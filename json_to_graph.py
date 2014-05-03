@@ -1,21 +1,23 @@
-import json, ast
 import os
+import ast
+import json
 import itertools
-from StringIO import StringIO
-from pprint import pprint
+
 import igraph
 
-DIR = "./"
+
+DATA_DIR = "./data"
+
 
 def main():
 
-    # parse the list of JSON files from the current directory
-    json_data = get_json_files(DIR)
+    # parse the list of JSON files from the data directory
+    json_data = get_json_files(DATA_DIR)
     g = igraph.Graph()
 
     files_parsed = 0
     for filename in json_data:
-        data = parse_file(filename)
+        data = parse_json_file(filename)
         for key in data.keys():
 
             # get list of PIs from JSON data; add all to graph
@@ -65,14 +67,12 @@ def parse_all_files_for_pivalues(json_data):
     """
     pi_list = []
     for filename in json_data:
-        data = parse_file(filename)
+        data = parse_json_file(filename)
         first_layer_keys = [key for key in data.keys()]
         for i in first_layer_keys:
-            pi_dict
             for j in pi_value:
                 pi_list.append(j)
-    print len(pi_list)
-    print len(list(set(pi_list)))
+    print "Number of PIs: {}".format(len(pi_list))
 
 
 def get_json_files(directory):
@@ -83,8 +83,8 @@ def get_json_files(directory):
     return json_files
 
 
-def parse_file(filename):
-    with open(os.path.join(DIR,filename)) as f:
+def parse_json_file(filename):
+    with open(os.path.join(DATA_DIR,filename)) as f:
         print("Parsing: {0}".format(filename))
         data = json.load(f)
         return data
@@ -93,6 +93,6 @@ def parse_file(filename):
 if __name__ == "__main__":
     g = main()
     print type(g)
-    g.summary()
+    print g.summary()
     igraph.plot(g, bbox=(0,0,1000,1000), layout=g.layout('kk')).show()
 
