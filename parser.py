@@ -60,49 +60,52 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
 
     files_parsed = 0
     for json_filepath in json_data_file_list:
+        print "Parsing file {}".format(json_filepath)
+
         json_data = data.load_json(json_filepath)
-        for key in json_data.keys():
-            award_data = json_data[key]
+        for doc_id in json_data.keys():
+            award_data = json_data[doc_id]
 
             # get list of PIs from JSON data; add all to graph
-            pi_list = [int(pi_id) for pi_id in award_data['PIcoPI']]
-            g.add_vertices(pi_list)
+            pi_list = []
+            for pi_id in award_data['PIcoPI']:
+                pi_id = str(pi_id)
 
-            # get ids of vertices we just added
-            pi_vertex_ids = []
-            for pi_id in pi_list:
-                vertex = g.vs.find(name_eq=pi_id)
-                vertex['label'] = pi_id  # add label for graphing
-                pi_vertex_ids.append(vertex.index)
+                try:
+                    g.vs.find(pi_id)
+                    # PI is already present in graph
+                except ValueError:
+                    # PI is not already present in graph
+                    pi_list.append(pi_id)
+                    g.add_vertex(pi_id, label=pi_id, id=pi_id)
 
-            # we now have the actual vertex ids of each PI; we want to
-            # add an edge for each with the awardId as an attribute, so
-            # we get all possible combinations of 2 (n choose 2), then
-            # add an edge for each
-            vid_iterator = itertools.combinations(pi_vertex_ids, 2)
-            pi_combos = [vid for vid in vid_iterator]
-            g.add_edges(pi_combos)
+            # pair up every PI with every other for this award
+            pi_combos = itertools.combinations(pi_list, 2)
 
-            # now add the award id as an attribute on each new edge
-            award_id = int(award_data['awardID'])
-            new_eids = g.get_eids(pi_combos)
-            for eid in new_eids:
-                new_edge = g.es.find(eid)
+            # TODO: there's sometimes more than one dir, div, pgm set
+            funding_agent = award_data['fundingAgent'][0]
+            award_id = str(award_data['awardID'])
 
-                new_edge['awardID'] = award_id
-                new_edge['label'] = award_id  # add label for graphing
+            # Yes, this is quite a lot of duplicate information being
+            # added to the graph. It is yet to be seen whether or not
+            # it is truly useful to do this. It is mostly for
+            # convenience. It would be better to only add 'awardID' and
+            # 'label', then look up the rest in tables.
+            edge_attributes = {
+                'awardID': award_id,
+                'label': award_id,
+                'abstract': award_data['abstract'].encode('utf-8'),
+                'title': award_data['title'].encode('utf-8'),
+                'effectiveDate': award_data['effectiveDate'],
+                'expirationDate': award_data['expirationDate'],
+                'PO': award_data['PO'],
+                'dir': funding_agent['dir']['id'],
+                'div': funding_agent['div']['id'],
+                'pgm': funding_agent['pgm']['id']
+            }
 
-                new_edge['abstract'] = award_data['abstract'].encode('utf-8')
-                new_edge['title'] = award_data['title'].encode('utf-8')
-                new_edge['effectiveDate'] = award_data['effectiveDate']
-                new_edge['expirationDate'] = award_data['expirationDate']
-                new_edge['PO'] = award_data['PO']
-
-                # TODO: there's sometimes more than one dir, div, pgm set
-                funding_agent = award_data['fundingAgent'][0]
-                new_edge['dir'] = funding_agent['dir']['id']
-                new_edge['div'] = funding_agent['div']['id']
-                new_edge['pgm'] = funding_agent['pgm']['id']
+            for edge in pi_combos:
+                g.add_edge(edge[0], edge[1], **edge_attributes)
 
             #print "award_id: {}".format(award_id)
             #print "pi list: {}".format(pi_list)
@@ -114,6 +117,7 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
         if file_limit is not None and (files_parsed) > file_limit:
             break
 
+    print "Number of files parsed: {}".format(files_parsed)
     return g
 
 
