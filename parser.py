@@ -52,12 +52,13 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
     @type  month_end: int
 
     """
+    g = igraph.Graph()
 
     # parse the list of JSON files from the data directory
     json_data_file_list = data.filter_files(year_start, year_end,
             month_start, month_end)
-    g = igraph.Graph()
 
+    pis_seen_set = set()
     files_parsed = 0
     for json_filepath in json_data_file_list:
         print "Parsing file {}".format(json_filepath)
@@ -67,20 +68,17 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
             award_data = json_data[doc_id]
 
             # get list of PIs from JSON data; add all to graph
-            pi_list = []
+            pi_set = set()
             for pi_id in award_data['PIcoPI']:
                 pi_id = str(pi_id)
+                pi_set.add(pi_id)
 
-                try:
-                    g.vs.find(pi_id)
-                    # PI is already present in graph
-                except ValueError:
-                    # PI is not already present in graph
-                    pi_list.append(pi_id)
+                if pi_id not in pis_seen_set:
                     g.add_vertex(pi_id, label=pi_id, id=pi_id)
+                    pis_seen_set.add(pi_id)
 
             # pair up every PI with every other for this award
-            pi_combos = itertools.combinations(pi_list, 2)
+            pi_combos = itertools.combinations(pi_set, 2)
 
             # TODO: there's sometimes more than one dir, div, pgm set
             funding_agent = award_data['fundingAgent'][0]
