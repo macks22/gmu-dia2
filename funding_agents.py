@@ -12,6 +12,7 @@ useful for answering questions like:
 
 """
 import os
+import itertools
 
 import parser
 
@@ -22,6 +23,8 @@ AGENT_LEVELS = {
     'div': ['div_id', 'div_abbr', 'div_name'],
     'pgm': ['pgm_id', 'pgm_name']
 }
+AGENT_LEVELS['all'] = list(itertools.chain.from_iterable(
+    AGENT_LEVELS.values()))
 
 
 def programs(pi_ids=None, agg='shared'):
@@ -53,6 +56,14 @@ def directorates(pi_ids=None, agg='shared'):
 
 dirs = directorates
 
+def shared_awards(pi_ids):
+    """
+    Retrieve the records for all awards which the given PIs have
+    worked on together.
+
+    """
+    return _records_for_pis(pi_ids, 'all', 'shared')
+
 
 def _records_for_pis(pi_ids, level, agg):
     """
@@ -83,6 +94,5 @@ def _filter_by_level(records, level):
     filtered = records[cols]
     counts = filtered.groupby(id_field)[id_field].transform('count')
     filtered['freq'] = counts
-    filtered.drop_duplicates(inplace=True)
-    return filtered
+    return filtered.drop_duplicates()
 
