@@ -5,27 +5,50 @@ with retrieving the files of interest to a particular analysis.
 
 """
 import os
-import json
+import igraph
+
+try:
+    # roughly 2x faster
+    import ujson as json
+except ImportError:
+    # builtin
+    import json
 
 
+# -----------------------------------------------------------------------------
+# MODULE SETUP
+# -----------------------------------------------------------------------------
 DATA_DIR = os.path.join(os.getcwd(), 'data')
 GRAPH_SAVE_DIR = os.path.join(DATA_DIR, 'pi-award-graphs')
+PICKLE_DIR = os.path.join(DATA_DIR, 'pickle')
 JSON_FILES = {}
 
+
+def _parse_all_data():
+    """
+    Parse data directory for list of JSON files.
+    This is designed to set up the global variables in this module.
+
+    """
+    for filename in os.listdir(DATA_DIR):
+        path = os.path.join(DATA_DIR, filename)
+        if os.path.isfile(path) and path.endswith('.json'):
+            without_extension = filename.split('.')[0]
+            _, year, month = without_extension.split('-')
+
+            year = int(year)
+            month = int(month)
+
+            if not JSON_FILES.has_key(year):
+                JSON_FILES[year] = {month: path}
+            else:
+                JSON_FILES[year][month] = path
+
+
 # parse data directory for list of JSON files
-for filename in os.listdir(DATA_DIR):
-    path = os.path.join(DATA_DIR, filename)
-    if os.path.isfile(path) and path.endswith('.json'):
-        without_extension = filename.split('.')[0]
-        _, year, month = without_extension.split('-')
+_parse_all_data()
 
-        year = int(year)
-        month = int(month)
-
-        if not JSON_FILES.has_key(year):
-            JSON_FILES[year] = {month: path}
-        else:
-            JSON_FILES[year][month] = path
+# -----------------------------------------------------------------------------
 
 
 def available_years():
@@ -37,6 +60,23 @@ def available_months(year):
         return JSON_FILES[year].keys()
     else:
         return []
+
+
+def awards():
+    """
+    A generator that parses each JSON file and yields each subsequent
+    chunk of award data. JSON files are read chronologically.
+
+    """
+    for year in JSON_FILES:
+        for month in JSON_FILES[year]:
+            json_filepath = JSON_FILES[year][month]
+            print "Parsing file {}".format(json_filepath)
+            json_data = load_json(json_filepath)
+
+            # 1:1 mapping for document IDs and award IDs
+            for doc_id in json_data:
+                yield json_data[doc_id]
 
 
 def all_files():
@@ -55,7 +95,8 @@ def all_files():
     return file_list
 
 
-def filter_files(year_start, year_end=None, month_start=None, month_end=None):
+def filter_files(year_start, year_end=None, month_start=None, month_end=None,
+        file_limit=None):
     """
     Filter the list of JSON files by year and month, allowing
     for a possible range of dates based on month/year.
@@ -85,8 +126,6 @@ def filter_files(year_start, year_end=None, month_start=None, month_end=None):
     @rtype:   list of str
 
     """
-    file_list = []
-
     if year_end is None:
         years = [year_start]
     else:
@@ -101,13 +140,21 @@ def filter_files(year_start, year_end=None, month_start=None, month_end=None):
     else:
         months = range(month_start, month_end + 1)
 
+    files_parsed = 0
     for year in years:
         for month in months:
             filepath = get_file(year, month)
             if filepath:
-                file_list.append(filepath)
+                print "Parsing file {}".format(filepath)
+                json_data = load_json(filepath)
+                for doc_id in json_data:
+                    yield json_data[doc_id]
 
-    return file_list
+                files_parsed += 1
+                if file_limit is not None and (files_parsed) > file_limit:
+                    break
+
+    print "Number of files parsed: {}".format(files_parsed)
 
 
 def get_file(year, month=None):
@@ -173,4 +220,25 @@ def load_graph(filename):
     graph_file = os.path.join(GRAPH_SAVE_DIR, with_extension)
     with open(graph_file, 'r') as f:
         return igraph.load(graph_file)
+
+
+def load_full_graph():
+    """
+    Load the complete directorate 5 data graph from its pickle file.
+
+    @returns: the graph for all directorate 5 data, with vertices
+              for each PI and an edge for each shared awardID
+    @rtype:   L{igraph.Graph}
+    """
+    graph_path = os.path.join(PICKLE_DIR, 'dir05-graph.pickle')
+    return igraph.load(graph_path)
+
+
+def save_full_graph(g):
+    """
+    Parse through all directorate 05 data and save it to a pickle file.
+
+    """
+    graph_path = os.path.join(PICKLE_DIR, 'dir05-graph.pickle')
+    g.write_pickle(graph_path)
 
