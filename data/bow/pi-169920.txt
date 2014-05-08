@@ -1,0 +1,14 @@
+0	assess	1
+1	bioengin	1
+2	bioinformat	1
+3	career	1
+4	collabor	1
+5	develop	1
+6	educ	1
+7	engin	1
+8	medic	1
+9	nih	1
+10	nsf	1
+11	opportun	1
+12	research	1
+13	train	1

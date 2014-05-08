@@ -1,0 +1,3 @@
+0	fellowship	1
+1	postdoctor	1
+2	research	1

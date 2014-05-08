@@ -1,0 +1,14 @@
+0	award	1
+1	british	1
+2	canada	1
+3	ccc	1
+4	columbia	1
+5	complex	1
+6	comput	1
+7	confer	1
+8	ieee	1
+9	june	1
+10	student	1
+11	support	1
+12	travel	1
+13	vancouv	1
