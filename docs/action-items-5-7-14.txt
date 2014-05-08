@@ -1,0 +1,10 @@
+Our Goals for Saturday:
+=======================
+
+1. generate doc/term vector for each award
+2. generate doc/term vector for each PI
+3. create graph with PIs as node attributes
+4. save that graph in graphml format
+5. parse with gephi
+6. run through CESNA
+
