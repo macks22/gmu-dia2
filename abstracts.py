@@ -9,12 +9,19 @@ vector for each PI.
 This will allow community detection via topic modelling approaches.
 
 """
+import os
+import cPickle as pickle
+
+import gensim
+import pandas as pd
+
 import data
+import doctovec
 
 
-PI_AWD_FRAME, AWD_ABSTRACT_FRAME = _setup_module()
-
-
+# -----------------------------------------------------------------------------
+# MODULE SETUP
+# -----------------------------------------------------------------------------
 def _setup_module():
     """
     Parse the data into data frames.
@@ -35,13 +42,116 @@ def _setup_module():
 
         # add a record for each pi/award pairing
         for pi_id in pi_list:
-            records.append((pi_id, award_id))
+            pi_awd_pairings.append((pi_id, award_id))
 
-    pi_awd_frame = pd.DataFrame(records,
+    pi_awd_frame = pd.DataFrame(pi_awd_pairings,
             columns=['pi_id', 'award_id'])
-    awd_abstract_frame = pd.DataFrame(records.items(),
-            columns=['award_id', 'abstract']).set_index('award_id')
+    awd_abstract_frame = pd.DataFrame(awd_abstract_pairings,
+            columns=['award_id', 'abstract'])
 
     return pi_awd_frame, awd_abstract_frame
 
+
+PI_AWD_FRAME, AWD_ABSTRACT_FRAME = _setup_module()
+# -----------------------------------------------------------------------------
+
+
+def get_abstracts(pi_id):
+    """
+    Get all abstracts for a particular PI. This gets a list
+    of all the abstracts for each award this PI has worked on.
+
+    @param pi_id: ID of the PI to get abstracts for.
+    @type  pi_id: str, unicode, or int
+
+    @returns: list of abstracts
+    @rtype:   L{numpy.ndarray} of str
+
+    """
+    selector = PI_AWD_FRAME['pi_id'] == str(pi_id)
+    joined = PI_AWD_FRAME[selector].merge(AWD_ABSTRACT_FRAME, on='award_id')
+    return joined['abstract'].values
+
+
+def awards_for_pi(pi_id):
+    """
+    Retrieve the list of all awards for the PI.
+
+    """
+    selector = PI_AWD_FRAME['pi_id'] == pi_id
+    return PI_AWD_FRAME[selector]['award_id'].values
+
+
+def parse_by_awards(write_vec=False, pickle_vec=True):
+    """
+    For each award in the dataset, parse the abstract into a vector of words
+    (tokenized, cleaned, and stemmed). Store all in a dictionary indexed by
+    award ids.
+
+    Optionally write each vector to a text file.
+    Optionally pickle each vector for quick loading later.
+
+    @param write_vec: whether or not to write the abstract vectors
+    @type  write_vec: bool
+
+    @param pickle_vec: whether or not to pickle the abstract vectors
+    @type  pickle_vec: bool
+
+    @returns: dictionary of (award: vectorized abstract) pairs
+    @rtype:   dict of (list of str)
+
+    """
+    abstracts_parsed = 0
+    records = {}
+    for award_id, abstract in AWD_ABSTRACT_FRAME.values:
+        vec = doctovec.vectorize(abstract)
+        records[award_id] = vec
+
+        if write_vec:
+            data.write_abstract_vec(vec, award_id)
+
+        if pickle_vec:
+            data.save_abstract_vec(vec, award_id)
+
+        abstracts_parsed +=1
+        print abstracts_parsed
+
+    print "Total # abstracts parsed: {}".format(abstracts_parsed)
+    return records
+
+
+def parse_by_pis(write=True):
+    """
+    For each PI in the dataset, parse out the list of abstracts (one for each
+    award worked on) into a BoW frequency distribution. Optionally write the
+    BoW to a text file.
+
+    @param write: whether or not to write the abstract vectors
+    @type  write: bool
+
+    """
+    pis_parsed = 0
+    for pi_id in PI_AWD_FRAME['pi_id'].values:
+        abstracts = []
+        awards = awards_for_pi(pi_id)
+
+        # get all pre-parsed abstracts from their pickle files
+        for award_id in awards:
+            abstracts.append(data.load_abstract_vec(award_id))
+
+        # parse documents into BoW representation
+        bow = gensim.corpora.dictionary.Dictionary(abstracts)
+
+        # write BoW to text files for this PI
+        if write:
+            data.write_bow(bow, pi_id)
+
+        pis_parsed += 1
+        print pis_parsed
+
+    print "Total # PIs parsed: {}".format(pis_parsed)
+
+
+if __name__ == "__main__":
+    parse_by_pis()
 
