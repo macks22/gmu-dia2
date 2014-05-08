@@ -18,7 +18,7 @@ except ImportError:
 # -----------------------------------------------------------------------------
 # MODULE SETUP
 # -----------------------------------------------------------------------------
-DATA_DIR = os.path.join(os.getcwd(), 'data')
+DATA_DIR = os.path.join(os.getcwd(), 'data/json')
 GRAPH_SAVE_DIR = os.path.join(DATA_DIR, 'pi-award-graphs')
 PICKLE_DIR = os.path.join(DATA_DIR, 'pickle')
 JSON_FILES = {}
