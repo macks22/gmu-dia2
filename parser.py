@@ -1,10 +1,17 @@
 import os
+import string
 import itertools
 
+import nltk
 import igraph
 import pandas as pd
 
 import data
+
+
+PUNCT = set(string.punctuation)
+STOPWORDS = nltk.corpus.stopwords.words('english')
+STEMMER = nltk.PorterStemmer()
 
 
 def save_graphs_for_each_year():
@@ -132,6 +139,17 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
     return g
 
 
+def parse_full_graph():
+    """
+    Parse through all directorate 05 data and save it to a pickle file.
+
+    """
+    years = data.available_years()
+    g = pi_award_graph(min(years), max(years))
+    data.save_full_graph(g)
+    return g
+
+
 def all_pi_ids_from_files():
     """
     This parses all files for IDs of all PIs and coPIs. Both are
@@ -235,15 +253,121 @@ def _parse_funding_agent(award_data):
     return records
 
 
-def parse_full_graph():
+def frame_pi_award_pairings():
     """
-    Parse through all directorate 05 data and save it to a pickle file.
+    Return a data frame with records for each PI for each award they
+    worked on.
+
+    @returns: data frame with pi_id and award_id columns
+    @rtype:   L{pandas.core.frame.DataFrame}
 
     """
-    years = data.available_years()
-    g = pi_award_graph(min(years), max(years))
-    data.save_full_graph(g)
-    return g
+    records = []
+    for award_data in data.awards():
+        award_id = str(award_data['awardID'])
+        pi_list = [str(pi_id) for pi_id in award_data['PIcoPI']]
+        for pi_id in pi_list:
+            records.append((pi_id, award_id))
+
+    return pd.DataFrame(records, columns=['pi_id', 'award_id'])
+
+
+def frame_abstracts():
+    """
+    Parse all abstracts into a DataFrame, indexed by award ids.
+
+    @returns: data frame of abstracts, indexed by award ids
+    @rtype:   L{pandas.core.frame.DataFrame}
+
+    """
+    records = []
+    for award_data in data.awards():
+        award_id = str(award_data['awardID'])
+        abstract = award_data['abstract'].encode('utf-8')
+        records.append((award_id, abstract))
+
+    df = pd.DataFrame(records.items(), columns=['award_id', 'abstract'])
+    return df.set_index('award_id')
+
+
+def parse_abstracts():
+    """
+    Parse all the abstracts for each award into document vectors
+    and package them up into a DataFrame, indexed by award IDs.
+
+    See docstring for `parser.clean_word_list` for cleaning operations
+    performed during parsing.
+
+    @returns: table of award_id: doc/term vectors for all abstracts
+    @rtype:   L{pandas.core.frame.DataFrame}
+
+    """
+    records = {}
+    for award_data in data.awards():
+        award_id = str(award_data['awardID'])
+        abstract = award_data['abstract'].encode('utf-8')
+        term_freqdist = _parse_abstract(abstract)
+
+        records[award_id] = {}
+        for word_freq in term_freqdist.iteritems():
+            records[award_id][word_freq[0]] = word_freq[1]
+
+    #return pd.DataFrame(records)
+    return records
+
+
+# for use in filtering out junk words
+def test_word(word):
+    if not word:
+        return False
+    elif word in STOPWORDS:
+        return False
+    elif word[0].isdigit():
+        return False
+    elif word.isdigit():
+        return False
+    elif len(word) == 1:
+        return False
+    else:
+        return True
+
+
+def clean_word(word):
+    word = ''.join([char for char in word if char not in PUNCT])
+    return word.lower().strip()
+
+
+def clean_word_list(word_list):
+    """
+    The following cleaning operations are performed:
+
+        1. punctuation removed
+        2. word lowercased
+        3. whitespace stripped
+
+    Then words meeting these filtering criteria are removed:
+
+        1. empty or only 1 character
+        2  stopword
+        3. all digits
+        4. starts with digit
+
+    Finally, all words are stemmed.
+
+    """
+    cleaned_words = [clean_word(w) for w in word_list]
+    filtered_words = filter(test_word, cleaned_words)
+    stemmed_words = [STEMMER.stem_word(word) for word in filtered_words]
+    return stemmed_words
+
+
+def _parse_abstract(abstract):
+    fdist = nltk.FreqDist()
+    word_list = nltk.tokenize.word_tokenize(abstract)
+    for word in clean_word_list(word_list):
+        fdist.inc(word)
+
+    return fdist
 
 
 if __name__ == "__main__":

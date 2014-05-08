@@ -12,19 +12,22 @@ useful for answering questions like:
 
 """
 import os
+import numpy
 import itertools
 
 import parser
 
 
 DF = parser.parse_funding_agents()
-AGENT_LEVELS = {
+SELECTORS = {
     'dir': ['dir_id', 'dir_abbr', 'dir_name'],
     'div': ['div_id', 'div_abbr', 'div_name'],
-    'pgm': ['pgm_id', 'pgm_name']
+    'pgm': ['pgm_id', 'pgm_name'],
+    'awd': ['award_id']
 }
-AGENT_LEVELS['all'] = list(itertools.chain.from_iterable(
-    AGENT_LEVELS.values()))
+# fa = funding agent
+SELECTORS['fa'] = list(itertools.chain.from_iterable(
+    SELECTORS.values()))
 
 
 def programs(pi_ids=None, agg='shared'):
@@ -56,13 +59,22 @@ def directorates(pi_ids=None, agg='shared'):
 
 dirs = directorates
 
-def shared_awards(pi_ids):
+
+def awards(pi_ids=None, agg='shared'):
     """
     Retrieve the records for all awards which the given PIs have
     worked on together.
 
     """
-    return _records_for_pis(pi_ids, 'all', 'shared')
+    return _records_for_pis(pi_ids, 'awd', agg)
+
+
+def unique_values(col_name):
+    """
+    Return an array of all unique values for the given column name.
+
+    """
+    return DF[col_name].unique()
 
 
 def _records_for_pis(pi_ids, level, agg):
@@ -73,15 +85,15 @@ def _records_for_pis(pi_ids, level, agg):
     if pi_ids is None:
         pi_ids = DF['pi_id'].values
         agg = 'total'
-    elif type(pi_ids) != list:
+    elif type(pi_ids) != list and type(pi_ids) != numpy.ndarray:
         pi_ids = [pi_ids]
 
     pi_ids = [str(pi_id) for pi_id in pi_ids]
-    all_records = DF[DF['pi_id'].isin(pi_ids)]
+    all_records = DF if agg == 'total' else DF[DF['pi_id'].isin(pi_ids)]
     records = _filter_by_level(all_records, level)
 
     if agg == 'total':
-        return records
+        return records.reset_index(drop=True)
     elif agg == 'shared':
         num_pis = len(pi_ids)
         shared = records[records['freq'] == num_pis].drop('freq', 1)
@@ -89,10 +101,11 @@ def _records_for_pis(pi_ids, level, agg):
 
 
 def _filter_by_level(records, level):
-    cols = AGENT_LEVELS[level]
+    cols = SELECTORS[level]
     id_field = cols[0]
     filtered = records[cols]
     counts = filtered.groupby(id_field)[id_field].transform('count')
     filtered['freq'] = counts
+    filtered = filtered.sort('freq', ascending=False)
     return filtered.drop_duplicates()
 
