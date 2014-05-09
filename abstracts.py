@@ -209,6 +209,143 @@ def parse_bow(pi_ids=None, write=True):
     print "Total # PIs parsed: {}".format(pis_parsed)
 
 
+def full_bow():
+    """
+    Load BoW dictionaries for all PIs and combine them to form a BoW
+    for the complete dataset (all abstracts).
+
+    @returns: the full BoW
+    @rtype:   L{gensim.corpora.dictionary.Dictionary}
+
+    """
+    corpus = AbstractsCorpus()
+    return gensim.corpora.dictionary.Dictionary(corpus)
+
+
+class AbstractsCorpus(object):
+    """Corpus class that yields abstracts as documents."""
+
+    def __init__(self, parse=False):
+        """
+        If parse is True, the abstracts are parsed from the full abstracts.
+        Otherwise, they are loaded from the pickle files.
+
+        @param parse: whether to parse abstracts from loaded abstracts or
+                      load from pickle files
+        @type  parse: bool
+
+        """
+        self._parse = parse
+        self._abstracts = AWD_ABSTRACT_FRAME['abstract'].values
+        self._award_ids = AWD_ABSTRACT_FRAME['award_id'].values
+        self._df = AWD_ABSTRACT_FRAME
+
+    def __iter__(self):
+        if self._parse:
+            for abstract in self._abstracts:
+                yield doctovec.vectorize(abstract)
+        else:
+            for award_id in self._award_ids:
+                yield data.load_abstract_vec(award_id)
+
+    def __getitem__(self, i):
+        return self._abstracts[i]
+
+    def __len__(self):
+        return len(self._abstracts)
+
+    def __str__(self):
+        msg = "Corpus of {} abstracts from NSF grant awards."
+        return msg.format(self.__len__())
+
+    def head(self, num):
+        return self._abstracts[:num]
+
+    def tail(self, num):
+        return self._abstracts[-num:]
+
+    def award(self, award_id):
+        selector = self._df['award_id'] == str(award_id)
+        result = self._df[selector]['abstract'].values
+        if len(result) == 1:
+            return result[0]
+        else:
+            return ''
+
+
+class BoWCorpusWrapper(object):
+    """Wrap up a corpus to return BoW representations of documents."""
+
+    def __init__(self, corpus):
+        self._corpus = corpus
+        self._dictionary = gensim.corpora.dictionary.Dictionary(corpus)
+
+    def __iter__(self):
+        for doc in self._corpus:
+            yield self._dictionary.doc2bow(doc)
+
+
+def run_lda():
+    corpus = AbstractsCorpus()
+    bow_corpus = BoWCorpusWrapper(corpus)
+    return gensim.models.LdaModel(bow_corpus, id2word=bow_corpus._dictionary)
+
+
+def write_wordle_files(lda_model, num_topics=10, topn=40):
+    """
+    Write files in a format which can be copy/pasted into wordle.net
+    to generate word clouds. The format is really quite simple:
+
+        word1:freq(word1)
+        word2:freq(word2)
+
+    where freq(word) is the prominence of that word in the model
+    multiplied by 1000. In other words, if a word has a weight of
+    .017 in the LDA model, the freq will be calculated as 17.
+
+    The files are written to the world data directory using the topic
+    number from the LDA model for file naming. See
+    L{data.write_wordle_file} for more details on file naming.
+
+    One thing to note is that previously written files with the same
+    topic number will be overwritten without warning
+
+    @param lda_model: the trained LDA model to parse topics from
+    @type  lda_mdoel: L{gensim.models.LdaModel}
+
+    @param num_topics: number of topics to write wordle files for
+    @type  num_topics: int
+
+    @param topn: number of words to represent each topic with;
+                 n most frequent
+    @type  topn: int
+
+    """
+    # sanity check number of topics requested: cannot exceed # topics in model
+    if num_topics > lda_model.num_topics:
+        num_topics = lda_mode.num_topics
+
+    # The raw format looks like:
+    #   ['0.051*electron + 0.040*molecular',
+    #    '0.023*molecul + 0.020*magnet']
+    # Each topic is a string of the form seen above,
+    # so the output of show_topics is a list of these strings
+    raw_topics = lda_model.show_topics(topics=num_topics, topn=topn)
+
+    # we want to get the form
+    #     [[(electron, 51), (molecular, 40)],
+    #      [(molecul, 23), (magnet, 20)]]
+    for topic_num, raw_topic in enumerate(raw_topics):
+        topic = []
+
+        pairs = [pair.split('*') for pair in raw_topic.split(' + ')]
+        # ['0.051', 'electron] --> ('electron', 51)
+        for pair in pairs:
+            topic.append((pair[1], int(float(pair[0]) * 1000)))
+
+        data.write_wordle_file(topic_num, topic)
+
+
 if __name__ == "__main__":
     parse_bow()
 

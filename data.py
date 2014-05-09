@@ -26,6 +26,7 @@ JSON_DIR = os.path.join(DATA_DIR, 'json')
 GRAPH_SAVE_DIR = os.path.join(DATA_DIR, 'pi-award-graphs')
 PICKLE_DIR = os.path.join(DATA_DIR, 'pickle')
 BOW_DIR = os.path.join(DATA_DIR, 'bow')
+WORDLE_DIR = os.path.join(DATA_DIR, 'wordle')
 JSON_FILES = {}
 
 
@@ -367,4 +368,42 @@ def read_bow(pi_id):
     filename = 'pi-{}.txt'.format(pi_id)
     path = os.path.join(BOW_DIR, filename)
     return gensim.corpora.dictionary.Dictionary.load_from_text(path)
+
+
+def load_lda_model():
+    """
+    Load the gensim LDA model for the directorate 05 dataset abstracts
+    from its pickle file in the data directory.
+
+    @returns: the loaded LDA model
+    @rtype:   L{gensim.models.LdaModel}
+
+    """
+    filename = 'lda-model-from-abstracts.pickle'
+    path = os.path.join(PICKLE_DIR, filename)
+    return gensim.models.LdaModel.load(path)
+
+
+def write_wordle_file(topic_num, topic):
+    """
+    Write a word frequency file which can be copy/pasted into wordle.net
+    given a topic, which is a list of the form:
+
+        [('electron', 50), ('molecule', 20)]
+
+    Specifically, the topic is a list of tuples, where the first element
+    of each tuple is the word and the second is the frequency of the word.
+
+    @param topic_num: the number of the topic from the LDA model
+    @type  topic_num: int
+
+    @param topic: the topic to write to a wordle-recognizable text file
+    @type  topic: list of (tuple of (str, int))
+
+    """
+    filename = 'lda-topic{}.txt'.format(topic_num)
+    path = os.path.join(WORDLE_DIR, filename)
+    with open(path, 'w') as f:
+        for word_and_freq in topic:
+            f.write('{}:{}\n'.format(word_and_freq[0], word_and_freq[1]))
 
