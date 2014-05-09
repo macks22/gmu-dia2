@@ -77,19 +77,27 @@ def awards_for_pi(pi_id):
     """
     Retrieve the list of all awards for the PI.
 
+    @param pi_id: ID of the PI to get awards for
+    @type  pi_id: str, unicode, or int
+
     """
     selector = PI_AWD_FRAME['pi_id'] == pi_id
     return PI_AWD_FRAME[selector]['award_id'].values
 
 
-def parse_by_awards(write_vec=False, pickle_vec=True):
+def vectorize(awards=None, write_vec=False, pickle_vec=True):
     """
-    For each award in the dataset, parse the abstract into a vector of words
-    (tokenized, cleaned, and stemmed). Store all in a dictionary indexed by
-    award ids.
+    Lookup abstracts based on the awards they were written for.  For
+    each award in the list, parse the abstract into a vector of words
+    (tokenized, cleaned, and stemmed). Store all in a dictionary
+    indexed by award ids.
 
+    If no list of award IDs is passed in, all will be used.
     Optionally write each vector to a text file.
     Optionally pickle each vector for quick loading later.
+
+    @param awards: list of award IDs to parse abstracts for
+    @type  awards: list of str
 
     @param write_vec: whether or not to write the abstract vectors
     @type  write_vec: bool
@@ -101,9 +109,13 @@ def parse_by_awards(write_vec=False, pickle_vec=True):
     @rtype:   dict of (list of str)
 
     """
-    abstracts_parsed = 0
-    records = {}
-    for award_id, abstract in AWD_ABSTRACT_FRAME.values:
+    if awards is not None:
+        selector = AWD_ABSTRACT_FRAME['award_id'].isin(awards)
+        df = AWD_ABSTRACT_FRAME[selector]
+    else:
+        df = AWD_ABSTRACT_FRAME
+
+    for award_id, abstract in df.values:
         vec = doctovec.vectorize(abstract)
         records[award_id] = vec
 
@@ -120,18 +132,63 @@ def parse_by_awards(write_vec=False, pickle_vec=True):
     return records
 
 
-def parse_by_pis(write=True):
+def bow_for_pi(pi_id, parse=False):
+    """
+    Get the representative BoW frequency distribution for the PI. By
+    default, load the BoW from a saved file. This can be overriden by
+    setting `parse` = True.
+
+    @param pi_id: the ID of the PI to parse the BoW for
+    @type  pi_id: str
+
+    @param parse: whether or not to parse the BoW from the raw data; by
+                  default, this is False, which means the BoW is loaded
+                  from a saved file.
+    @type  parse: bool
+
+    @returns: the BoW frequency distribution parsed
+    @rtype:   L{gensim.corpora.dictionary.Dictionary}
+
+    """
+    abstracts = []
+    awards = awards_for_pi(pi_id)
+
+    if parse:
+
+        # get all pre-parsed abstracts from their pickle files
+        for award_id in awards:
+            abstracts.append(data.load_abstract_vec(award_id))
+
+        # parse documents into BoW representation
+        bow = gensim.corpora.dictionary.Dictionary(abstracts)
+    else:
+        bow = data.read_bow(pi_id)
+
+    return bow
+
+
+def parse_bow(pi_ids=None, write=True):
     """
     For each PI in the dataset, parse out the list of abstracts (one for each
     award worked on) into a BoW frequency distribution. Optionally write the
     BoW to a text file.
 
+    @param pi_ids: list of PI IDs to parse BoWs for; if none is passed, all
+                   will be used
+    @type  pi_ids: list of str
+
     @param write: whether or not to write the abstract vectors
     @type  write: bool
 
     """
+    if pi_ids is not None:
+        selector = PI_AWD_FRAME['pi_id'].isin(pi_ids)
+        df = PI_AWD_FRAME[selector]
+    else:
+        df = PI_AWD_FRAME
+
     pis_parsed = 0
-    for pi_id in PI_AWD_FRAME['pi_id'].values:
+    for pi_id in df.values:
         abstracts = []
         awards = awards_for_pi(pi_id)
 
@@ -153,5 +210,5 @@ def parse_by_pis(write=True):
 
 
 if __name__ == "__main__":
-    parse_by_pis()
+    parse_bow()
 
