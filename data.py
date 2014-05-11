@@ -278,7 +278,7 @@ def load_abstract_vec(award_id):
         return pickle.load(f)
 
 
-def save_abstract_vec(vec, award_id):
+def save_abstract_vector(vec, award_id):
     """
     Save the vectorized abstract for the given award_id by pickling it. The
     award ID is required because the filename convention is based on the award
