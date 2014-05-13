@@ -372,7 +372,7 @@ class AbstractBoWs(object):
 class LdaModel(object):
     """Run LDA using abstracts corpus (BoW)."""
 
-    def __init__(self, num_topics=100, bow_corpus=None, parse=False):
+    def __init__(self, num_topics=96, bow_corpus=None, parse=False):
         # TODO: data.load_bow_corpus
         if bow_corpus is None:
             self._bow_corpus = AbstractBoWs(parse=parse)
@@ -475,7 +475,7 @@ def write_wordle_files(lda_model, num_topics=10, topn=40):
     multiplied by 1000. In other words, if a word has a weight of
     .017 in the LDA model, the freq will be calculated as 17.
 
-    The files are written to the world data directory using the topic
+    The files are written to the wordle data directory using the topic
     number from the LDA model for file naming. See
     L{data.write_wordle_file} for more details on file naming.
 
