@@ -1,25 +1,43 @@
 """
 This module contains functions for parsing documents to vectors.
-In particular, the primary ways the documents can be represented
-are as frequency distributions of words and as bags of words.
-
 Functions for word cleaning and stemming are also included.
 
 """
 import string
 
 import nltk
-import gensim
-
 
 PUNCT = set(string.punctuation)
+"""
+@type PUNCT: set
+@var  PUNCT: The set of punctuation to be filtered from documents.
+
+"""
+
 STOPWORDS = set(nltk.corpus.stopwords.words('english'))
 STOPWORDS.add('br')  # get rid of </br> html tags (hackish)
+"""
+@type STOPWORDS: set
+@var  STOPWORDS: The set of stopwords to be filtered from documents.
+
+"""
+
 STEMMER = nltk.PorterStemmer()
+"""
+@type STEMMER: L{nltk.PorterStemmer}
+@var  STEMMER: stemmer instance used to stem words in documents.
+
+"""
 
 
-# for use in filtering out junk words
 def test_word(word):
+    """
+    Applies a set of conditions to filter out junk words.
+
+    @type  word: str
+    @param word: word to test
+
+    """
     if not word:
         return False
     elif word in STOPWORDS:
@@ -35,6 +53,18 @@ def test_word(word):
 
 
 def clean_word(word):
+    """
+    Remove punctuation, lowercase, and strip whitespace from the word.
+    Note that this will remove all characters from the word in cases
+    where it consists only of whitespace and/or punctuation.
+
+    @type  word: str
+    @param word: The word to clean.
+
+    @rtype:  str
+    @return: The cleaned word.
+
+    """
     word = ''.join([char for char in word if char not in PUNCT])
     return word.lower().strip()
 
@@ -50,11 +80,17 @@ def clean_word_list(word_list):
     Then words meeting these filtering criteria are removed:
 
         1. empty or only 1 character
-        2  stopword
+        2. stopword
         3. all digits
         4. starts with digit
 
     Finally, all words are stemmed.
+
+    @type  word_list: list of str
+    @param word_list: The list of words to clean.
+
+    @rtype:  list of str
+    @return: The cleaned, stemmed, filtered, list of words.
 
     """
     cleaned_words = [clean_word(w) for w in word_list]
@@ -68,11 +104,11 @@ def vectorize(doc):
     Convert a document (string/unicode) into a filtered, cleaned,
     stemmed, list of words.
 
+    @type  doc: str
     @param doc: the document to vectorize
-    @type  doc: string or unicode
 
-    @return: filtered, cleaned, stemmed, list of words
     @rtype:  list of str
+    @return: filtered, cleaned, stemmed, list of words
 
     """
     word_list = nltk.tokenize.word_tokenize(doc)
@@ -84,49 +120,14 @@ def write_vec(vec, filepath):
     Write a list of words to a txt file.
     Separate words by newlines.
 
+    @type  vec: list of str
+    @param vec: The word vector to write to a file.
+
+    @type  filepath: str
+    @param filepath: The absolute path of the file to write to.
+
     """
     with open(filepath, 'w') as f:
         for word in vec:
             f.write('{}\n'.format(word))
-
-
-def bow(docs):
-    """
-    Process a list of document into a BoW vector.
-
-    """
-    token_lists = []
-    for doc in docs:
-        word_list = nltk.tokenize.word_tokenize(doc)
-        token_lists.append(clean_word_list(word_list))
-
-    dictionary = gensim.corpora.dictionary.Dictionary(token_lists)
-    return dictionary
-
-
-def _slow_freqdist(doc):
-    fdist = nltk.FreqDist()
-    word_list = nltk.tokenize.word_tokenize(doc)
-    for word in clean_word_list(word_list):
-        fdist.inc(word)
-
-    return fdist
-
-
-def _fast_doctovec(doc):
-    pass
-
-
-
-if __name__ == "__main__":
-    import data
-    awards = data.awards()
-    abstracts = []
-
-    for _ in range(5):
-        a = awards.next()['abstract']
-        print a
-        abstracts.append(awards.next()['abstract'])
-
-    d = bow(abstracts)
 

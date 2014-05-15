@@ -1,3 +1,16 @@
+"""
+This module contains functions for parsing data from the raw JSON
+files and loading parsed data from saved pickle files. It is meant
+to act as the main parsing interface on top of the raw data.
+Eventually, the vision is to have each "Data object" be retreivable
+via two possible methods: parse & load. The parsing functionality
+will be present in this module, while the loading functionality
+will exist in the L{data} module.
+
+Currently, things are a bit more messy than that, and there is
+some of both parsing and loading functionality in this module.
+
+"""
 import os
 import string
 import itertools
@@ -7,11 +20,6 @@ import igraph
 import pandas as pd
 
 import data
-
-
-PUNCT = set(string.punctuation)
-STOPWORDS = nltk.corpus.stopwords.words('english')
-STEMMER = nltk.PorterStemmer()
 
 
 def save_graphs_for_each_year():
@@ -141,7 +149,7 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
 
 def parse_full_graph():
     """
-    Parse through all directorate 05 data and save it to a pickle file.
+    Parse through all data and save it to a pickle file.
 
     """
     years = data.available_years()
@@ -288,86 +296,6 @@ def frame_abstracts():
 
     df = pd.DataFrame(records.items(), columns=['award_id', 'abstract'])
     return df.set_index('award_id')
-
-
-def parse_abstracts():
-    """
-    Parse all the abstracts for each award into document vectors
-    and package them up into a DataFrame, indexed by award IDs.
-
-    See docstring for `parser.clean_word_list` for cleaning operations
-    performed during parsing.
-
-    @returns: table of award_id: doc/term vectors for all abstracts
-    @rtype:   L{pandas.core.frame.DataFrame}
-
-    """
-    records = {}
-    for award_data in data.awards():
-        award_id = str(award_data['awardID'])
-        abstract = award_data['abstract'].encode('utf-8')
-        term_freqdist = _parse_abstract(abstract)
-
-        records[award_id] = {}
-        for word_freq in term_freqdist.iteritems():
-            records[award_id][word_freq[0]] = word_freq[1]
-
-    #return pd.DataFrame(records)
-    return records
-
-
-# for use in filtering out junk words
-def test_word(word):
-    if not word:
-        return False
-    elif word in STOPWORDS:
-        return False
-    elif word[0].isdigit():
-        return False
-    elif word.isdigit():
-        return False
-    elif len(word) == 1:
-        return False
-    else:
-        return True
-
-
-def clean_word(word):
-    word = ''.join([char for char in word if char not in PUNCT])
-    return word.lower().strip()
-
-
-def clean_word_list(word_list):
-    """
-    The following cleaning operations are performed:
-
-        1. punctuation removed
-        2. word lowercased
-        3. whitespace stripped
-
-    Then words meeting these filtering criteria are removed:
-
-        1. empty or only 1 character
-        2  stopword
-        3. all digits
-        4. starts with digit
-
-    Finally, all words are stemmed.
-
-    """
-    cleaned_words = [clean_word(w) for w in word_list]
-    filtered_words = filter(test_word, cleaned_words)
-    stemmed_words = [STEMMER.stem_word(word) for word in filtered_words]
-    return stemmed_words
-
-
-def _parse_abstract(abstract):
-    fdist = nltk.FreqDist()
-    word_list = nltk.tokenize.word_tokenize(abstract)
-    for word in clean_word_list(word_list):
-        fdist.inc(word)
-
-    return fdist
 
 
 if __name__ == "__main__":

@@ -1,14 +1,14 @@
 """
 This module contains functions for answering questions about the
 funding agents for the NSF awards dataset. In particular, it is
-useful for answering questions like::
+useful for answering questions like:
 
-    * How many unique programs his this PI worked on? Which ones?
-    * Which programs have these two PIs worked on together?
-    * How many directorates/divisons/programs are in the dataset?
-    * Who has the most awards?
-    * Which division has given out the most awards?
-    * Which programs have the most PIs in common?
+    - How many unique programs his this PI worked on? Which ones?
+    - Which programs have these two PIs worked on together?
+    - How many directorates/divisons/programs are in the dataset?
+    - Who has the most awards?
+    - Which division has given out the most awards?
+    - Which programs have the most PIs in common?
 
 """
 import os
@@ -84,7 +84,7 @@ class FundingAgentExplorer(object):
             'shared': returns only directorates which every PI has
                 been funded by
 
-        @rtype:  L{pandas.core.frame.DataFrame}
+        @rtype:  L{pandas.DataFrame}
         @return: the filtered data frame with only the columns
             returned by the directorate hierarchy level selector
 
@@ -113,7 +113,7 @@ class FundingAgentExplorer(object):
         @param dirs: the directorate id or list of directorate ids
             to filter by.
 
-        @rtype:  L{pandas.core.frame.DataFrame}
+        @rtype:  L{pandas.DataFrame}
         @return: the filtered data frame with only the columns
             returned by the division hierarchy level selector
 
@@ -151,7 +151,7 @@ class FundingAgentExplorer(object):
         @param divs: the division id or list of division ids to
             filter by
 
-        @rtype:  L{pandas.core.frame.DataFrame}
+        @rtype:  L{pandas.DataFrame}
         @return: the filtered data frame with only the columns
             returned by the program hierarchy level selector
 
@@ -222,7 +222,7 @@ class FundingAgentExplorer(object):
             occurence; 'shared' filters down to only those where _all_ PI
             ids show up.
 
-        @rtype:   L{pandas.core.frame.DataFrame}
+        @rtype:   L{pandas.DataFrame}
         @return:  The DataFrame records remaining after selecting and
             filtering based on the parameters
 
@@ -261,13 +261,13 @@ class FundingAgentExplorer(object):
         Filter the records in the frame passed in based on the level
         in the funding agent hierarchy.
 
-        @type  records:   L{pandas.core.frame.DataFrame}
+        @type  records:   L{pandas.DataFrame}
         @param records: data frame with records to be filtered
 
         @type  level: str
         @param level: level of funding agent hierarchy to filter by
 
-        @rtype:  L{pandas.core.frame.DataFrame}
+        @rtype:  L{pandas.DataFrame}
         @return: the filtered data frame
 
         """
@@ -288,7 +288,7 @@ class FundingAgentExplorer(object):
 
         Note that no attributes are removed, only records.
 
-        @type  frame: L{pandas.core.frame.DataFrame}
+        @type  frame: L{pandas.DataFrame}
         @param frame: data frame to filter by level value
 
         @type  level: str
@@ -297,7 +297,7 @@ class FundingAgentExplorer(object):
         @type  value: str, unicode, int or list of these
         @param value: single id or list of ids to filter by
 
-        @rtype:  L{pandas.core.frame.DataFrame}
+        @rtype:  L{pandas.DataFrame}
         @return: filtered data frame
 
         @raise KeyError: if the level is not a valid option
