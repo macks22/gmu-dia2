@@ -58,10 +58,30 @@ _parse_all_data()
 
 
 def available_years():
+    """
+    Get the list of all years there is data for.
+
+    @rtype:  list of str
+    @return: A chronologically ordered list of all years there is
+        data for.
+
+    """
     return JSON_FILES.keys()
 
 
 def available_months(year):
+    """
+    Get the list of all months there is data for in a particular
+    year.
+
+    @type  year: str
+    @param year: The year to check available months for.
+
+    @rtype:  list of str
+    @return: A list of all months for which there is data in the
+        given year; will be empty if none are available.
+
+    """
     if JSON_FILES.has_key(year):
         return JSON_FILES[year].keys()
     else:
@@ -71,7 +91,14 @@ def available_months(year):
 def awards():
     """
     A generator that parses each JSON file and yields each subsequent
-    chunk of award data. JSON files are read chronologically.
+    chunk of award data. JSON files are read chronologically. Files
+    are parsed one at a time (lazy loaded), so that the maximum
+    memory used at any point is bounded by the size of the largest
+    JSON data file.
+
+    @rtype:  iterator yielding dict
+    @return: An iterator which yields award dictionaries parsed from
+        the raw JSON files.
 
     """
     for year in JSON_FILES:
@@ -89,6 +116,13 @@ def abstracts():
     """
     A generator that parses each JSOn file and yields each subsequent
     abstract as it is encountered. JSON files are read chronologically.
+    Files are lazy loaded in order to conserve memory. See L{awards}
+    for more detail.
+
+    @rtype:  iterator yielding str
+    @return: An iterator which yields abstracts as they are read from
+        the awards, which are read from the JSON files in
+        chronological order.
 
     """
     for award in awards():
@@ -97,10 +131,12 @@ def abstracts():
 
 def all_files():
     """
-    Return a list of absolute paths for all files in the data directory.
+    Return a list of absolute paths for all files in the data
+    directory.
 
-    @returns: list of absolute paths for all JSON files in the data directory.
     @rtype:   list of str
+    @returns: A list of absolute paths for all JSON files in the data
+        directory.
 
     """
     file_list = []
@@ -126,20 +162,21 @@ def filter_files(year_start, year_end=None, month_start=None, month_end=None,
     year. This function does not allow you to pick different
     months for each year in the range.
 
-    @param year_start: first year in range to get
     @type  year_start: int
+    @param year_start: First year in range to parse.
 
-    @param year_end: last year in range to get
     @type  year_end: int
+    @param year_end: Last year in range to parse.
 
-    @param month_start: first month in range to get
     @type  month_start: int
+    @param month_start: First month in range to parse.
 
-    @param month_end: last month in range to get
     @type  month_end: int
+    @param month_end: Last month in range to parse.
 
-    @returns: the list of filepaths in the given range of years/months
-    @rtype:   list of str
+    @rtype:  list of str
+    @return: The list of filepaths in the given range of
+        years/months.
 
     """
     if year_end is None:
@@ -177,15 +214,15 @@ def get_file(year, month=None):
     """
     Retreive the data file path from the month and year.
 
-    @param year: the year to search for
     @type  year: int
+    @param year: The year to search for.
 
-    @param month: the month to search for
     @type  month: int
+    @param month: The month to search for.
 
-    @returns: the absolute path of the file found, or an empty string if
-              there is no data file for that month/year combo
     @rtype:   str
+    @returns: The absolute path of the file found, or an empty string if
+        there is no data file for that month/year combo.
 
     """
     if JSON_FILES.has_key(year):
@@ -202,11 +239,11 @@ def load_json(filepath):
     """
     Load a JSON string from a file.
 
-    @param filepath: path of the JSON file to parse.
     @type  filepath: str
+    @param filepath: The path of the JSON file to parse.
 
-    @returns: dict parsed from JSON file
     @rtype:   dict
+    @returns: Dictionary parsed from JSON file.
 
     """
     with open(filepath) as json_file:
@@ -216,7 +253,13 @@ def load_json(filepath):
 def save_graph(graph, filename):
     """
     Save the graph to the appropriate data directory using
-    graphml format.
+    GraphML format.
+
+    @type  graph: L{igraph.Graph}
+    @param graph: The graph instance to be saved.
+
+    @type  filename: str
+    @param filename: The name of the file to save the graph to.
 
     """
     with_extension = filename + '.graphml'
@@ -229,7 +272,13 @@ def save_graph(graph, filename):
 
 def load_graph(filename):
     """
-    Load a graph from its saved graphml file.
+    Load a graph from its saved GraphML file.
+
+    @type  filename: str
+    @param filename: The name of the file to load the graph from.
+
+    @rtype:  L{igraph.Graph}
+    @return: The graph instance loaded from the file.
 
     """
     with_extension = filename + '.graphml'
@@ -242,9 +291,10 @@ def load_full_graph():
     """
     Load the complete directorate 5 data graph from its pickle file.
 
-    @returns: the graph for all directorate 5 data, with vertices
-              for each PI and an edge for each shared awardID
     @rtype:   L{igraph.Graph}
+    @return: The graph for all directorate 5 data, with vertices
+        for each PI and an edge for each shared awardID.
+
     """
     graph_path = os.path.join(PICKLE_DIR, 'dir05-graph.pickle')
     return igraph.load(graph_path)
@@ -252,7 +302,10 @@ def load_full_graph():
 
 def save_full_graph(g):
     """
-    Parse through all directorate 05 data and save it to a pickle file.
+    Save the full directorate 05 graph to a pickle file.
+
+    @type  g: L{igraph.Graph}
+    @param g: The graph instance to save
 
     """
     graph_path = os.path.join(PICKLE_DIR, 'dir05-graph.pickle')
@@ -264,11 +317,11 @@ def load_abstract_vec(award_id):
     """
     Load the pickled abstract vector for the given award id.
 
-    @param award_id: the award id to load the abstract for
     @type  award_id: str, unicode, or int
+    @param award_id: The award id to load the abstract for.
 
-    @returns: the loaded abstract vector
     @rtype:   list of str
+    @returns: The loaded abstract vector.
 
     """
     filename = 'award-{}.pickle'.format(award_id)
@@ -282,15 +335,15 @@ def save_abstract_vector(vec, award_id):
     """
     Save the vectorized abstract for the given award_id by pickling it. The
     award ID is required because the filename convention is based on the award
-    ID:
+    ID::
 
         award-<award_id>.pickle
 
-    @param vec: vectorized abstract
     @type  vec: list of str
+    @param vec: The vectorized abstract.
 
-    @param award_id: the award id to base the filename off of
     @type  award_id: str
+    @param award_id: The award id to base the filename off of.
 
     """
     filename = 'award-{}.pickle'.format(award_id)
@@ -303,15 +356,15 @@ def write_abstract_vector(vec, award_id):
     """
     Save the vectorized abstract for the given award_id by writing it to a text
     file. The award ID is required because the filename convention is based on
-    the award ID:
+    the award ID::
 
         award-<award_id>.txt
 
-    @param vec: vectorized abstract
     @type  vec: list of str
+    @param vec: The vectorized abstract to write to a file.
 
-    @param award_id: the award id to base the filename off of
     @type  award_id: str
+    @param award_id: The award id to base the filename off of.
 
     """
     filename = 'award-{}.txt'.format(award_id)
@@ -326,11 +379,11 @@ def read_abstract_vector(award_id):
     """
     Read the abstract vector for the given award id.
 
-    @param award_id: the award id to read the abstract for
     @type  award_id: str, unicode, or int
+    @param award_id: The award id to read the abstract for.
 
-    @returns: the loaded abstract vector
-    @rtype:   list of str
+    @rtype:  list of str
+    @return: The loaded abstract vector.
 
     """
     filename = 'award-{}.txt'.format(award_id)
@@ -343,13 +396,14 @@ def read_abstract_vector(award_id):
 
 def write_bow(bow, pi_id):
     """
-    Write the BoW frequency distribution for the given PI to a text file.
+    Write the BoW frequency distribution for the given PI to a text
+    file.
 
-    @param bow: the BoW to write
-    @type  bow: L{gensim.corpora.dictionary.Dictionary}
+    @type  bow: L{gensim.Dictionary}
+    @param bow: The BoW to write.
 
-    @param pi_id: ID of the PI this BoW represents
     @type  pi_id: str
+    @param pi_id: ID of the PI this BoW represents.
 
     """
     filename = 'pi-{}.txt'.format(pi_id)
@@ -361,8 +415,11 @@ def read_bow(pi_id):
     """
     Read the BoW frequency distribution for the given PI.
 
-    @param pi_id: ID of the PI to read BoW for
     @type  pi_id: str
+    @param pi_id: ID of the PI to read BoW for
+
+    @rtype:  list of (tuple of (int, int))
+    @return: The BoW read for the given PI.
 
     """
     filename = 'pi-{}.txt'.format(pi_id)
@@ -375,8 +432,8 @@ def load_lda_model():
     Load the gensim LDA model for the directorate 05 dataset abstracts
     from its pickle file in the data directory.
 
-    @returns: the loaded LDA model
     @rtype:   L{gensim.models.LdaModel}
+    @returns: The loaded LDA model.
 
     """
     filename = 'lda-model-from-abstracts.pickle'
@@ -387,18 +444,19 @@ def load_lda_model():
 def write_wordle_file(topic_num, topic):
     """
     Write a word frequency file which can be copy/pasted into wordle.net
-    given a topic, which is a list of the form:
+    given a topic, which is a list of the form::
 
         [('electron', 50), ('molecule', 20)]
 
     Specifically, the topic is a list of tuples, where the first element
     of each tuple is the word and the second is the frequency of the word.
 
-    @param topic_num: the number of the topic from the LDA model
     @type  topic_num: int
+    @param topic_num: The number of the topic from the LDA model.
 
-    @param topic: the topic to write to a wordle-recognizable text file
     @type  topic: list of (tuple of (str, int))
+    @param topic: The topic to write to a wordle-recognizable text
+        file.
 
     """
     filename = 'lda-topic{}.txt'.format(topic_num)

@@ -2,32 +2,25 @@
 This module contains functions for parsing documents to vectors.
 Functions for word cleaning and stemming are also included.
 
+@type PUNCT: set
+@var  PUNCT:  The set of punctuation to be filtered from documents.
+
+@type STOPWORDS: set
+@var  STOPWORDS: The set of stopwords to be filtered from documents.
+
+@type STEMMER: L{nltk.PorterStemmer}
+@var  STEMMER: stemmer instance used to stem words in documents.
+
 """
 import string
 
 import nltk
 
+
 PUNCT = set(string.punctuation)
-"""
-@type PUNCT: set
-@var  PUNCT: The set of punctuation to be filtered from documents.
-
-"""
-
 STOPWORDS = set(nltk.corpus.stopwords.words('english'))
 STOPWORDS.add('br')  # get rid of </br> html tags (hackish)
-"""
-@type STOPWORDS: set
-@var  STOPWORDS: The set of stopwords to be filtered from documents.
-
-"""
-
 STEMMER = nltk.PorterStemmer()
-"""
-@type STEMMER: L{nltk.PorterStemmer}
-@var  STEMMER: stemmer instance used to stem words in documents.
-
-"""
 
 
 def test_word(word):
@@ -35,7 +28,10 @@ def test_word(word):
     Applies a set of conditions to filter out junk words.
 
     @type  word: str
-    @param word: word to test
+    @param word: The word to test.
+
+    @rtype:  bool
+    @return: False if the word is junk, else True.
 
     """
     if not word:
@@ -105,10 +101,10 @@ def vectorize(doc):
     stemmed, list of words.
 
     @type  doc: str
-    @param doc: the document to vectorize
+    @param doc: The document to vectorize.
 
     @rtype:  list of str
-    @return: filtered, cleaned, stemmed, list of words
+    @return: The filtered, cleaned, stemmed, list of words.
 
     """
     word_list = nltk.tokenize.word_tokenize(doc)

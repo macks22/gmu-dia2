@@ -54,29 +54,29 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
     This function does not allow you to pick different months for
     each year in the range.
 
-    @param year_start: first year in range to get
     @type  year_start: int
+    @param year_start: First year in range to parse.
 
-    @param year_end: last year in range to get
     @type  year_end: int
+    @param year_end: Last year in range to parse.
 
-    @param month_start: first month in range to get
     @type  month_start: int
+    @param month_start: First month in range to parse.
 
-    @param month_end: last month in range to get
     @type  month_end: int
+    @param month_end: Last month in range to parse.
 
-    @param file_limit: limits the number of files parsed; note
-                       this option overrides the year/month params
     @type  file_limit: int
+    @param file_limit: Limits the number of files parsed; note
+        this option overrides the year/month params
 
-    @param all_edge_attributes: if False, only the awardID is added
-                                as an attribute for each, otherwise
-                                everything is; default is True.
     @type  all_edge_attributes: bool
+    @param all_edge_attributes: If False, only the awardID is added
+        as an attribute for each, otherwise
+        everything is; default is True.
 
-    @returns: graph constructed from JSON data files parsed
     @rtype:   L{igraph.Graph}
+    @returns: Graph constructed from JSON data files parsed.
 
     """
     g = igraph.Graph()
@@ -151,6 +151,9 @@ def parse_full_graph():
     """
     Parse through all data and save it to a pickle file.
 
+    @rtype:  L{igraph.Graph}
+    @return: The graph which was parsed from the full dataset.
+
     """
     years = data.available_years()
     g = pi_award_graph(min(years), max(years))
@@ -164,8 +167,8 @@ def all_pi_ids_from_files():
     treated the same since we have no way to distinguish between the
     two.
 
-    @returns: list of all PI and coPI IDs found
     @rtype:   list of int
+    @return:  List of all PI IDs found.
 
     """
     json_data_file_list = data.all_files()
@@ -183,11 +186,11 @@ def all_pi_ids(g):
     """
     Parse the graph to get the set of all PI IDs.
 
-    @param graph: graph to parse for PI IDs
-    @type  graph: L{igraph.Graph}
+    @type  g: L{igraph.Graph}
+    @param g: Graph to parse for PI IDs.
 
-    @returns: set of all PI IDs in the graph (for all vertices)
     @rtype:   set
+    @returns: Set of all PI IDs in the graph (for all vertices).
 
     """
     return set([v['name'] for v in g.vs])
@@ -213,8 +216,8 @@ def parse_funding_agents():
         10. pgm_name : program name
 
 
-    @returns: a data frame with the 10 fields listed above
-    @rtype:   L{pandas.core.frame.DataFrame}
+    @rtype:   L{pandas.DataFrame}
+    @return:  A data frame with the 10 fields listed above.
 
     """
     all_records = []
@@ -266,8 +269,8 @@ def frame_pi_award_pairings():
     Return a data frame with records for each PI for each award they
     worked on.
 
-    @returns: data frame with pi_id and award_id columns
-    @rtype:   L{pandas.core.frame.DataFrame}
+    @rtype:   L{pandas.DataFrame}
+    @return:  DataFrame with pi_id and award_id columns.
 
     """
     records = []
@@ -284,8 +287,8 @@ def frame_abstracts():
     """
     Parse all abstracts into a DataFrame, indexed by award ids.
 
-    @returns: data frame of abstracts, indexed by award ids
-    @rtype:   L{pandas.core.frame.DataFrame}
+    @rtype:   L{pandas.DataFrame}
+    @return:  DataFrame of abstracts, indexed by award ids.
 
     """
     records = []
