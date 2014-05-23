@@ -8,6 +8,10 @@ import requests
 URL = 'http://ci4ene01.ecn.purdue.edu/GMU_DIA2/DIA2/site/JSONRPC/query.php'
 
 
+class InvalidYearMonth(Exception):
+    pass
+
+
 def json_rpc_request(json_content):
     """
     Make the request to the NSF database through the PHP query
@@ -90,6 +94,23 @@ def write_data(data, year, month, dir_id):
         json.dump(data, json_file)
 
 
+def validate_year_and_month(year, month):
+    """
+    Make sure the requested year and month falls within the
+    allowable time range of 1995-01 to 2014-02.
+
+    @raises InvalidYearMonth: If the year/month is outside the
+        allowable time range.
+
+    """
+    year = int(year)
+    month = int(month)
+    if year > 2014 or year < 1995:
+        raise InvalidYearMonth('There is only data from 1995 to 2014')
+    elif year == 2014 and month > 2:
+        raise InvalidYearMonth('There is only data up until 2014-02')
+
+
 def request_data(year, month, dir_id='05', mode='current', logical_op='and'):
     """
     Request data from DIA2 by year, month, and directorate. Before
@@ -129,7 +150,11 @@ def request_data(year, month, dir_id='05', mode='current', logical_op='and'):
         this will be awards that matched the specified month, year,
         and directorate.
 
+    @raises InvalidYearMonth: If the year/month is outside the
+        allowable time range.
+
     """
+    validate_year_and_month(year, month)
     month = _translate_month(month)
     trigger_caching(year, month, dir_id, logical_op)
     params = {
@@ -170,7 +195,10 @@ def main():
     parser = setup_parser()
     args = parser.parse_args()
 
-    data = request_data(args.year, args.month, args.dir_id)
+    try:
+        data = request_data(args.year, args.month, args.dir_id)
+    except InvalidYearMonth as err:
+        print err
 
 
 if __name__ == "__main__":
