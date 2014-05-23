@@ -108,7 +108,15 @@ def request_data(year, month, dir_id='05', mode='current', logical_op='and'):
     @type  mode: str
     @param mode: This indicates how to handle modified awards.
         It is current by default, which means keep only the newest
-        status of modified awards, so as to reduce complexity.
+        status of modified awards, so as to reduce complexity::
+
+        mode indicate the document disambiguation status
+        default mode is "disambiguated"
+        disambiguated: nonColModDocIDs
+        all: dupDocIDs
+        current: nonModOriDocIDs
+        collab: nonModDocIDs
+        ori: oriDocIDs
 
     @type  logical_op: str
     @param logical_op: how to combine the query parameters. This is
