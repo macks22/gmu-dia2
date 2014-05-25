@@ -1,47 +1,51 @@
 <?php
+
 require_once("service_basic.php");
 $full = true;
+
 function getDocumentIDsByParams($params) {
   global $full;
   $op = $params->{"logicalOp"};
   $docIDs = array();
   $first = true;
-  
-  $paramFuncMap = array("authorID"=>'getDocumentIDsByAuthorID',
-						"author"=>'getDocumentIDsByAuthor',
-						"personID"=>'getDocumentIDsByPersonID',
-						"POID"=>'getDocumentIDsByPOID',
-						"poID"=>'getDocumentIDsByPOID',
-						"PIID"=>'getDocumentIDsByPIID',
-						"coPIID"=>'getDocumentIDsByCoPIID',
-						"publicationID"=>'getDocumentIDsByPublicationID',
-						"organization"=>'getDocumentIDsByOrganization',
-						"organizationID"=>'getDocumentIDsByOrganizationID',
-						"NSFProgram"=>'getDocumentIDsByNSFProgram',
-						"program"=>'getDocumentIDsByNSFProgram',
-						"directorateID"=>'getDocumentIDsByDirID',
-						"NSFDirectorate"=>'getDocumentIDsByNSFDirectorate',
-						"directorate"=>'getDocumentIDsByNSFDirectorate',
-						"dirID"=>'getDocumentIDsByDirID',
-						"divisionID"=>'getDocumentIDsByDivID',
-						"divID"=>'getDocumentIDsByDivID',
-						"division"=>'getDocumentIDsByNSFDivision',
-						"NSFDivision"=>'getDocumentIDsByNSFDivision',
-						"programID"=>'getDocumentIDsByNSFProgramID',
-						"pgmID"=>'getDocumentIDsByNSFProgramID',
-						"documentGenreID"=>'getDocumentIDsByDocumentGenreID',
-						"publicationGenreID"=>'getDocumentIDsByPublicationGenreID',
-						"title"=>'getDocumentIDsByDocumentTitle',
-						"documentTitle"=>'getDocumentIDsByDocumentTitle',
-						"abstract"=>'getDocumentIDsByAbstract',
-						"awardID"=>'getDocumentIDsByAwardIDArray',
-						//"MachineGeneratedTerm"=>'getDocumentIDsByMachineGeneratedTerm',
-						"conceptID"=>'getDocumentIDsByConceptID',
-						"statusGroupID"=>'getDocumentIDsByStatusGroupID',
-						"q"=>'getDocumentIDsByFullText',
-						"stateID"=>'getDocumentIDsByStateID',
-						"year"=>'getDocumentIDsByPublicationYear',
-						);
+
+  $paramFuncMap = array(
+      "authorID"=>'getDocumentIDsByAuthorID',
+      "author"=>'getDocumentIDsByAuthor',
+      "personID"=>'getDocumentIDsByPersonID',
+      "POID"=>'getDocumentIDsByPOID',
+      "poID"=>'getDocumentIDsByPOID',
+      "PIID"=>'getDocumentIDsByPIID',
+      "coPIID"=>'getDocumentIDsByCoPIID',
+      "publicationID"=>'getDocumentIDsByPublicationID',
+      "organization"=>'getDocumentIDsByOrganization',
+      "organizationID"=>'getDocumentIDsByOrganizationID',
+      "NSFProgram"=>'getDocumentIDsByNSFProgram',
+      "program"=>'getDocumentIDsByNSFProgram',
+      "directorateID"=>'getDocumentIDsByDirID',
+      "NSFDirectorate"=>'getDocumentIDsByNSFDirectorate',
+      "directorate"=>'getDocumentIDsByNSFDirectorate',
+      "dirID"=>'getDocumentIDsByDirID',
+      "divisionID"=>'getDocumentIDsByDivID',
+      "divID"=>'getDocumentIDsByDivID',
+      "division"=>'getDocumentIDsByNSFDivision',
+      "NSFDivision"=>'getDocumentIDsByNSFDivision',
+      "programID"=>'getDocumentIDsByNSFProgramID',
+      "pgmID"=>'getDocumentIDsByNSFProgramID',
+      "documentGenreID"=>'getDocumentIDsByDocumentGenreID',
+      "publicationGenreID"=>'getDocumentIDsByPublicationGenreID',
+      "title"=>'getDocumentIDsByDocumentTitle',
+      "documentTitle"=>'getDocumentIDsByDocumentTitle',
+      "abstract"=>'getDocumentIDsByAbstract',
+      "awardID"=>'getDocumentIDsByAwardIDArray',
+      //"MachineGeneratedTerm"=>'getDocumentIDsByMachineGeneratedTerm',
+      "conceptID"=>'getDocumentIDsByConceptID',
+      "statusGroupID"=>'getDocumentIDsByStatusGroupID',
+      "q"=>'getDocumentIDsByFullText',
+      "stateID"=>'getDocumentIDsByStateID',
+      "year"=>'getDocumentIDsByPublicationYear',
+  );
+
   $ddpDone = false;
   if(isset($params->{"directorateID"}) && isset($params->{"divisionID"}) && isset($params->{"programID"})) {
   	$docIDs = getDocumentIDsByDirDivPgm($params->{"directorateID"}, $params->{"divisionID"}, $params->{"programID"});
@@ -49,7 +53,7 @@ function getDocumentIDsByParams($params) {
 	$ddpDone = true;
 	$full = false;
   }
-  
+
   foreach($paramFuncMap as $attr=>$func) {
 	if($ddpDone && in_array($attr, array("NSFProgram", "program", "directorateID", "NSFDirectorate", "directorate", "dirID", "divisionID", "divID", "division", "NSFDivision", "programID", "pgmID")))
 	  continue;
