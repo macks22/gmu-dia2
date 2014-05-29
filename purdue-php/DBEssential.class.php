@@ -98,8 +98,8 @@ class DBEssential {
         $open = opendir($dir);
         $pattern = "/\b".$fileName."\./";
 
-        while (($file = readdir($open)) !== false){
-            if (preg_match($pattern, $file)){
+        while (($file = readdir($open)) !== false) {
+            if (preg_match($pattern, $file)) {
                 unlink($file);
             }
         }
@@ -178,7 +178,7 @@ class DBEssential {
     public function load($params, $attrs=null) {
         if ($attrs == null || in_array("ddp", $attrs)) {
             $string = file_get_contents("widgetcache/ddp_name.json");
-            $json   = json_decode($string,true);
+            $json = json_decode($string,true);
             $this->idPgmname = $json["idPgmname"];
             $this->idDivname = $json["idDivname"];
             $this->idDivabbr = $json["idDivabbr"];
@@ -194,8 +194,8 @@ class DBEssential {
         }
 
         if ($attrs == null || in_array("status", $attrs)) {
-            $string   = file_get_contents("widgetcache/group_status.json");
-            $this->groupStatus   = json_decode($string,true);
+            $string = file_get_contents("widgetcache/group_status.json");
+            $this->groupStatus = json_decode($string,true);
         }
 
         if ($attrs == null || in_array("excludedPersonIDs", $attrs)) {
@@ -204,17 +204,16 @@ class DBEssential {
         }
 
         if ($attrs == null || in_array("conceptPC", $attrs)) {
-            $string   = file_get_contents("widgetcache/concept.json");
-            $this->conceptPC   = json_decode($string,true);
+            $string = file_get_contents("widgetcache/concept.json");
+            $this->conceptPC = json_decode($string,true);
         }
 
         if ($this->docDocMapExists) {
-            $string   = file_get_contents("widgetcache/ddMap.json");
-            $json   = json_decode($string,true);
+            $string = file_get_contents("widgetcache/ddMap.json");
+            $json = json_decode($string,true);
             $this->allDocDocMap = $json["allDocDocMap"];
             $this->modDocDocMap = $json["modDocDocMap"];
         }
-
 
         $caseAttrs = array(
             "full","docTitle","docAward",
@@ -239,15 +238,18 @@ class DBEssential {
             foreach ($items as $item) {
                 $string = file_get_contents($fileName.".".$item.".json");
                 $json = json_decode($string,true);
-                $this->$item =$json;
+                $this->$item = $json;
             }
         }
     }
 
-    public static function getFileName($params){
-
-          // getting the name of the file with params
+    /**
+     * Get the name of the cache file to use for the given params.
+     */
+    public static function getFileName($params) {
           $filename = "";
+
+          // lowercase all parameter keys
           $paramsArr = (array) $params;
           foreach ($paramsArr as $k=>$v) {
               unset($paramsArr[$k]);
@@ -255,15 +257,14 @@ class DBEssential {
           }
 
           ksort($paramsArr);
-          //print_r($paramsArr);
           foreach ($paramsArr as $k=>$v) {
               if ($k == "userid"
                   || $k == "mode"
                   || $k == "overviewmode"
                   || $k == "depth"
-                  ||(gettype($v) != "string"
-                  && gettype($v) != "array"
-                  && gettype($v) != "integer"))
+                  || (gettype($v) != "string"
+                     && gettype($v) != "array"
+                     && gettype($v) != "integer"))
               {
                   continue;
               }
@@ -288,7 +289,6 @@ class DBEssential {
           $filename = str_replace(" ", "_", $filename);
           $filename = str_replace('"', '+qt', $filename);
           $filename = strtolower($filename);
-          //echo $filename;
 
           return $filename;
     }
@@ -296,8 +296,9 @@ class DBEssential {
     function loadExcludedPersonIDs() {
         $this->excludedPersonIDs = array();
         //Name Not Available
-        $res = executeSQLSequence(array(),
-            array('select id from person where lastname="" or lastname in ("None","Available","DATA NOT AVAILABLE")'));
+        $res = executeSQLSequence(array(), array(
+            'select id from person where lastname="" or lastname in ("None","Available","DATA NOT AVAILABLE")'
+        ));
         foreach ($res as $r) {
             $this->excludedPersonIDs[] = $r["id"];
         }
@@ -306,8 +307,9 @@ class DBEssential {
     function getDocumentAliasMapByCollab($docIDs) {
         // Check function in service_basic.php the two parameters are $type and $name
         $dupID = getIDFromLookup("documentRelationship", "collaborative");
-        $res = executeSQLSequence($docIDs,
-            array("select documentID1 as id, documentID2 as aliasID from document_document where (documentID1 in (#) or documentID2 in (#)) and relationshipID=$dupID"));
+        $res = executeSQLSequence($docIDs, array(
+            "select documentID1 as id, documentID2 as aliasID from document_document where (documentID1 in (#) or documentID2 in (#)) and relationshipID=$dupID"
+        ));
         foreach ($res as $r) {
             $map[$r["id"]] = $r["aliasID"];
         }
@@ -315,8 +317,9 @@ class DBEssential {
     }
 
     public static function getPersonAliasMap($pids) {
-        $res = executeSQLSequence($pids,
-            array("select id, aliasID from person_person where id in (#) or aliasID in (#)"));
+        $res = executeSQLSequence($pids, array(
+            "select id, aliasID from person_person where id in (#) or aliasID in (#)"
+        ));
         foreach ($res as $r) {
             $map[$r["id"]] = $r["aliasID"];
         }
@@ -324,15 +327,16 @@ class DBEssential {
     }
 
     function loadStateInfo() {
-        $res = executeSQLSequence(array(),
-            array('select id, name, abbreviation as abbr from state'));
+        $res = executeSQLSequence(array(), array('select id, name, abbreviation as abbr from state'));
         foreach ($res as $r) {
-            $this->stateInfo[$r["id"]] = array("name"=>$r["name"],
-                                             "abbr"=>$r["abbr"]);
+            $this->stateInfo[$r["id"]] = array(
+                "name"=>$r["name"],
+                "abbr"=>$r["abbr"]
+            );
         }
     }
 
-    function loadOrgPersonMap(){
+    function loadOrgPersonMap() {
         $pIDs = $this->dupAuthorIDs;
 
         $res = executeSQLSequence($pIDs, array(
@@ -636,11 +640,11 @@ class DBEssential {
 
             foreach ($res as $r) {
 
-                  // build the doc-doc map for all relationship (modified and collaborative)
-                  $this->allDocDocMap[$r["id"]] = $r["doc2"];
+                // build the doc-doc map for all relationship (modified and collaborative)
+                $this->allDocDocMap[$r["id"]] = $r["doc2"];
 
-                  // build the doc-doc map for only modified relationship
-                  if ($r["relationshipID"] == $mod) {
+                // build the doc-doc map for only modified relationship
+                if ($r["relationshipID"] == $mod) {
                     $this->modDocDocMap[$r["id"]] = $r["doc2"];
                 }
             }
@@ -651,7 +655,7 @@ class DBEssential {
         $this->nonModDocIDs = DBEssential::disambiguateDocuments($ids, $this->modDocDocMap);
     }
 
-     function computeNonModOriDocumentIDs (){
+    function computeNonModOriDocumentIDs () {
         $ids = $this->oriDocIDs;
         if (!$this->docDocMapExists) {
             $collab = getIDFromLookup("documentRelationship", "Collaborative");
@@ -666,9 +670,10 @@ class DBEssential {
                 $this->allDocDocMap[$r["id"]] = $r["doc2"];
 
                 // build the doc-doc map for only modified relationship
-                if ($r["relationshipID"] == $mod)
-                  $this->modDocDocMap[$r["id"]] = $r["doc2"];
-              }
+                if ($r["relationshipID"] == $mod) {
+                    $this->modDocDocMap[$r["id"]] = $r["doc2"];
+                }
+            }
         }
         $this->computeCurrentDocIDs($ids, $this->modDocDocMap);
     }
@@ -743,7 +748,7 @@ class DBEssential {
         //array_splice($newids, 0, 0, $ids);
         // create an alias map
         if ($this->full) {
-              $this->dupDocIDs = $this->oriDocIDs;
+            $this->dupDocIDs = $this->oriDocIDs;
         } else {
             $this->dupDocIDs = DBEssential::getDupDocumentIDs($ids, $this->allDocDocMap);
         }
@@ -782,6 +787,7 @@ class DBEssential {
 
         unset($aExist);
         $this->dupAuthorIDs = $aIDs;
+
         // person name disambiguation
         // -- author IDs
         if ($this->full) {
@@ -832,10 +838,10 @@ class DBEssential {
         foreach ($this->docPOs as $docID=>$poIDs) {
             $newPOIDs = array();
             foreach ($poIDs as $poID=>$temp) {
-              if (isset($this->poMap[$poID])) {
-                  $poID = $this->poMap[$poID];
-              }
-              $newPOIDs[] = $poID;
+                if (isset($this->poMap[$poID])) {
+                    $poID = $this->poMap[$poID];
+                }
+                $newPOIDs[] = $poID;
             }
             $this->docPOs[$docID] = $newPOIDs;
         }
@@ -906,12 +912,12 @@ class DBEssential {
     }
 
     public static function isFull($params) {
-      foreach ($params as $k=>$v) {
-          if ($k != "logicalOp") {
-              return false;
-          }
-      }
-      return true;
+        foreach ($params as $k=>$v) {
+            if ($k != "logicalOp") {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static function isFullAwarded($params) {

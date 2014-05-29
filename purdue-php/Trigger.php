@@ -13,19 +13,21 @@ function Trigger($params) {
             global $full;
 
             //echo "list of documents"."\n";
-            if(!$full) {
+            if (!$full) {
                 $dbe = new DBEssential($docIDs);
             } else {
                 $dbe = new DBEssential(null);
             }
+
             $dbe->full = $full;
             $dbe->run();
             $dbe->save($res["data"]);
-        }	
+        }
         $result["exist"] = false;
     } else {
         $result["exist"] = true;
     }
+
     $result["status"] = "OK";
     return $result;
 }
@@ -40,13 +42,13 @@ function checkFile($params){
         if (preg_match($pattern,$file)) {
             $result["exist"] = true;
             $result["status"] = "OK";
-            $result["data"] = $filename; 
+            $result["data"] = $filename;
             return $result;
         }
     }
 
     closedir($open);
-    $result=array(
+    $result = array(
         "exist"=>0,
         "status"=>"OK",
         "data"=>$filename
@@ -56,3 +58,4 @@ function checkFile($params){
 }
 
 ?>
+
