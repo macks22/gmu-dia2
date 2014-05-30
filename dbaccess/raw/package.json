@@ -1,0 +1,16 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bookshelf": "^0.6.10",
+    "express": "3.5.1",
+    "jade": "*",
+    "knex": "^0.5.14",
+    "lodash": "^2.4.1",
+    "mysql": "^2.3.2"
+  }
+}
