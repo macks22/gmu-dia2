@@ -221,7 +221,7 @@ class AbstractVectors(object):
         Look up an abstract by the id of the award it was written for.
 
         @type  award_id: str or int
-        @param award_id: id of the award to look up an abstract for
+        @param award_id: id of the award to look up an abstract for.
 
         @raises KeyError: If the award id is not in the data parsed.
 
@@ -249,7 +249,7 @@ class AbstractVectors(object):
         award id to a pickle file for quick loading later.
 
         @type  award_id: str or int
-        @param award_id: id of the award to save the abstract word vector for
+        @param award_id: id of the award to save the abstract word vector for.
 
         @raises KeyError: If the award id is not in the data parsed.
 

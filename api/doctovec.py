@@ -23,7 +23,7 @@ STOPWORDS.add('br')  # get rid of </br> html tags (hackish)
 STEMMER = nltk.PorterStemmer()
 
 
-def test_word(word):
+def keep_word(word):
     """
     Applies a set of conditions to filter out junk words.
 
