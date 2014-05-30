@@ -1,4 +1,5 @@
 <?php
+
 function getAuthorInfo($params) {
     ini_set('memory_limit','3072M');
 

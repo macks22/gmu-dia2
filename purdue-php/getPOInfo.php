@@ -1,8 +1,8 @@
 <?php
 
-ini_set('memory_limit','3072M');
-
 function getPOInfo($params) {
+    ini_set('memory_limit','3072M');
+
     $attrs = array("oriDocIDs", "nonColModDocIDs", "nonModOriDocIDs","poDocs", "personName","eliminatedPersonIDs");
     $dbe = new DBEssential(null);
     $dbe->load($params);
