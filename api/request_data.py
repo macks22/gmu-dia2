@@ -41,13 +41,45 @@ def _translate_month(month):
     return '0' + month if len(month) == 1 else month
 
 
-def trigger_caching(year, month, dir_id='05', logical_op='and'):
+def _trigger_award_caching(year, month, dir_id='05', logical_op='and'):
     params = {
         'logicalOp': str(logical_op),
         'yearMonth': str(year) + '-' + _translate_month(month),
         'directorateID': str(dir_id)
     }
     req_body = {'method': 'Trigger', 'params': params}
+    return json_rpc_request(json.dumps(req_body))
+
+
+def _trigger_name_caching(pi_id, logical_op='and'):
+    params = {
+        'logicalOp': str(logical_op),
+        'personID': str(pi_id)
+    }
+    req_body = {'method': 'Trigger', 'params': params}
+    return json_rpc_request(json.dumps(req_body))
+
+
+def get_name(pi_id, logical_op='and'):
+    """
+    Get the name of a PI by the disambiguated ID.
+
+    @type  pi_id: int or str
+    @param pi_id: ID of the PI to get the name of.
+
+    @type  logical_op: str
+    @param logical_op: How to combine the various query parameters.
+
+    @rtype:  dict
+    @return: The name of the PI if any, decoded from the JSON response.
+
+    """
+    _trigger_name_caching(pi_id, logical_op)
+    params = {
+        'logicalOp': str(logical_op),
+        'personId': str(pi_id)
+    }
+    req_body = {'method': 'getName', 'params': params}
     return json_rpc_request(json.dumps(req_body))
 
 
@@ -156,7 +188,7 @@ def request_data(year, month, dir_id='05', mode='current', logical_op='and'):
     """
     validate_year_and_month(year, month)
     month = _translate_month(month)
-    trigger_caching(year, month, dir_id, logical_op)
+    _trigger_award_caching(year, month, dir_id, logical_op)
     params = {
         'logicalOp': str(logical_op),
         'mode': str(mode),
@@ -180,13 +212,17 @@ def request_data(year, month, dir_id='05', mode='current', logical_op='and'):
 
 def setup_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('year', action='store',
-            help='the year to get data for')
-    parser.add_argument('month', action='store',
-            help='the month to get data for')
-    parser.add_argument('dir_id', action='store',
-            nargs='?', default='05',
-            help='the directorate to get data for')
+
+    parser.add_argument(
+        'year', action='store',
+        help='the year to get data for')
+    parser.add_argument(
+        'month', action='store',
+        help='the month to get data for')
+    parser.add_argument(
+        'dir_id', action='store',
+        nargs='?', default='05',
+        help='the directorate to get data for')
 
     return parser
 
@@ -203,4 +239,3 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
-
