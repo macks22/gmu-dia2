@@ -69,8 +69,8 @@ class Abstracts(object):
         for award_data in data.awards():
             award_id = str(award_data['awardID'])
             pi_list = [str(pi_id) for pi_id in award_data['PIcoPI']]
-            abstract = award_data['abstract'].encode('utf-8')
-            title = award_data['title'].encode('utf-8')
+            abstract = unicode(award_data['abstract'])
+            title = unicode(award_data['title'])
 
             # add a record for the award/abstract pairing
             abstract_frame_columns = ['award_id', 'abstract', 'title']
@@ -81,10 +81,12 @@ class Abstracts(object):
             for pi_id in pi_list:
                 pi_awd_pairings.append((pi_id, award_id))
 
-        self._pi_frame = pd.DataFrame(pi_awd_pairings,
-                columns=pi_frame_columns)
-        self._abstract_frame = pd.DataFrame(awd_abstract_pairings,
-                columns=abstract_frame_columns)
+        self._pi_frame = pd.DataFrame(
+            pi_awd_pairings,
+            columns=pi_frame_columns)
+        self._abstract_frame = pd.DataFrame(
+            awd_abstract_pairings,
+            columns=abstract_frame_columns)
 
         self.abstracts = self._abstract_frame['abstract'].values
         self.award_ids = self._abstract_frame['award_id'].values
@@ -356,8 +358,8 @@ class AbstractBoWs(object):
         else:
             self._abstract_vectors = abstract_vectors
 
-        self._dictionary = gensim.corpora.dictionary.Dictionary(
-                self._abstract_vectors)
+        self.dictionary = gensim.corpora.dictionary.Dictionary(
+            self._abstract_vectors)
         self.award_ids = self._abstract_vectors.award_ids
 
     def __iter__(self):
@@ -371,7 +373,7 @@ class AbstractBoWs(object):
 
         """
         for abstract in self._abstract_vectors:
-            yield self._dictionary.doc2bow(abstract)
+            yield self.dictionary.doc2bow(abstract)
 
     def __getitem__(self, award_id):
         """
@@ -384,7 +386,7 @@ class AbstractBoWs(object):
         @raises KeyError: If the award id is not in the data parsed.
 
         """
-        return self._dictionary.doc2bow(self._abstract_vectors[award_id])
+        return self.dictionary.doc2bow(self._abstract_vectors[award_id])
 
     def __len__(self):
         """
@@ -425,7 +427,7 @@ class AbstractBoWs(object):
 
         """
         abstract_vectors = self._abstract_vectors.for_pi(pi_id)
-        return [self._dictionary.doc2bow(vec) for vec in abstract_vectors]
+        return [self.dictionary.doc2bow(vec) for vec in abstract_vectors]
 
     def pi_document(self, pi_id):
         """
@@ -439,7 +441,7 @@ class AbstractBoWs(object):
 
         """
         document_vector = self._abstract_vectors.pi_document(pi_id)
-        return self._dictionary.doc2bow(document_vector)
+        return self.dictionary.doc2bow(document_vector)
 
 
 class LdaModel(object):
@@ -472,8 +474,10 @@ class LdaModel(object):
         self._dict = self._bow_corpus._dictionary
 
         if parse:
-            self._model = gensim.models.LdaModel(self._bow_corpus,
-                    num_topics=num_topics, id2word=self._dict)
+            self._model = gensim.models.LdaModel(
+                self._bow_corpus,
+                num_topics=num_topics,
+                id2word=self._dict)
         else:
             self._model = data.load_lda_model()
 
@@ -624,4 +628,3 @@ def write_wordle_files(lda_model, num_topics=10, topn=40):
             topic.append((pair[1], int(float(pair[0]) * 1000)))
 
         data.write_wordle_file(topic_num, topic)
-

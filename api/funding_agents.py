@@ -15,7 +15,7 @@ import os
 import numpy
 import itertools
 
-import parser
+import parse
 
 
 class FundingAgentExplorer(object):
@@ -24,10 +24,10 @@ class FundingAgentExplorer(object):
     def __init__(self):
         """
         Parse the funding agents from the raw JSON files using the
-        parser module, then set up the hierarchy level selectors.
+        parse module, then set up the hierarchy level selectors.
 
         """
-        self._df = parser.parse_funding_agents()
+        self._df = parse.parse_funding_agents()
         self._selectors = {
             'dir': ['dir_id', 'dir_abbr', 'dir_name'],
             'div': ['div_id', 'div_abbr', 'div_name'],
@@ -318,4 +318,3 @@ class FundingAgentExplorer(object):
             raise KeyError("level must be one of {'dir', 'div','pgm'}")
 
         return filtered.reset_index(drop=True)
-

@@ -21,7 +21,7 @@ except ImportError:
 # -----------------------------------------------------------------------------
 # MODULE SETUP
 # -----------------------------------------------------------------------------
-DATA_DIR = os.path.join(os.getcwd(), 'data')
+DATA_DIR = os.path.join(os.path.pardir, 'data')
 JSON_DIR = os.path.join(DATA_DIR, 'json')
 GRAPH_SAVE_DIR = os.path.join(DATA_DIR, 'pi-award-graphs')
 PICKLE_DIR = os.path.join(DATA_DIR, 'pickle')
@@ -45,7 +45,7 @@ def _parse_all_data():
             year = int(year)
             month = int(month)
 
-            if not JSON_FILES.has_key(year):
+            if not year in JSON_FILES:
                 JSON_FILES[year] = {month: path}
             else:
                 JSON_FILES[year][month] = path
@@ -82,7 +82,7 @@ def available_months(year):
         given year; will be empty if none are available.
 
     """
-    if JSON_FILES.has_key(year):
+    if year in JSON_FILES:
         return JSON_FILES[year].keys()
     else:
         return []
@@ -148,7 +148,7 @@ def all_files():
 
 
 def filter_files(year_start, year_end=None, month_start=None, month_end=None,
-        file_limit=None):
+                 file_limit=None):
     """
     Filter the list of JSON files by year and month, allowing
     for a possible range of dates based on month/year.
@@ -189,7 +189,7 @@ def filter_files(year_start, year_end=None, month_start=None, month_end=None,
     if month_end is None and month_start is not None:
         months = [month_start]
     elif month_start is None:
-        months = range(1,13)
+        months = range(1, 13)
     else:
         months = range(month_start, month_end + 1)
 
@@ -225,9 +225,9 @@ def get_file(year, month=None):
         there is no data file for that month/year combo.
 
     """
-    if JSON_FILES.has_key(year):
+    if year in JSON_FILES:
         if month is not None:
-            if JSON_FILES[year].has_key(month):
+            if month in JSON_FILES[year]:
                 return JSON_FILES[year][month]
         else:
             return JSON_FILES[year].values()
@@ -464,4 +464,3 @@ def write_wordle_file(topic_num, topic):
     with open(path, 'w') as f:
         for word_and_freq in topic:
             f.write('{}:{}\n'.format(word_and_freq[0], word_and_freq[1]))
-

@@ -90,7 +90,7 @@ def clean_word_list(word_list):
 
     """
     cleaned_words = [clean_word(w) for w in word_list]
-    filtered_words = filter(test_word, cleaned_words)
+    filtered_words = filter(keep_word, cleaned_words)
     stemmed_words = [STEMMER.stem_word(word) for word in filtered_words]
     return stemmed_words
 
@@ -126,4 +126,3 @@ def write_vec(vec, filepath):
     with open(filepath, 'w') as f:
         for word in vec:
             f.write('{}\n'.format(word))
-

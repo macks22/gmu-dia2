@@ -35,7 +35,7 @@ def save_graphs_for_each_year():
 
 
 def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
-        file_limit=None, all_edge_attributes=True):
+                   file_limit=None, all_edge_attributes=True):
     """
     Parse the json files for the given years/months into an igraph
     Graph object. The graph is constructed by creating a vertex for
@@ -82,8 +82,10 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
     g = igraph.Graph()
 
     # parse the list of JSON files from the data directory
-    awards = data.filter_files(year_start, year_end,
-                month_start, month_end, file_limit)
+    awards = data.filter_files(
+        year_start, year_end,
+        month_start, month_end, file_limit
+    )
 
     pis_seen_set = set()
     for award_data in awards:
@@ -303,4 +305,3 @@ def frame_abstracts():
 
 if __name__ == "__main__":
     save_graphs_for_each_year()
-
