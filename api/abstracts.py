@@ -32,8 +32,7 @@ used to parse subsequent documents into BoW representations using the
 I{doc2bow} method.
 
 The BoW documents can then be used with the various models in
-L{gensim.models}, such as the L{gensim.models.LdaModel} to perform
-topic modeling and compute document similarity measures.
+L{gensim.models}, such as the L{gensim.models.LdaModel} to perform topic modeling and compute document similarity measures.
 
 """
 import os
@@ -365,6 +364,8 @@ class AbstractBoWs(object):
 
         self.dictionary = gensim.corpora.dictionary.Dictionary(
             self._abstract_vectors)
+        self.dictionary.filter_extremes()
+
         self.award_ids = self._abstract_vectors.award_ids
         self.pis = self._abstract_vectors.pis
 
@@ -477,7 +478,7 @@ class LdaModel(object):
         else:
             self._bow_corpus = bow_corpus
 
-        self._dict = self._bow_corpus._dictionary
+        self._dict = self._bow_corpus.dictionary
 
         if parse:
             self._model = gensim.models.LdaModel(
@@ -486,6 +487,9 @@ class LdaModel(object):
                 id2word=self._dict)
         else:
             self._model = data.load_lda_model()
+
+        # expose pi set for convenience
+        self.pis = self._bow_corpus.pis
 
     def __getitem__(self, pi_id):
         """
@@ -500,9 +504,11 @@ class LdaModel(object):
 
         """
         pi_bow = self._bow_corpus.pi_document(pi_id)
-        return self._model[pi_bow]
+        topic_distribution = self._model[pi_bow]
+        return sorted(topic_distribution,
+            reverse=True, key=lambda topic: topic[1])
 
-    def save(self, filepath):
+    def save(self):
         """
         Save this LDA model to a pickle file.
 
@@ -525,8 +531,21 @@ class LdaModel(object):
         with open(filepath, 'r') as f:
             return pickle.load(f)
 
-    def show_topic(self, topic_num):
-        self._model.show_topic(topic_num)
+    def show_topic(self, topic_id, topn=10):
+        """
+        Show a particular topic in the form of a list of terms
+        with relative representativeness scores, sorted from
+        most representative to least.
+
+        :type  topic_id: int
+        :param topic_id: ID of topic to show.
+
+        :type  topn: int
+        :param topn: Number of words to show; these will be the top n
+            most representative of the topic; 10 are shown by default.
+
+        """
+        return self._model.show_topic(topic_id, topn)
 
     def top_topics_for_pi(self, pi_id, topn=5):
         membership = self.__getitem__(pi_id)
@@ -535,7 +554,7 @@ class LdaModel(object):
         if len(membership) < topn:
             topn = len(membership)
 
-        membership.sort(key=lambda item: item[1])
+        membership.sort(key=lambda topic: topic[1])
         top_topics = [membership.pop() for _ in range(topn)]
         return top_topics
 
@@ -577,7 +596,7 @@ def build_lda():
 
     """
     bow_corpus = AbstractBoWs()
-    return gensim.models.LdaModel(bow_corpus, id2word=bow_corpus._dictionary)
+    return gensim.models.LdaModel(bow_corpus, id2word=bow_corpus.dictionary)
 
 
 def write_wordle_files(lda_model, num_topics=10, topn=40):

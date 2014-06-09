@@ -428,6 +428,16 @@ def load_lda_model():
     path = os.path.join(PICKLE_DIR, filename)
     return gensim.models.LdaModel.load(path)
 
+def save_lda_model(lda_model):
+    """
+    Save the gensim LDA model for the directorate 05 dataset abstracts
+    to its pickle file in the data directory.
+
+    """
+    filename = 'lda-model-from-abstracts.pickle'
+    path = os.path.join(PICKLE_DIR, filename)
+    lda_model.save(path)
+
 
 def write_wordle_file(topic_num, topic):
     """
