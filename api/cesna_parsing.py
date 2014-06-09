@@ -55,15 +55,16 @@ class FeaturesFiles(object):
             all_term_freqs = self.all_term_freqs_for_pi(pi_id)
             yield unicode(pi_id) + ' '.join(map(unicode, all_term_freqs))
 
-    def write(self):
+    def write(self, features=True, descriptors=True):
         pi_features = self.parse()
 
-        with open('cesna-features-file.txt', 'w') as f:
-            for pi_feature_string in pi_features:
-                to_write = pi_feature_string + '\n'
-                f.write(to_write.encode('utf-8'))
+        if features:
+            with open('cesna-features-file.txt', 'w') as f:
+                for pi_feature_string in pi_features:
+                    to_write = pi_feature_string + '\n'
+                    f.write(to_write.encode('utf-8'))
 
-        with open('cesna-features-file-descriptors.txt', 'w') as f:
-            for item in self.bowas.dictionary.iteritems():
-                f.write('{} {}\n'.format(item[0], item[1]).encode('utf-8'))
-
+        if descriptors:
+            with open('cesna-features-file-descriptors.txt', 'w') as f:
+                for item in self.bowas.dictionary.iteritems():
+                    f.write('{} {}\n'.format(item[0], item[1]))

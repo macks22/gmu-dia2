@@ -66,7 +66,8 @@ class Abstracts(object):
         """
         awd_abstract_pairings = []
         pi_awd_pairings = []
-        for award_data in data.awards():
+        data_manager = data.DataDirectory()
+        for award_data in data_manager.awards():
             award_id = str(award_data['awardID'])
             pi_list = [str(pi_id) for pi_id in award_data['PIcoPI']]
             abstract = unicode(award_data['abstract'])
@@ -90,6 +91,9 @@ class Abstracts(object):
 
         self.abstracts = self._abstract_frame['abstract'].values
         self.award_ids = self._abstract_frame['award_id'].values
+
+        # include set of PI IDs for convenience
+        self.pis = self._pi_frame['pi_id'].unique()
 
     def __getitem__(self, award_id):
         """
@@ -201,6 +205,7 @@ class AbstractVectors(object):
         """
         self._abstracts = Abstracts() if abstracts is None else abstracts
         self.award_ids = self._abstracts.award_ids
+        self.pis = self._abstracts.pis
         self.parse = parse
 
     def __iter__(self):
@@ -361,6 +366,7 @@ class AbstractBoWs(object):
         self.dictionary = gensim.corpora.dictionary.Dictionary(
             self._abstract_vectors)
         self.award_ids = self._abstract_vectors.award_ids
+        self.pis = self._abstract_vectors.pis
 
     def __iter__(self):
         """

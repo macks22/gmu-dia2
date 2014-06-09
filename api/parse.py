@@ -13,6 +13,7 @@ some of both parsing and loading functionality in this module.
 """
 import os
 import string
+import logging
 import itertools
 
 import nltk
@@ -22,20 +23,7 @@ import pandas as pd
 import data
 
 
-def save_graphs_for_each_year():
-    """
-    Create a graph for each year of data and save the graphs in
-    GraphML format.
-
-    """
-    for year in data.available_years():
-        g = pi_award_graph(year)
-        filename = str(year)
-        data.save_graph(g, filename)
-
-
-def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
-                   file_limit=None, all_edge_attributes=True):
+def pi_award_graph(all_edge_attributes=True, **kwargs):
     """
     Parse the json files for the given years/months into an igraph
     Graph object. The graph is constructed by creating a vertex for
@@ -82,10 +70,8 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
     g = igraph.Graph()
 
     # parse the list of JSON files from the data directory
-    awards = data.filter_files(
-        year_start, year_end,
-        month_start, month_end, file_limit
-    )
+    award_directory = data.DataDirectory()
+    awards = award_directory.awards(**kwargs)
 
     pis_seen_set = set()
     for award_data in awards:
@@ -104,6 +90,10 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
         pi_combos = itertools.combinations(pi_set, 2)
         award_id = str(award_data['awardID'])
 
+        edge_attributes = {
+            'awardID': award_id,
+            'label': award_id
+        }
         # Yes, this is quite a lot of duplicate information being
         # added to the graph. It is yet to be seen whether or not
         # it is truly useful to do this. It is mostly for
@@ -111,31 +101,25 @@ def pi_award_graph(year_start, year_end=None, month_start=None, month_end=None,
         # 'label', then look up the rest in tables.
         if all_edge_attributes:
 
-            # TODO: add all funding agents rather than just 05
+            # there may be more than one funding agent
+            fa_dirs = []
+            fa_divs = []
+            fa_pgms = []
             for agent in award_data['fundingAgent']:
-                if agent['dir']['id'].strip() == '05':
-                    funding_agent_dir = '05'
-                    funding_agent_div = agent['div']['id']
-                    funding_agent_pgm = agent['pgm']['id']
-                    break
+                fa_dirs.append(agent['dir']['id'])
+                fa_divs.append(agent['div']['id'])
+                fa_pgms.append(agent['pgm']['id'])
 
-            edge_attributes = {
-                'awardID': award_id,
-                'label': award_id,
+            edge_attributes.update({
                 'abstract': award_data['abstract'].encode('utf-8'),
                 'title': award_data['title'].encode('utf-8'),
                 'effectiveDate': award_data['effectiveDate'],
                 'expirationDate': award_data['expirationDate'],
                 'PO': award_data['PO'],
-                'dir': funding_agent_dir,
-                'div': funding_agent_div,
-                'pgm': funding_agent_pgm
-            }
-        else:
-            edge_attributes = {
-                'awardID': award_id,
-                'label': award_id
-            }
+                'dir': ','.join(fa_dirs),
+                'div': ','.join(fa_divs),
+                'pgm': ','.join(fa_pgms)
+            })
 
         for edge in pi_combos:
             g.add_edge(edge[0], edge[1], **edge_attributes)
@@ -157,8 +141,7 @@ def parse_full_graph():
     @return: The graph which was parsed from the full dataset.
 
     """
-    years = data.available_years()
-    g = pi_award_graph(min(years), max(years))
+    g = pi_award_graph()
     data.save_full_graph(g)
     return g
 
@@ -169,22 +152,20 @@ def all_pi_ids_from_files():
     treated the same since we have no way to distinguish between the
     two.
 
-    @rtype:   list of int
-    @return:  List of all PI IDs found.
+    @rtype:   set of str
+    @return:  Set of all PI IDs found.
 
     """
-    json_data_file_list = data.all_files()
     pi_ids = set()
-    for filename in json_data_file_list:
-        json_data = data.load_json(filename)
-        for key in json_data.keys():
-            for pi_id in json_data[key]['PIcoPI']:
-                pi_ids.add(str(pi_id))
+    award_directory = data.DataDirectory()
+    for award in award_directory.awards():
+        for pi_id in award['PIcoPI']:
+            pi_ids.add(str(pi_id))
 
     return pi_ids
 
 
-def all_pi_ids(g):
+def all_pi_ids_from_graph(g):
     """
     Parse the graph to get the set of all PI IDs.
 
@@ -231,7 +212,8 @@ def parse_funding_agents():
     ]
 
     # parse the list of JSON files from the data directory
-    for award_data in data.awards():
+    award_directory = data.DataDirectory()
+    for award_data in award_directory.awards():
         records_for_award = _parse_funding_agent(award_data)
         all_records += records_for_award
 
@@ -276,7 +258,8 @@ def frame_pi_award_pairings():
 
     """
     records = []
-    for award_data in data.awards():
+    award_directory = data.DataDirectory()
+    for award_data in award_directory.awards():
         award_id = str(award_data['awardID'])
         pi_list = [str(pi_id) for pi_id in award_data['PIcoPI']]
         for pi_id in pi_list:
@@ -294,14 +277,11 @@ def frame_abstracts():
 
     """
     records = []
-    for award_data in data.awards():
+    award_directory = data.DataDirectory()
+    for award_data in award_directory.awards():
         award_id = str(award_data['awardID'])
         abstract = award_data['abstract'].encode('utf-8')
         records.append((award_id, abstract))
 
-    df = pd.DataFrame(records.items(), columns=['award_id', 'abstract'])
+    df = pd.DataFrame(records, columns=['award_id', 'abstract'])
     return df.set_index('award_id')
-
-
-if __name__ == "__main__":
-    save_graphs_for_each_year()

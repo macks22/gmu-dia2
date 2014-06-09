@@ -5,10 +5,8 @@ with retrieving the files of interest to a particular analysis.
 
 """
 import os
-import gensim
+import logging
 import cPickle as pickle
-
-import igraph
 
 try:
     # roughly 2x faster
@@ -17,11 +15,14 @@ except ImportError:
     # builtin
     import json
 
+import gensim
+import igraph
+
 
 # -----------------------------------------------------------------------------
 # MODULE SETUP
 # -----------------------------------------------------------------------------
-DATA_DIR = os.path.join(os.path.pardir, 'data')
+DATA_DIR = os.path.join(os.path.abspath(os.path.pardir), 'data')
 JSON_DIR = os.path.join(DATA_DIR, 'json')
 GRAPH_SAVE_DIR = os.path.join(DATA_DIR, 'pi-award-graphs')
 PICKLE_DIR = os.path.join(DATA_DIR, 'pickle')
@@ -30,176 +31,172 @@ WORDLE_DIR = os.path.join(DATA_DIR, 'wordle')
 JSON_FILES = {}
 
 
-def _parse_all_data():
-    """
-    Parse data directory for list of JSON files.
-    This is designed to set up the global variables in this module.
+class DataDirectory(object):
+    """Enable easy access to the JSON data directory."""
 
-    """
-    for filename in os.listdir(JSON_DIR):
-        path = os.path.join(JSON_DIR, filename)
-        if os.path.isfile(path) and path.endswith('.json'):
-            without_extension = filename.split('.')[0]
-            _, year, month = without_extension.split('-')
+    def __init__(self):
+        """
+        Parse data directory for list of JSON files.
+        This is designed to set up the global variables in this module.
 
-            year = int(year)
-            month = int(month)
+        """
+        self.json_files = {}
+        for filename in os.listdir(JSON_DIR):
+            path = os.path.join(JSON_DIR, filename)
+            if os.path.isfile(path) and path.endswith('.json'):
+                without_extension = filename.split('.')[0]
+                _, year, month = without_extension.split('-')
 
-            if not year in JSON_FILES:
-                JSON_FILES[year] = {month: path}
-            else:
-                JSON_FILES[year][month] = path
+                year = int(year)
+                month = int(month)
 
+                if not year in self.json_files:
+                    self.json_files[year] = {month: path}
+                else:
+                    self.json_files[year][month] = path
 
-# parse data directory for list of JSON files
-_parse_all_data()
+    def available_years(self):
+        """
+        Get the list of all years there is data for.
 
-# -----------------------------------------------------------------------------
+        @rtype:  list of str
+        @return: A chronologically ordered list of all years there is
+            data for.
 
-
-def available_years():
-    """
-    Get the list of all years there is data for.
-
-    @rtype:  list of str
-    @return: A chronologically ordered list of all years there is
-        data for.
-
-    """
-    return JSON_FILES.keys()
+        """
+        return self.json_files.keys()
 
 
-def available_months(year):
-    """
-    Get the list of all months there is data for in a particular
-    year.
+    def available_months(self, year):
+        """
+        Get the list of all months there is data for in a particular
+        year.
 
-    @type  year: str
-    @param year: The year to check available months for.
+        @type  year: str
+        @param year: The year to check available months for.
 
-    @rtype:  list of str
-    @return: A list of all months for which there is data in the
-        given year; will be empty if none are available.
+        @rtype:  list of str
+        @return: A list of all months for which there is data in the
+            given year; will be empty if none are available.
 
-    """
-    if year in JSON_FILES:
-        return JSON_FILES[year].keys()
-    else:
-        return []
+        """
+        if year in self.json_files:
+            return self.json_files[year].keys()
+        else:
+            return []
 
+    def get_filepaths(self, year, month=None):
+        """
+        Retreive the data file path from the month and year.
 
-def awards():
-    """
-    A generator that parses each JSON file and yields each subsequent
-    chunk of award data. JSON files are read chronologically. Files
-    are parsed one at a time (lazy loaded), so that the maximum
-    memory used at any point is bounded by the size of the largest
-    JSON data file.
+        @type  year: int
+        @param year: The year to search for.
 
-    @rtype:  iterator yielding dict
-    @return: An iterator which yields award dictionaries parsed from
-        the raw JSON files.
+        @type  month: int
+        @param month: The month to search for.
 
-    """
-    for year in JSON_FILES:
-        for month in JSON_FILES[year]:
-            json_filepath = JSON_FILES[year][month]
-            print "Parsing file {}".format(json_filepath)
-            json_data = load_json(json_filepath)
+        @rtype:   list or str
+        @returns: The absolute path of the file found, or an empty
+            string if there is no data file for that month/year combo.
+            If given no month, a list of paths will be returned for
+            all months in the given year; the list will be empty if
+            no months are available for that year.
 
-            # 1:1 mapping for document IDs and award IDs
-            for doc_id in json_data:
-                yield json_data[doc_id]
+        """
+        if year in self.json_files:
+            if month is not None:
+                if month in self.json_files[year]:  # return single file
+                    return self.json_files[year][month]
+                else:
+                    return ''
+            else:  # return all file paths for given year
+                return self.json_files[year].values()
+        else:  # no files available for given year
+            return []
 
-
-def abstracts():
-    """
-    A generator that parses each JSOn file and yields each subsequent
-    abstract as it is encountered. JSON files are read chronologically.
-    Files are lazy loaded in order to conserve memory. See L{awards}
-    for more detail.
-
-    @rtype:  iterator yielding str
-    @return: An iterator which yields abstracts as they are read from
-        the awards, which are read from the JSON files in
-        chronological order.
-
-    """
-    for award in awards():
-        yield award['abstract']
-
-
-def all_files():
-    """
-    Return a list of absolute paths for all files in the data
-    directory.
-
-    @rtype:   list of str
-    @returns: A list of absolute paths for all JSON files in the data
+    def file_list(self):
+        """
+        Return a list of absolute paths for all files in the data
         directory.
 
-    """
-    file_list = []
-    for year in JSON_FILES:
-        for month in JSON_FILES[year]:
-            file_list.append(JSON_FILES[year][month])
+        @rtype:   list of str
+        @returns: A list of absolute paths for all JSON files in the data
+            directory.
 
-    return file_list
+        """
+        file_list = []
+        for year in self.json_files:
+            for month in self.json_files[year]:
+                file_list.append(self.json_files[year][month])
 
+        return file_list
 
-def filter_files(year_start, year_end=None, month_start=None, month_end=None,
-                 file_limit=None):
-    """
-    Filter the list of JSON files by year and month, allowing
-    for a possible range of dates based on month/year.
+    def load_json(self, filepath):
+        """
+        Load a JSON string from a file.
 
-    If a year_start is included but no year_end, only files for
-    year_start will be selected. Same goes for month_start. Note
-    that if month_end is given but not month_start, it will be
-    ignored silently.
+        @type  filepath: str
+        @param filepath: The path of the JSON file to parse.
 
-    Note that the range of months given will be used for each
-    year. This function does not allow you to pick different
-    months for each year in the range.
+        @rtype:   dict
+        @returns: Dictionary parsed from JSON file.
 
-    @type  year_start: int
-    @param year_start: First year in range to parse.
+        """
+        with open(filepath) as json_file:
+            return json.load(json_file)
 
-    @type  year_end: int
-    @param year_end: Last year in range to parse.
+    def awards(self, year_start=1995, year_end=2014, month_start=1,
+        month_end=12, file_limit=None):
+        """
+        A generator that parses each JSON file and yields each
+        subsequent chunk of award data. The list of JSON files are
+        filtered by year and month, allowing for a possible range of
+        dates based on month/year. Files are read chronologically.
+        Files are parsed one at a time (lazy loaded), so that the
+        maximum memory used at any point is bounded by the size of
+        the largest JSON data file.
 
-    @type  month_start: int
-    @param month_start: First month in range to parse.
+        The 4 year/month parameters control filtering. By default,
+        all data files are parsed. The time range of data to parse
+        can be limited by narrowing in the start and end. For
+        instance, to set a range of 1997 to 2002, months 2 to 5::
 
-    @type  month_end: int
-    @param month_end: Last month in range to parse.
+            year_start=1997, year_end=2002,
+            month_start=2, month_end=5
 
-    @rtype:  list of str
-    @return: The list of filepaths in the given range of
-        years/months.
+        Note that the range of months given will be used for each
+        year. This function does not allow you to pick different
+        months for each year in the range.
 
-    """
-    if year_end is None:
-        years = [year_start]
-    else:
+        @type  year_start: int
+        @param year_start: First year in range to parse.
+
+        @type  year_end: int
+        @param year_end: Last year in range to parse.
+
+        @type  month_start: int
+        @param month_start: First month in range to parse.
+
+        @type  month_end: int
+        @param month_end: Last month in range to parse.
+
+        @rtype:  iterator yielding dict
+        @return: An iterator which yields award dictionaries parsed
+            from the raw JSON files.
+
+        """
         years = range(year_start, year_end + 1)
-
-    # 4 possible combos for month_start and month_end
-    # silently ignore month_end when no month_start is given
-    if month_end is None and month_start is not None:
-        months = [month_start]
-    elif month_start is None:
-        months = range(1, 13)
-    else:
         months = range(month_start, month_end + 1)
 
-    files_parsed = 0
-    for year in years:
-        for month in months:
-            filepath = get_file(year, month)
-            if filepath:
-                print "Parsing file {}".format(filepath)
-                json_data = load_json(filepath)
+        files_parsed = 0
+        for year in years:
+            for month in months:
+                filepath = self.get_filepaths(year, month)
+                if not filepath:
+                    break
+
+                logging.info("Parsing file {}".format(filepath))
+                json_data = self.load_json(filepath)
                 for doc_id in json_data:
                     yield json_data[doc_id]
 
@@ -207,32 +204,23 @@ def filter_files(year_start, year_end=None, month_start=None, month_end=None,
                 if file_limit is not None and (files_parsed) > file_limit:
                     break
 
-    print "Number of files parsed: {}".format(files_parsed)
+        logging.info("Number of files parsed: {}".format(files_parsed))
 
+    def abstracts(self):
+        """
+        A generator that parses each JSOn file and yields each subsequent
+        abstract as it is encountered. JSON files are read chronologically.
+        Files are lazy loaded in order to conserve memory. See L{awards}
+        for more detail.
 
-def get_file(year, month=None):
-    """
-    Retreive the data file path from the month and year.
+        @rtype:  iterator yielding str
+        @return: An iterator which yields abstracts as they are read
+            from the awards, which are read from the JSON files in
+            chronological order.
 
-    @type  year: int
-    @param year: The year to search for.
-
-    @type  month: int
-    @param month: The month to search for.
-
-    @rtype:   str
-    @returns: The absolute path of the file found, or an empty string if
-        there is no data file for that month/year combo.
-
-    """
-    if year in JSON_FILES:
-        if month is not None:
-            if month in JSON_FILES[year]:
-                return JSON_FILES[year][month]
-        else:
-            return JSON_FILES[year].values()
-
-    return ""
+        """
+        for award in awards():
+            yield unicode(award['abstract'].decode('utf-8'))
 
 
 def load_json(filepath):
