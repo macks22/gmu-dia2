@@ -2,7 +2,6 @@ import os
 import sys
 import json
 import argparse
-
 import requests
 
 
@@ -25,7 +24,6 @@ def json_rpc_request(json_content):
     }
     res = requests.post(URL, json_content, headers=headers)
     return res.json()
-
 
 def _translate_month(month):
     """
@@ -80,7 +78,7 @@ def get_name(pi_id, logical_op='and'):
         'logicalOp': str(logical_op),
         'personID': str(pi_id)
     }
-    req_body = {'method': 'getName', 'params': params}
+    req_body = {'method': 'getNameGMU', 'params': params}
     return json_rpc_request(json.dumps(req_body))
 
 
@@ -238,12 +236,24 @@ def request_data(year, month, dir_id='05', mode='current', logical_op='and'):
 
 def name(args):
     """Main CLI for 'name' subcommand."""
+    if args.outfile:
+        path = os.path.abspath(args.outfile)
+    else:
+        path = ''
+
     if args.id:
         try:
             int(args.id)
         except ValueError:
             return 2
-        print get_name(args.id)
+
+        if not path:
+            path = os.path.abspath(args.id + '-name-affiliation.json')
+
+        json_data = get_name(args.id)
+        with open(path, 'w') as f:
+            json.dump(json_data, f)
+
         return 0
     elif args.file:
         print get_names(args.file)
@@ -288,6 +298,9 @@ def setup_parser():
     name_parser.add_argument(
         '-f', '--file', action='store', default='',
         help='file of PI IDs, one per line, to get names for')
+    name_parser.add_argument(
+        '-o', '--outfile', action='store', default='',
+        help='file to write output to')
     name_parser.set_defaults(func=name)
 
     return parser
