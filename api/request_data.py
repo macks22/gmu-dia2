@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import argparse
 
@@ -77,9 +78,34 @@ def get_name(pi_id, logical_op='and'):
     _trigger_name_caching(pi_id, logical_op)
     params = {
         'logicalOp': str(logical_op),
-        'personId': str(pi_id)
+        'personID': str(pi_id)
     }
     req_body = {'method': 'getName', 'params': params}
+    return json_rpc_request(json.dumps(req_body))
+
+
+def get_names(pi_id_file, logical_op='and'):
+    """
+    Get the name of a PI by the disambiguated ID.
+
+    @type  pi_id: int or str
+    @param pi_id: ID of the PI to get the name of.
+
+    @type  logical_op: str
+    @param logical_op: How to combine the various query parameters.
+
+    @rtype:  dict
+    @return: The names of the PIs, decoded from the JSON response.
+
+    """
+    with open(pi_id_file, 'r') as f:
+        pi_ids = [pi_id for pi_id in f]
+
+    params = {
+        'logicalOp': str(logical_op),
+        'personIDs': pi_ids
+    }
+    req_body = {'method': 'getNames', 'params': params}
     return json_rpc_request(json.dumps(req_body))
 
 
@@ -210,19 +236,59 @@ def request_data(year, month, dir_id='05', mode='current', logical_op='and'):
     return data
 
 
+def name(args):
+    """Main CLI for 'name' subcommand."""
+    if args.id:
+        try:
+            int(args.id)
+        except ValueError:
+            return 2
+        print get_name(args.id)
+        return 0
+    elif args.file:
+        print get_names(args.file)
+        return 0
+    return 1
+
+
+def download(args):
+    """Main CLI for 'download' subcommand."""
+    try:
+        data = request_data(args.year, args.month, args.dir_id)
+    except InvalidYearMonth as err:
+        print err
+        return 1
+    return 0
+
+
 def setup_parser():
     parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(
+        help='valid subcommands')
 
-    parser.add_argument(
+    download_parser = subparsers.add_parser(
+        'download', help='download award data for a year/month')
+    download_parser.add_argument(
         'year', action='store',
         help='the year to get data for')
-    parser.add_argument(
+    download_parser.add_argument(
         'month', action='store',
         help='the month to get data for')
-    parser.add_argument(
+    download_parser.add_argument(
         'dir_id', action='store',
         nargs='?', default='05',
         help='the directorate to get data for')
+    download_parser.set_defaults(func=download)
+
+    name_parser = subparsers.add_parser(
+        'name', help='get people names and affiliations')
+    name_parser.add_argument(
+        'id', nargs='?', default='',
+        help='the person ID to get name info for')
+    name_parser.add_argument(
+        '-f', '--file', action='store', default='',
+        help='file of PI IDs, one per line, to get names for')
+    name_parser.set_defaults(func=name)
 
     return parser
 
@@ -230,11 +296,10 @@ def setup_parser():
 def main():
     parser = setup_parser()
     args = parser.parse_args()
-
-    try:
-        data = request_data(args.year, args.month, args.dir_id)
-    except InvalidYearMonth as err:
-        print err
+    exit_code = args.func(args)
+    if exit_code:
+        parser.print_usage()
+    return exit_code
 
 
 if __name__ == "__main__":
