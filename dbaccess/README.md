@@ -68,6 +68,21 @@ approaches which could be taken:
 5. Add another attribute for state, constrain that one, and allow both to be
    NULL (but not both? Is that possible?)
 
+### Geospatial Analysis
+
+It will likely be interesting at some point to map a trend of NSF funding based
+on geospatial locality, so adding two lat/lon fields to the address table
+might also be useful. The decimal values used below allow for ~1mm accuracy at
+the equator. Initially at least it will be useful to allow these to be NULL by
+default, since the raw NSF data does not have lat/lon coords.
+
+    *********************************
+    Field              Type
+    *********************************
+    lat             decimal(10,8)
+    lon             decimal(11,8)
+    *********************************
+
 ## Enrichment
 
 One of the more ambitious goals with this database will be an effort to enrich
