@@ -2,8 +2,7 @@ This short document describes what the folders in the data directory are and
 what they're supposed to contain, as well as conventions for each.
 
 
-json
-----
+##json
 
 Contains raw data in JSON format. The files are named based on the year and
 month which they contain data for:
@@ -40,29 +39,25 @@ The other data in each doc/award JSON block is:
 * PO
 
 
-csv
----
+##csv
 
 Contains tables of information parsed from the JSON files. All files are in CSV
 (comma-separated values) format.
 
 
-pi-award-graphs
----------------
+##pi-award-graphs
 
 Contains graph data which was parsed from the JSON files, typically in GraphML
 format.
 
 
-pickle
-------
+##pickle
 
 Contains pickled Python data structures which were time-consuming to parse.
 This directory is primarily to avoid unecessary re-parsing of the JSON data, as
 pickle files are much faster to load from.
 
-bow
----
+##bow
 
 Contains text files which contain BoW representations for each PI in the
 dataset. The BoW for each PI is generated using the following methodology:
