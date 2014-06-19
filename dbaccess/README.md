@@ -65,8 +65,8 @@ approaches which could be taken:
    region abbreviations to region names; use this for translation
 4. Attempt to capture all region abbreviations in a region table, and constrain
    the region attribute using that
-5. Add another attribute for state, constrain that one, and allow both to be
-   NULL (but not both? Is that possible?)
+5. Add another attribute for state, constrain that one, and allow either to be
+   NULL (but not both at the same time? Is that possible?)
 
 ### Geospatial Analysis
 
