@@ -68,6 +68,17 @@ approaches which could be taken:
 5. Add another attribute for state, constrain that one, and allow either to be
    NULL (but not both at the same time? Is that possible?)
 
+## Enrichment
+
+One of the more ambitious goals with this database will be an effort to enrich
+the data we have by mining additional papers, abstracts, publications, etc for
+each investigator. It will also be useful to make an attempt to map their
+affiliation progressions. For instance, for a particular researcher, we can
+currently tell what their affiliations are as a group, and we can infer what the
+current one is, but we do not have the time interval over which they were
+actually affiliated with an organization. This could probably be scraped from
+personal pages, institutional faculty listings, etc.
+
 ### Geospatial Analysis
 
 It will likely be interesting at some point to map a trend of NSF funding based
@@ -83,13 +94,5 @@ default, since the raw NSF data does not have lat/lon coords.
     lon             decimal(11,8)
     *********************************
 
-## Enrichment
-
-One of the more ambitious goals with this database will be an effort to enrich
-the data we have by mining additional papers, abstracts, publications, etc for
-each investigator. It will also be useful to make an attempt to map their
-affiliation progressions. For instance, for a particular researcher, we can
-currently tell what their affiliations are as a group, and we can infer what the
-current one is, but we do not have the time interval over which they were
-actually affiliated with an organization. This could probably be scraped from
-personal pages, institutional faculty listings, etc.
+The addresses of institutions can be used to get lat/lon coords using a library
+like [pygeocoding](http://code.xster.net/pygeocoder/wiki/Home).
