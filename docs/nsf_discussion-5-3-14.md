@@ -57,10 +57,12 @@
     + sum up and normalize all terms associated with all awardIDs for each comm
       CESNA finds
 
-* Matt's work on comm detection (703-209-5044)
+* Matt's work on comm detection
     + more directly relevant to DIA2 needs
     + directly estimate topic distributions (2nd step from CESNA)
     + can work on this more later (post-CESNA analysis)
+    + analyze historical nature of the subcommunities AGM-type algorithms identify
+        - relate subcommunities with large overlap back to idea of one original community
 
 * model:
     + person is part of one or more communities
