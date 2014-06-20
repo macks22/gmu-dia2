@@ -95,4 +95,4 @@ default, since the raw NSF data does not have lat/lon coords.
     *********************************
 
 The addresses of institutions can be used to get lat/lon coords using a library
-like [pygeocoding](http://code.xster.net/pygeocoder/wiki/Home).
+like [pygeocoder](http://code.xster.net/pygeocoder/wiki/Home).
