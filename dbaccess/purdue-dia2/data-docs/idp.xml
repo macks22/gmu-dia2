@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<EntityDescriptor entityID="https://eauthsso.dev.nsf.gov/sso" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+    <IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>
+MIICujCCAaKgAwIBAgIETW1b1zANBgkqhkiG9w0BAQUFADAfMR0wGwYDVQQDExRlYXV0aHNzby5k
+ZXYubnNmLmdvdjAeFw0xMTAzMDEyMDQ5MjdaFw0xNjAyMjMyMDQ5MjdaMB8xHTAbBgNVBAMTFGVh
+dXRoc3NvLmRldi5uc2YuZ292MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqWu9u6H5
+0IZdls7taw4OxEcH4XP2z0TFDjB1V77JAWnyDimi6h7Q3vkdFGsd49UIGJvIZUpuS/IwhT80ypz1
+XPumVGsbZMV8SMFiLPYzxRS3ddeQjgu8QEdFxsVTfOCW7v6F2wZw98/G3Tj+Nkf5kSNhstA/7wdb
+0pa3di7iNvD7Vqx5/ssl+phfsE7VZA3WOaOZ+kOx7MBsmqKtYOmGwdTMEWUwf5iRVvqXgxfgpsHX
+daernmZxrcPOPY5FszKbiYm7dzJz9DZ4EUT2PcIGSCSJ6GdR5Km9E6Cgq70yq98i59Hf+ONKSF0a
+OEBYoOu7VDld2CxyMrm3z4QxUPrXGwIDAQABMA0GCSqGSIb3DQEBBQUAA4IBAQBzwUIPFFE6pZLn
+TScDGm3tsLD25XQrm3ReHHf5mZ7+KWQ59uAbvZDg5tn9fsBdAGC0dioHshke6yy+IpFVXlfIVtms
+cJO67Z3/bJIOMA0hOfYgV2h0E/3fMsAZCjySVQbbutfy04Z+B0cI1RZ48SMqS5cpASN+j+2MCACh
+SYfetojnqlePZ8jIJOAyS8MMnZjcafS55yn9hDFhAXIQYCfhcAQg2HdmP6GVOWGA5BHAPzkR74gI
+TBQThAtQ4SmhUsI9kK92D0RTEAtepylFdpnG1Bjch2BGpuBv945+nhrTIP2RpAGBzVn2vaZZBRHO
+UgZrjrtLxxKzLceoZCQ5HvCe
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </KeyDescriptor>
+        <ArtifactResolutionService index="0" isDefault="true" Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://eauthsso.dev.nsf.gov/sso/ArtifactResolver/metaAlias/research/idp"/>
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://eauthsso.dev.nsf.gov/sso/IDPSloRedirect/metaAlias/research/idp" ResponseLocation="https://eauthsso.dev.nsf.gov/sso/IDPSloRedirect/metaAlias/research/idp"/>
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://eauthsso.dev.nsf.gov/sso/IDPSloPOST/metaAlias/research/idp" ResponseLocation="https://eauthsso.dev.nsf.gov/sso/IDPSloPOST/metaAlias/research/idp"/>
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://eauthsso.dev.nsf.gov/sso/IDPSloSoap/metaAlias/research/idp"/>
+        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://eauthsso.dev.nsf.gov/sso/IDPMniRedirect/metaAlias/research/idp" ResponseLocation="https://eauthsso.dev.nsf.gov/sso/IDPMniRedirect/metaAlias/research/idp"/>
+        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://eauthsso.dev.nsf.gov/sso/IDPMniPOST/metaAlias/research/idp" ResponseLocation="https://eauthsso.dev.nsf.gov/sso/IDPMniPOST/metaAlias/research/idp"/>
+        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://eauthsso.dev.nsf.gov/sso/IDPMniSoap/metaAlias/research/idp"/>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</NameIDFormat>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://eauthsso.dev.nsf.gov/sso/SSORedirect/metaAlias/research/idp"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://eauthsso.dev.nsf.gov/sso/SSOPOST/metaAlias/research/idp"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://eauthsso.dev.nsf.gov/sso/SSOSoap/metaAlias/research/idp"/>
+        <NameIDMappingService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://eauthsso.dev.nsf.gov/sso/NIMSoap/metaAlias/research/idp"/>
+        <AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="http://nsf-sandbx-z-17.dev.nsf.gov:8080/sso/AIDReqSoap/IDPRole/metaAlias/research/idp"/>
+        <AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:URI" Location="http://nsf-sandbx-z-17.dev.nsf.gov:8080/sso/AIDReqUri/IDPRole/metaAlias/research/idp"/>
+    </IDPSSODescriptor>
+</EntityDescriptor>

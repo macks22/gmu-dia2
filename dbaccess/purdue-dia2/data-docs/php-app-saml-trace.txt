@@ -1,0 +1,113 @@
+https://eauthsso.dev.nsf.gov/sso/idpssoinit?NameIDFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:transient&metaAlias=/research/idp&spEntityID=http://ci4ene01.ecn.purdue.edu/&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+
+GET /sso/idpssoinit?NameIDFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:transient&metaAlias=/research/idp&spEntityID=http://ci4ene01.ecn.purdue.edu/&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST HTTP/1.1
+Host: eauthsso.dev.nsf.gov
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Cookie: JSESSIONID=yQzXQ0wcWvZvTdJ4gGKkTRWR1L83TwjF65L5JCVfY9wNTm11JWyF!2067810056; amlbcookie=01; RGovSessionDev=AQIC5wM2LY4SfcyqA8FCjYsSz0jPdydqSF+IWUqk1FjcKok=@AAJTSQACMDIAAlMxAAIwMQ==#
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache,no-store
+Date: Wed, 22 Aug 2012 15:14:20 GMT
+Pragma: no-cache
+Content-Length: 7958
+Content-Type: text/html; charset=ISO-8859-1
+X-Powered-By: Servlet/2.5 JSP/2.1
+----------------------------------------------------------
+http://ci4ene01.ecn.purdue.edu/simplesaml/module.php/saml/sp/saml2-acs.php/r-gov-auth-sp
+
+POST /simplesaml/module.php/saml/sp/saml2-acs.php/r-gov-auth-sp HTTP/1.1
+Host: ci4ene01.ecn.purdue.edu
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Cookie: PHPSESSID=2a80077e2efe71c2fbf335a09e2f95b4
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 7537
+SAMLResponse=PHNhbWxwOlJlc3BvbnNlIHhtbG5zOnNhbWxwPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6%0D%0AcHJvdG9jb2wiIElEPSJzMjMyYjZhYmY2NDQ1MTNiZWRkZmEzYzA2MWUwNWY2ZGY5Yjk5NWM2OTEi%0D%0AIFZlcnNpb249IjIuMCIgSXNzdWVJbnN0YW50PSIyMDEyLTA4LTIyVDE1OjE0OjIwWiIgRGVzdGlu%0D%0AYXRpb249Imh0dHA6Ly9jaTRlbmUwMS5lY24ucHVyZHVlLmVkdS9zaW1wbGVzYW1sL21vZHVsZS5w%0D%0AaHAvc2FtbC9zcC9zYW1sMi1hY3MucGhwL3ItZ292LWF1dGgtc3AiPjxzYW1sOklzc3VlciB4bWxu%0D%0AczpzYW1sPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6YXNzZXJ0aW9uIj5odHRwczovL2Vh%0D%0AdXRoc3NvLmRldi5uc2YuZ292L3Nzbzwvc2FtbDpJc3N1ZXI%2BPHNhbWxwOlN0YXR1cyB4bWxuczpz%0D%0AYW1scD0idXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOnByb3RvY29sIj4KPHNhbWxwOlN0YXR1%0D%0Ac0NvZGUgIHhtbG5zOnNhbWxwPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6cHJvdG9jb2wi%0D%0AClZhbHVlPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6c3RhdHVzOlN1Y2Nlc3MiPgo8L3Nh%0D%0AbWxwOlN0YXR1c0NvZGU%2BCjwvc2FtbHA6U3RhdHVzPjxzYW1sOkFzc2VydGlvbiB4bWxuczpzYW1s%0D%0APSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6YXNzZXJ0aW9uIiBJRD0iczIwZmI2MjU3YTlk%0D%0AZmNhMDlhNTlmOGZmMGViYzU1YWQyMzQ2ZTIwYWQ1IiBJc3N1ZUluc3RhbnQ9IjIwMTItMDgtMjJU%0D%0AMTU6MTQ6MjBaIiBWZXJzaW9uPSIyLjAiPgo8c2FtbDpJc3N1ZXI%2BaHR0cHM6Ly9lYXV0aHNzby5k%0D%0AZXYubnNmLmdvdi9zc288L3NhbWw6SXNzdWVyPjxkczpTaWduYXR1cmUgeG1sbnM6ZHM9Imh0dHA6%0D%0ALy93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiPgo8ZHM6U2lnbmVkSW5mbz4KPGRzOkNhbm9u%0D%0AaWNhbGl6YXRpb25NZXRob2QgQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzEwL3ht%0D%0AbC1leGMtYzE0biMiLz4KPGRzOlNpZ25hdHVyZU1ldGhvZCBBbGdvcml0aG09Imh0dHA6Ly93d3cu%0D%0AdzMub3JnLzIwMDAvMDkveG1sZHNpZyNyc2Etc2hhMSIvPgo8ZHM6UmVmZXJlbmNlIFVSST0iI3My%0D%0AMGZiNjI1N2E5ZGZjYTA5YTU5ZjhmZjBlYmM1NWFkMjM0NmUyMGFkNSI%2BCjxkczpUcmFuc2Zvcm1z%0D%0APgo8ZHM6VHJhbnNmb3JtIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxk%0D%0Ac2lnI2VudmVsb3BlZC1zaWduYXR1cmUiLz4KPGRzOlRyYW5zZm9ybSBBbGdvcml0aG09Imh0dHA6%0D%0ALy93d3cudzMub3JnLzIwMDEvMTAveG1sLWV4Yy1jMTRuIyIvPgo8L2RzOlRyYW5zZm9ybXM%2BCjxk%0D%0AczpEaWdlc3RNZXRob2QgQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRz%0D%0AaWcjc2hhMSIvPgo8ZHM6RGlnZXN0VmFsdWU%2BWENROWZ0L3JuVFVOaUNTQ3JYdnhGaGEzY2E4PTwv%0D%0AZHM6RGlnZXN0VmFsdWU%2BCjwvZHM6UmVmZXJlbmNlPgo8L2RzOlNpZ25lZEluZm8%2BCjxkczpTaWdu%0D%0AYXR1cmVWYWx1ZT4KajZrOUFuSEsva3JtRWkyOEwzRFU2dGk5SGF5dkwxa001aUpzVGhKSE5uUktT%0D%0AUFNtK1pLdXB0eG91akJ6c2VCUnYxY3Y5czFvMm0vcwpXODZoejczQ0YxaUZlQ1ZPNERxVlRTQ0cy%0D%0ANlRpNFdoekFSZ0p2V1cwdnB2Tk1CWkdnL1p2dGUxSWJwcU44SmRtQzdMbHVNWDJGaE1YCkh4SWdH%0D%0AaDROVFp5VFllYnpJTWUyVDdRY3JuQU01dFIyMzA1WTJXYnI5MlpyZGNuRitjUUQzcjRWa1JRRTRC%0D%0ASjl6d3Z6V2hDNzRqYkIKSWN0LzNOdHdxYk9vbW5wL0RLOWJ2N05PZG1iMkQ0eXpOR1lzYWtJMEpv%0D%0Aa0twaFZBV1crOThZdmFyakpGNER3elo0QnZjU0h2RHc0SQpETTQ4c1kzZEFoMzlZRVQyOTRTaDRI%0D%0ATDlzem5NNWlIenVQVmdiZz09CjwvZHM6U2lnbmF0dXJlVmFsdWU%2BCjxkczpLZXlJbmZvPgo8ZHM6%0D%0AWDUwOURhdGE%2BCjxkczpYNTA5Q2VydGlmaWNhdGU%2BCk1JSUN1akNDQWFLZ0F3SUJBZ0lFVFcxYjF6%0D%0AQU5CZ2txaGtpRzl3MEJBUVVGQURBZk1SMHdHd1lEVlFRREV4UmxZWFYwYUhOemJ5NWsKWlhZdWJu%0D%0ATm1MbWR2ZGpBZUZ3MHhNVEF6TURFeU1EUTVNamRhRncweE5qQXlNak15TURRNU1qZGFNQjh4SFRB%0D%0AYkJnTlZCQU1URkdWaApkWFJvYzNOdkxtUmxkaTV1YzJZdVoyOTJNSUlCSWpBTkJna3Foa2lHOXcw%0D%0AQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXFXdTl1Nkg1CjBJWmRsczd0YXc0T3hFY0g0WFAyejBU%0D%0ARkRqQjFWNzdKQVdueURpbWk2aDdRM3ZrZEZHc2Q0OVVJR0p2SVpVcHVTL0l3aFQ4MHlwejEKWFB1%0D%0AbVZHc2JaTVY4U01GaUxQWXp4UlMzZGRlUWpndThRRWRGeHNWVGZPQ1c3djZGMndadzk4L0czVGor%0D%0ATmtmNWtTTmhzdEEvN3dkYgowcGEzZGk3aU52RDdWcXg1L3NzbCtwaGZzRTdWWkEzV09hT1ora094%0D%0AN01Cc21xS3RZT21Hd2RUTUVXVXdmNWlSVnZxWGd4Zmdwc0hYCmRhZXJubVp4cmNQT1BZNUZzekti%0D%0AaVltN2R6Sno5RFo0RVVUMlBjSUdTQ1NKNkdkUjVLbTlFNkNncTcweXE5OGk1OUhmK09OS1NGMGEK%0D%0AT0VCWW9PdTdWRGxkMkN4eU1ybTN6NFF4VVByWEd3SURBUUFCTUEwR0NTcUdTSWIzRFFFQkJRVUFB%0D%0ANElCQVFCendVSVBGRkU2cFpMbgpUU2NER20zdHNMRDI1WFFybTNSZUhIZjVtWjcrS1dRNTl1QWJ2%0D%0AWkRnNXRuOWZzQmRBR0MwZGlvSHNoa2U2eXkrSXBGVlhsZklWdG1zCmNKTzY3WjMvYkpJT01BMGhP%0D%0AZllnVjJoMEUvM2ZNc0FaQ2p5U1ZRYmJ1dGZ5MDRaK0IwY0kxUlo0OFNNcVM1Y3BBU04raisyTUNB%0D%0AQ2gKU1lmZXRvam5xbGVQWjhqSUpPQXlTOE1NblpqY2FmUzU1eW45aERGaEFYSVFZQ2ZoY0FRZzJI%0D%0AZG1QNkdWT1dHQTVCSEFQemtSNzRnSQpUQlFUaEF0UTRTbWhVc0k5a0s5MkQwUlRFQXRlcHlsRmRw%0D%0AbkcxQmpjaDJCR3B1QnY5NDUrbmhyVElQMlJwQUdCelZuMnZhWlpCUkhPClVnWnJqcnRMeHhLekxj%0D%0AZW9aQ1E1SHZDZQo8L2RzOlg1MDlDZXJ0aWZpY2F0ZT4KPC9kczpYNTA5RGF0YT4KPC9kczpLZXlJ%0D%0AbmZvPgo8L2RzOlNpZ25hdHVyZT48c2FtbDpTdWJqZWN0Pgo8c2FtbDpOYW1lSUQgRm9ybWF0PSJ1%0D%0Acm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6bmFtZWlkLWZvcm1hdDp0cmFuc2llbnQiIE5hbWVR%0D%0AdWFsaWZpZXI9Imh0dHBzOi8vZWF1dGhzc28uZGV2Lm5zZi5nb3Yvc3NvIiBTUE5hbWVRdWFsaWZp%0D%0AZXI9Imh0dHA6Ly9jaTRlbmUwMS5lY24ucHVyZHVlLmVkdS8iPmFhcmRlbGw8L3NhbWw6TmFtZUlE%0D%0APjxzYW1sOlN1YmplY3RDb25maXJtYXRpb24gTWV0aG9kPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FN%0D%0ATDoyLjA6Y206YmVhcmVyIj4KPHNhbWw6U3ViamVjdENvbmZpcm1hdGlvbkRhdGEgTm90T25PckFm%0D%0AdGVyPSIyMDEyLTA4LTIyVDE1OjI0OjIwWiIgUmVjaXBpZW50PSJodHRwOi8vY2k0ZW5lMDEuZWNu%0D%0ALnB1cmR1ZS5lZHUvc2ltcGxlc2FtbC9tb2R1bGUucGhwL3NhbWwvc3Avc2FtbDItYWNzLnBocC9y%0D%0ALWdvdi1hdXRoLXNwIi8%2BPC9zYW1sOlN1YmplY3RDb25maXJtYXRpb24%2BCjwvc2FtbDpTdWJqZWN0%0D%0APjxzYW1sOkNvbmRpdGlvbnMgTm90QmVmb3JlPSIyMDEyLTA4LTIyVDE1OjA0OjIwWiIgTm90T25P%0D%0AckFmdGVyPSIyMDEyLTA4LTIyVDE1OjI0OjIwWiI%2BCjxzYW1sOkF1ZGllbmNlUmVzdHJpY3Rpb24%2B%0D%0ACjxzYW1sOkF1ZGllbmNlPmh0dHA6Ly9jaTRlbmUwMS5lY24ucHVyZHVlLmVkdS88L3NhbWw6QXVk%0D%0AaWVuY2U%2BCjwvc2FtbDpBdWRpZW5jZVJlc3RyaWN0aW9uPgo8L3NhbWw6Q29uZGl0aW9ucz4KPHNh%0D%0AbWw6QXV0aG5TdGF0ZW1lbnQgQXV0aG5JbnN0YW50PSIyMDEyLTA4LTIyVDE1OjAzOjI0WiIgU2Vz%0D%0Ac2lvbkluZGV4PSJzMmFjNjFmNjk2ZjMwNjg2ODdhMTQyNWQ3OWM1ZjFiY2Y5MmQ3MWRlMDEiPjxz%0D%0AYW1sOkF1dGhuQ29udGV4dD48c2FtbDpBdXRobkNvbnRleHRDbGFzc1JlZj51cm46b2FzaXM6bmFt%0D%0AZXM6dGM6U0FNTDoyLjA6YWM6Y2xhc3NlczpQYXNzd29yZFByb3RlY3RlZFRyYW5zcG9ydDwvc2Ft%0D%0AbDpBdXRobkNvbnRleHRDbGFzc1JlZj48L3NhbWw6QXV0aG5Db250ZXh0Pjwvc2FtbDpBdXRoblN0%0D%0AYXRlbWVudD48c2FtbDpBdHRyaWJ1dGVTdGF0ZW1lbnQ%2BPHNhbWw6QXR0cmlidXRlIE5hbWU9InVp%0D%0AZCI%2BPHNhbWw6QXR0cmlidXRlVmFsdWUgeG1sbnM6eHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEv%0D%0AWE1MU2NoZW1hIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWlu%0D%0Ac3RhbmNlIiB4c2k6dHlwZT0ieHM6c3RyaW5nIj5hYXJkZWxsPC9zYW1sOkF0dHJpYnV0ZVZhbHVl%0D%0APjwvc2FtbDpBdHRyaWJ1dGU%2BPHNhbWw6QXR0cmlidXRlIE5hbWU9InNuIj48c2FtbDpBdHRyaWJ1%0D%0AdGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5z%0D%0AOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBl%0D%0APSJ4czpzdHJpbmciPkFyZGVsbDwvc2FtbDpBdHRyaWJ1dGVWYWx1ZT48L3NhbWw6QXR0cmlidXRl%0D%0APjxzYW1sOkF0dHJpYnV0ZSBOYW1lPSJjbiI%2BPHNhbWw6QXR0cmlidXRlVmFsdWUgeG1sbnM6eHM9%0D%0AImh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cu%0D%0AdzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4c2k6dHlwZT0ieHM6c3RyaW5nIj5hYXJk%0D%0AZWxsPC9zYW1sOkF0dHJpYnV0ZVZhbHVlPjwvc2FtbDpBdHRyaWJ1dGU%2BPHNhbWw6QXR0cmlidXRl%0D%0AIE5hbWU9Ikdyb3VwcyIgTmFtZUZvcm1hdD0idXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOmF0%0D%0AdHJuYW1lLWZvcm1hdDpiYXNpYyI%2BPHNhbWw6QXR0cmlidXRlVmFsdWUgeG1sbnM6eHM9Imh0dHA6%0D%0ALy93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3Jn%0D%0ALzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4c2k6dHlwZT0ieHM6c3RyaW5nIj5zdGFmZjwvc2Ft%0D%0AbDpBdHRyaWJ1dGVWYWx1ZT48L3NhbWw6QXR0cmlidXRlPjxzYW1sOkF0dHJpYnV0ZSBOYW1lPSJJ%0D%0ARFBTb3VyY2UiIE5hbWVGb3JtYXQ9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDphdHRybmFt%0D%0AZS1mb3JtYXQ6YmFzaWMiPjxzYW1sOkF0dHJpYnV0ZVZhbHVlIHhtbG5zOnhzPSJodHRwOi8vd3d3%0D%0ALnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAx%0D%0AL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnR5cGU9InhzOnN0cmluZyIvPjwvc2FtbDpBdHRyaWJ1%0D%0AdGU%2BPC9zYW1sOkF0dHJpYnV0ZVN0YXRlbWVudD48L3NhbWw6QXNzZXJ0aW9uPjwvc2FtbHA6UmVz%0D%0AcG9uc2U%2B%0D%0A
+HTTP/1.0 500 Internal Server Error
+Date: Wed, 22 Aug 2012 15:14:22 GMT
+Server: Apache/2.2.17 (Unix) PHP/5.3.4
+X-Powered-By: PHP/5.3.4
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+x-frame-options: SameOrigin
+MS-Author-Via: DAV
+Content-Length: 3182
+Connection: close
+Content-Type: text/html
+----------------------------------------------------------
+http://ci4ene01.ecn.purdue.edu/simplesaml/resources/default.css
+
+GET /simplesaml/resources/default.css HTTP/1.1
+Host: ci4ene01.ecn.purdue.edu
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Referer: http://ci4ene01.ecn.purdue.edu/simplesaml/module.php/saml/sp/saml2-acs.php/r-gov-auth-sp
+Cookie: PHPSESSID=2a80077e2efe71c2fbf335a09e2f95b4
+If-Modified-Since: Thu, 26 May 2011 10:40:00 GMT
+If-None-Match: "2775d5d-1365-4a42b71678000"
+
+HTTP/1.1 304 Not Modified
+Date: Wed, 22 Aug 2012 15:14:23 GMT
+Server: Apache/2.2.17 (Unix) PHP/5.3.4
+Connection: Keep-Alive
+Keep-Alive: timeout=15, max=500
+Etag: "2775d5d-1365-4a42b71678000"
+Expires: Wed, 22 Aug 2012 15:15:23 GMT
+Cache-Control: max-age=60
+----------------------------------------------------------
+http://ci4ene01.ecn.purdue.edu/simplesaml/resources/script.js
+
+GET /simplesaml/resources/script.js HTTP/1.1
+Host: ci4ene01.ecn.purdue.edu
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1
+Accept: */*
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Referer: http://ci4ene01.ecn.purdue.edu/simplesaml/module.php/saml/sp/saml2-acs.php/r-gov-auth-sp
+Cookie: PHPSESSID=2a80077e2efe71c2fbf335a09e2f95b4
+If-Modified-Since: Wed, 14 Oct 2009 07:44:32 GMT
+If-None-Match: "2775d7d-2f2-475e0555b1800"
+
+HTTP/1.1 304 Not Modified
+Date: Wed, 22 Aug 2012 15:14:23 GMT
+Server: Apache/2.2.17 (Unix) PHP/5.3.4
+Connection: Keep-Alive
+Keep-Alive: timeout=15, max=500
+Etag: "2775d7d-2f2-475e0555b1800"
+Expires: Wed, 22 Aug 2012 15:15:23 GMT
+Cache-Control: max-age=60
+----------------------------------------------------------
+http://ci4ene01.ecn.purdue.edu/simplesaml/resources/icons/favicon.ico
+
+GET /simplesaml/resources/icons/favicon.ico HTTP/1.1
+Host: ci4ene01.ecn.purdue.edu
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Cookie: PHPSESSID=2a80077e2efe71c2fbf335a09e2f95b4
+If-Modified-Since: Fri, 29 Jan 2010 12:58:46 GMT
+If-None-Match: "2775d4e-47e-47e4d32296d80"
+
+HTTP/1.1 304 Not Modified
+Date: Wed, 22 Aug 2012 15:14:23 GMT
+Server: Apache/2.2.17 (Unix) PHP/5.3.4
+Connection: Keep-Alive
+Keep-Alive: timeout=15, max=499
+Etag: "2775d4e-47e-47e4d32296d80"
+Expires: Wed, 22 Aug 2012 15:15:23 GMT
+Cache-Control: max-age=60
+----------------------------------------------------------

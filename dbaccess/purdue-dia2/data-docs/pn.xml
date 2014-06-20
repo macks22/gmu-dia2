@@ -1,0 +1,109 @@
+<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+	ID="s232b6abf644513beddfa3c061e05f6df9b995c691" Version="2.0"
+	IssueInstant="2012-08-22T15:14:20Z"
+	Destination="http://ci4ene01.ecn.purdue.edu/simplesaml/module.php/saml/sp/saml2-acs.php/r-gov-auth-sp">
+	<saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">https://eauthsso.dev.nsf.gov/sso
+	</saml:Issuer>
+	<samlp:Status xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
+		<samlp:StatusCode xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+			Value="urn:oasis:names:tc:SAML:2.0:status:Success">
+		</samlp:StatusCode>
+	</samlp:Status>
+	<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+		ID="s20fb6257a9dfca09a59f8ff0ebc55ad2346e20ad5" IssueInstant="2012-08-22T15:14:20Z"
+		Version="2.0">
+		<saml:Issuer>https://eauthsso.dev.nsf.gov/sso</saml:Issuer>
+		<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+			<ds:SignedInfo>
+				<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+				<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+				<ds:Reference URI="#s20fb6257a9dfca09a59f8ff0ebc55ad2346e20ad5">
+					<ds:Transforms>
+						<ds:Transform
+							Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+						<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+					</ds:Transforms>
+					<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+					<ds:DigestValue>XCQ9ft/rnTUNiCSCrXvxFha3ca8=</ds:DigestValue>
+				</ds:Reference>
+			</ds:SignedInfo>
+			<ds:SignatureValue>
+				j6k9AnHK/krmEi28L3DU6ti9HayvL1kM5iJsThJHNnRKSPSm+ZKuptxoujBzseBRv1cv9s1o2m/s
+				W86hz73CF1iFeCVO4DqVTSCG26Ti4WhzARgJvWW0vpvNMBZGg/Zvte1IbpqN8JdmC7LluMX2FhMX
+				HxIgGh4NTZyTYebzIMe2T7QcrnAM5tR2305Y2Wbr92ZrdcnF+cQD3r4VkRQE4BJ9zwvzWhC74jbB
+				Ict/3NtwqbOomnp/DK9bv7NOdmb2D4yzNGYsakI0JokKphVAWW+98YvarjJF4DwzZ4BvcSHvDw4I
+				DM48sY3dAh39YET294Sh4HL9sznM5iHzuPVgbg==
+			</ds:SignatureValue>
+			<ds:KeyInfo>
+				<ds:X509Data>
+					<ds:X509Certificate>
+						MIICujCCAaKgAwIBAgIETW1b1zANBgkqhkiG9w0BAQUFADAfMR0wGwYDVQQDExRlYXV0aHNzby5k
+						ZXYubnNmLmdvdjAeFw0xMTAzMDEyMDQ5MjdaFw0xNjAyMjMyMDQ5MjdaMB8xHTAbBgNVBAMTFGVh
+						dXRoc3NvLmRldi5uc2YuZ292MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqWu9u6H5
+						0IZdls7taw4OxEcH4XP2z0TFDjB1V77JAWnyDimi6h7Q3vkdFGsd49UIGJvIZUpuS/IwhT80ypz1
+						XPumVGsbZMV8SMFiLPYzxRS3ddeQjgu8QEdFxsVTfOCW7v6F2wZw98/G3Tj+Nkf5kSNhstA/7wdb
+						0pa3di7iNvD7Vqx5/ssl+phfsE7VZA3WOaOZ+kOx7MBsmqKtYOmGwdTMEWUwf5iRVvqXgxfgpsHX
+						daernmZxrcPOPY5FszKbiYm7dzJz9DZ4EUT2PcIGSCSJ6GdR5Km9E6Cgq70yq98i59Hf+ONKSF0a
+						OEBYoOu7VDld2CxyMrm3z4QxUPrXGwIDAQABMA0GCSqGSIb3DQEBBQUAA4IBAQBzwUIPFFE6pZLn
+						TScDGm3tsLD25XQrm3ReHHf5mZ7+KWQ59uAbvZDg5tn9fsBdAGC0dioHshke6yy+IpFVXlfIVtms
+						cJO67Z3/bJIOMA0hOfYgV2h0E/3fMsAZCjySVQbbutfy04Z+B0cI1RZ48SMqS5cpASN+j+2MCACh
+						SYfetojnqlePZ8jIJOAyS8MMnZjcafS55yn9hDFhAXIQYCfhcAQg2HdmP6GVOWGA5BHAPzkR74gI
+						TBQThAtQ4SmhUsI9kK92D0RTEAtepylFdpnG1Bjch2BGpuBv945+nhrTIP2RpAGBzVn2vaZZBRHO
+						UgZrjrtLxxKzLceoZCQ5HvCe
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</ds:Signature>
+		<saml:Subject>
+			<saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+				NameQualifier="https://eauthsso.dev.nsf.gov/sso" SPNameQualifier="http://ci4ene01.ecn.purdue.edu/">aardell
+			</saml:NameID>
+			<saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+				<saml:SubjectConfirmationData
+					NotOnOrAfter="2012-08-22T15:24:20Z"
+					Recipient="http://ci4ene01.ecn.purdue.edu/simplesaml/module.php/saml/sp/saml2-acs.php/r-gov-auth-sp" />
+			</saml:SubjectConfirmation>
+		</saml:Subject>
+		<saml:Conditions NotBefore="2012-08-22T15:04:20Z"
+			NotOnOrAfter="2012-08-22T15:24:20Z">
+			<saml:AudienceRestriction>
+				<saml:Audience>http://ci4ene01.ecn.purdue.edu/</saml:Audience>
+			</saml:AudienceRestriction>
+		</saml:Conditions>
+		<saml:AuthnStatement AuthnInstant="2012-08-22T15:03:24Z"
+			SessionIndex="s2ac61f696f3068687a1425d79c5f1bcf92d71de01">
+			<saml:AuthnContext>
+				<saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport
+				</saml:AuthnContextClassRef>
+			</saml:AuthnContext>
+		</saml:AuthnStatement>
+		<saml:AttributeStatement>
+			<saml:Attribute Name="uid">
+				<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">aardell
+				</saml:AttributeValue>
+			</saml:Attribute>
+			<saml:Attribute Name="sn">
+				<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">Ardell
+				</saml:AttributeValue>
+			</saml:Attribute>
+			<saml:Attribute Name="cn">
+				<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">aardell
+				</saml:AttributeValue>
+			</saml:Attribute>
+			<saml:Attribute Name="Groups"
+				NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+				<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">staff
+				</saml:AttributeValue>
+			</saml:Attribute>
+			<saml:Attribute Name="IDPSource"
+				NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+				<saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string" />
+			</saml:Attribute>
+		</saml:AttributeStatement>
+	</saml:Assertion>
+</samlp:Response>

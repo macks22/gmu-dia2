@@ -1,0 +1,1782 @@
+CREATE TABLE dbo.amd ( 
+	awd 	char(7) NOT NULL,
+	prop	char(7) NOT NULL,
+	seq 	numeric(3,0) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.awd ( 
+	awd_id      	char(7) NOT NULL,
+	titl        	varchar(180) NOT NULL,
+	abst        	text NULL,
+	awd_amt     	numeric(10,0) NOT NULL,
+	td_amt      	numeric(10,0) NOT NULL,
+	actv_flag   	char(1) NOT NULL,
+	fy          	numeric(4,0) NOT NULL,
+	stts_time   	int NOT NULL,
+	eff_time    	int NOT NULL,
+	exp_time    	int NOT NULL,
+	prop        	char(7) NOT NULL,
+	pi          	char(9) NOT NULL,
+	inst        	char(10) NOT NULL,
+	mgr         	char(8) NOT NULL,
+	div         	char(4) NOT NULL,
+	pgm         	char(4) NOT NULL,
+	awd_eff_date	datetime NULL,
+	awd_exp_date	datetime NULL 
+	)
+GO
+
+CREATE TABLE dbo.awd_abst ( 
+	awd_id       	char(7) NOT NULL,
+	abst_narr_txt	text NULL 
+	)
+GO
+
+CREATE TABLE dbo.awd_istr ( 
+	awd_istr_id	char(1) NOT NULL,
+	code       	varchar(4) NOT NULL,
+	name       	varchar(40) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.awd_oblg ( 
+	awd_id       	char(7) NOT NULL,
+	bep_fisc_yr  	numeric(4,0) NOT NULL,
+	bep_mgr      	char(8) NULL,
+	bep_div      	char(4) NULL,
+	bep_pgm      	char(4) NULL,
+	tran_dol_oblg	decimal(12,2) NULL 
+	)
+GO
+
+CREATE TABLE dbo.awd_pi_copi ( 
+	awd_id        	char(7) NOT NULL,
+	pi_id         	char(9) NOT NULL,
+	proj_role_code	char(1) NOT NULL,
+	start_date    	datetime NOT NULL,
+	end_date      	datetime NULL,
+	last_updt_user	char(8) NOT NULL,
+	last_updt_pgm 	char(8) NOT NULL,
+	last_updt_tmsp	datetime NOT NULL,
+	cent_mrkr_awd 	char(2) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.awd_prop ( 
+	awd_id         	char(7) NOT NULL,
+	titl           	varchar(180) NOT NULL,
+	abst           	text NULL,
+	awd_amt        	numeric(10,0) NOT NULL,
+	actv_flag      	char(1) NOT NULL,
+	prop_score     	numeric(2,1) NOT NULL,
+	prop_amt       	numeric(10,0) NOT NULL,
+	prop_dwell     	float NOT NULL,
+	intl_impl_flag 	char(1) NOT NULL,
+	fy             	numeric(4,0) NOT NULL,
+	stts_time      	int NOT NULL,
+	eff_time       	int NOT NULL,
+	pi             	char(9) NOT NULL,
+	inst           	char(10) NOT NULL,
+	mgr            	char(8) NOT NULL,
+	div            	char(4) NOT NULL,
+	pgm            	char(4) NOT NULL,
+	recv_time      	int NOT NULL,
+	prop_type      	char(1) NOT NULL,
+	prop_rtng      	char(1) NOT NULL,
+	prop_dwell_rnge	char(1) NOT NULL,
+	prop_recv_time 	int NOT NULL,
+	prop_stts_time 	int NOT NULL,
+	prop_awd_istr  	char(1) NOT NULL,
+	prop_natr_rqst 	char(1) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.cncp ( 
+	id       	int IDENTITY(1,1) NOT NULL,
+	name     	varchar(160) NOT NULL,
+	cncp_tree	int NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.cncp_tree ( 
+	id  	int IDENTITY(1,1) NOT NULL,
+	name	varchar(160) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.comm_oblg ( 
+	id       	int IDENTITY(1,1) NOT NULL,
+	tot_amt  	money NOT NULL,
+	oblg_flag	char(1) NOT NULL,
+	app      	char(4) NOT NULL,
+	perf_org 	char(3) NOT NULL,
+	fy       	numeric(4,0) NOT NULL,
+	prop     	char(7) NOT NULL,
+	fdr      	char(8) NOT NULL,
+	fdr_div  	char(4) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.comm_oblg_prop ( 
+	id             	int NOT NULL,
+	tot_amt        	money NOT NULL,
+	oblg_flag      	char(1) NOT NULL,
+	app            	char(4) NOT NULL,
+	perf_org       	char(3) NOT NULL,
+	fy             	numeric(4,0) NOT NULL,
+	prop           	char(7) NOT NULL,
+	fdr            	char(8) NOT NULL,
+	fdr_div        	char(4) NOT NULL,
+	prop_type      	char(1) NOT NULL,
+	prop_rtng      	char(1) NOT NULL,
+	prop_dwell_rnge	char(1) NOT NULL,
+	prop_stts_time 	int NOT NULL,
+	prop_recv_time 	int NOT NULL,
+	prop_awd_istr  	char(1) NOT NULL,
+	prop_natr_rqst 	char(1) NOT NULL,
+	prop_pi        	char(9) NOT NULL,
+	prop_inst      	char(10) NOT NULL,
+	prop_own       	char(8) NOT NULL,
+	prop_div       	char(4) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.ctry ( 
+	ctry_id	char(2) NOT NULL,
+	code   	char(2) NOT NULL,
+	name   	varchar(40) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.dir ( 
+	dir_id   	char(2) NOT NULL,
+	name     	varchar(60) NOT NULL,
+	shrt_name	varchar(4) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.div ( 
+	div_id   	char(4) NOT NULL,
+	name     	varchar(50) NOT NULL,
+	shrt_name	varchar(4) NOT NULL,
+	dir      	char(2) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.div_pgm ( 
+	div_pgm_id	char(8) NOT NULL,
+	div       	char(4) NOT NULL,
+	pgm       	char(4) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.dtproperties ( 
+	id      	int IDENTITY(1,1) NOT NULL,
+	objectid	int NULL,
+	property	varchar(64) NOT NULL,
+	value   	varchar(255) NULL,
+	uvalue  	nvarchar(255) NULL,
+	lvalue  	image NULL,
+	version 	int NOT NULL DEFAULT (0) 
+	)
+GO
+
+CREATE TABLE dbo.dwell_rnge ( 
+	dwell_rnge_id	char(1) NOT NULL,
+	code         	char(4) NOT NULL,
+	ordr         	int NOT NULL,
+	name         	varchar(20) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.dwell_stage ( 
+	dwell_stage_id  	varchar(2) NOT NULL,
+	dwell_stage_name	varchar(40) NOT NULL,
+	ordr            	varchar(1) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.fund ( 
+	id     	int IDENTITY(1,1) NOT NULL,
+	tot_amt	money NOT NULL,
+	fy     	numeric(4,0) NOT NULL,
+	awd    	char(7) NOT NULL,
+	fdr    	char(8) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.fund_awd ( 
+	id           	int NOT NULL,
+	tot_amt      	money NOT NULL,
+	fy           	numeric(4,0) NOT NULL,
+	fdr          	char(8) NOT NULL,
+	awd          	char(7) NULL,
+	awd_div      	char(4) NOT NULL,
+	awd_mgr      	char(8) NOT NULL,
+	awd_fy       	numeric(4,0) NOT NULL,
+	awd_stts_time	int NOT NULL,
+	awd_eff_time 	int NOT NULL,
+	awd_pi       	char(9) NOT NULL,
+	awd_inst     	char(10) NOT NULL,
+	awd_actv_flag	char(1) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.fy ( 
+	fy	numeric(4,0) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.gend ( 
+	gend_id	char(1) NOT NULL,
+	code   	char(4) NOT NULL,
+	ordr   	int NOT NULL,
+	name   	varchar(20) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.inst ( 
+	inst_id  	char(10) NOT NULL,
+	name     	varchar(64) NOT NULL,
+	shrt_name	varchar(26) NOT NULL,
+	zip_code 	varchar(9) NULL,
+	ctry     	char(2) NOT NULL,
+	st       	char(2) NOT NULL,
+	min      	char(1) NOT NULL,
+	type     	char(3) NOT NULL,
+	cong_dist	char(2) NULL 
+	)
+GO
+
+CREATE TABLE dbo.inst_min ( 
+	inst_min_id	char(1) NOT NULL,
+	code       	char(4) NOT NULL,
+	ordr       	int NOT NULL,
+	name       	varchar(40) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.inst_type ( 
+	inst_type_id	char(3) NOT NULL,
+	name        	varchar(40) NOT NULL,
+	grp         	char(4) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.inst_type_grp ( 
+	inst_type_grp_id	char(4) NOT NULL,
+	code            	char(4) NOT NULL,
+	ordr            	int NOT NULL,
+	name            	varchar(15) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.intl ( 
+	intl_code	char(2) NOT NULL,
+	intl_abbr	char(4) NULL,
+	intl_txt 	char(40) NULL,
+	eff_date 	datetime NULL,
+	end_date 	datetime NULL 
+	)
+GO
+
+CREATE TABLE dbo.intl_impl ( 
+	prop_id              	char(7) NOT NULL,
+	intl_impl_code_1     	char(2) NULL,
+	intl_impl_code_2     	char(2) NULL,
+	intl_impl_code_3     	char(3) NULL,
+	intl_impl_code_4     	char(2) NULL,
+	intl_impl_code_5     	char(2) NULL,
+	intl_impl_code_6     	char(2) NULL,
+	intl_impl_code_7     	char(2) NULL,
+	intl_ctry_1          	char(2) NULL,
+	intl_ctry_2          	char(2) NULL,
+	intl_ctry_3          	char(2) NULL,
+	intl_dol             	numeric(10,0) NULL,
+	intl_ctry_1_colb_flag	char(1) NULL,
+	intl_ctry_2_colb_flag	char(1) NULL,
+	intl_ctry_3_colb_flag	char(1) NULL,
+	intl_acty_flag       	char(1) NULL,
+	intl_trav_flag       	char(1) NULL 
+	)
+GO
+
+CREATE TABLE dbo.mnth ( 
+	id  	numeric(2,0) NOT NULL,
+	code	char(3) NOT NULL,
+	name	varchar(9) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.natr_rqst ( 
+	natr_rqst_id	char(1) NOT NULL,
+	code        	varchar(4) NOT NULL,
+	name        	varchar(40) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.pgm ( 
+	pgm_id   	char(4) NOT NULL,
+	code     	char(4) NOT NULL,
+	name     	varchar(30) NOT NULL,
+	code_name	varchar(35) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.pi ( 
+	pi_id       	char(9) NOT NULL,
+	name        	varchar(43) NOT NULL,
+	pi_frst_name	varchar(15) NULL,
+	pi_last_name	varchar(24) NULL,
+	emai_addr   	varchar(80) NULL,
+	gend        	char(1) NOT NULL,
+	minr_flag   	char(1) NOT NULL,
+	ethn_code   	varchar(2) NOT NULL,
+	rno_code    	varchar(2) NOT NULL,
+	ethn_txt    	varchar(10) NOT NULL,
+	rno_txt     	varchar(15) NOT NULL,
+	hdcp_flag   	char(1) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.pr_cntl ( 
+	rpt_num          	numeric(8,0) NOT NULL,
+	rpt_type         	char(1) NOT NULL,
+	rpt_peri_start   	datetime NOT NULL,
+	rpt_peri_end     	datetime NOT NULL,
+	rpt_due_date     	datetime NOT NULL,
+	rpt_odue_date    	datetime NOT NULL,
+	sub_flag         	char(1) NULL,
+	sub_date         	datetime NULL,
+	aprv_flag        	char(1) NULL,
+	aprv_date        	datetime NULL,
+	rpt_subm_type    	char(1) NULL,
+	rpt_req_stts_code	char(1) NULL,
+	po_logn_id       	varchar(8) NOT NULL,
+	awd_id           	char(7) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.prj_rpt ( 
+	rpt_num          	numeric(8,0) NOT NULL,
+	rpt_type         	char(1) NOT NULL,
+	rpt_peri_start   	datetime NOT NULL,
+	rpt_peri_end     	datetime NOT NULL,
+	rpt_due_date     	datetime NOT NULL,
+	rpt_odue_date    	datetime NOT NULL,
+	sub_flag         	char(1) NULL,
+	sub_date         	datetime NULL,
+	aprv_flag        	char(1) NULL,
+	aprv_date        	datetime NULL,
+	rpt_subm_type    	char(1) NULL,
+	rpt_subm_stts    	char(1) NOT NULL,
+	rpt_subm_sub_stts	char(2) NOT NULL,
+	rpt_stts         	char(1) NOT NULL,
+	rpt_req_stts_code	char(1) NULL,
+	po_logn_id       	varchar(8) NOT NULL,
+	awd_id           	char(7) NOT NULL,
+	inst             	char(10) NOT NULL,
+	mgr              	char(8) NOT NULL,
+	div              	char(4) NOT NULL,
+	pgm_ele_code     	char(4) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.prop ( 
+	prop_id       	char(7) NOT NULL,
+	titl          	varchar(180) NOT NULL,
+	score         	numeric(2,1) NOT NULL,
+	rtng          	char(1) NOT NULL,
+	prop_amt      	numeric(10,0) NOT NULL,
+	pm_ibm_logn_id	varchar(8) NOT NULL,
+	dwell_rnge    	char(1) NOT NULL,
+	dwell_stage   	varchar(2) NOT NULL,
+	dwell_stts    	char(1) NOT NULL,
+	dwell         	float NOT NULL,
+	dwell_days    	float NOT NULL,
+	dwell_fy      	varchar(8) NOT NULL,
+	intl_impl_flag	char(1) NOT NULL,
+	prop_stts_date	datetime NULL,
+	nsf_rcvd_date 	datetime NULL,
+	pm_rcom_dt    	datetime NULL,
+	third_rev_dt  	datetime NULL,
+	ddconcur_flag 	char(1) NOT NULL,
+	amdd_flag     	char(1) NOT NULL,
+	stts          	char(2) NOT NULL,
+	type          	char(1) NOT NULL,
+	fy            	numeric(4,0) NOT NULL,
+	recv_fy       	numeric(4,0) NOT NULL,
+	recv_time     	int NOT NULL,
+	stts_time     	int NOT NULL,
+	awd_istr      	char(1) NOT NULL,
+	natr_rqst     	char(1) NOT NULL,
+	pi            	char(9) NOT NULL,
+	inst          	char(10) NOT NULL,
+	own           	char(8) NOT NULL,
+	div           	char(4) NOT NULL,
+	pgm           	char(4) NOT NULL,
+	pgm_annc_id   	varchar(10) NULL 
+	)
+GO
+
+CREATE TABLE dbo.prop_desc ( 
+	prop_id	varchar(7) NOT NULL,
+	desc   	ntext NULL 
+	)
+GO
+
+CREATE TABLE dbo.prop_hist ( 
+	prop_id      	char(7) NULL,
+	fy           	numeric(4,0) NOT NULL,
+	stts_grp     	varchar(4) NOT NULL,
+	dwell_rnge   	char(1) NOT NULL,
+	ddconcur_flag	char(1) NOT NULL,
+	pi           	char(9) NOT NULL,
+	inst         	char(10) NOT NULL,
+	natr_rqst    	char(1) NOT NULL,
+	rtng         	char(1) NOT NULL,
+	type         	char(1) NOT NULL,
+	own          	char(8) NOT NULL,
+	div          	char(4) NOT NULL,
+	pgm          	char(4) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.prop_rtng ( 
+	prop_rtng_id	char(1) NOT NULL,
+	code        	char(4) NOT NULL,
+	ordr        	int NOT NULL,
+	name        	varchar(40) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.prop_stts ( 
+	prop_stts_id	char(2) NOT NULL,
+	name        	varchar(40) NOT NULL,
+	grp         	varchar(4) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.prop_stts_grp ( 
+	prop_stts_grp_id	varchar(4) NOT NULL,
+	code            	varchar(4) NOT NULL,
+	ordr            	int NOT NULL,
+	name            	varchar(40) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.prop_stts_hist ( 
+	id      	int IDENTITY(1,1) NOT NULL,
+	prop    	char(7) NOT NULL,
+	stts_grp	varchar(4) NOT NULL,
+	fy      	numeric(4,0) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.prop_summ ( 
+	prop_id	varchar(7) NOT NULL,
+	summ   	ntext NULL 
+	)
+GO
+
+CREATE TABLE dbo.prop_type ( 
+	prop_type_id	char(1) NOT NULL,
+	code        	char(4) NOT NULL,
+	ordr        	int NOT NULL,
+	name        	varchar(40) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.rpt_stts ( 
+	rpt_stts     	char(1) NOT NULL,
+	rpt_stts_name	varchar(30) NULL,
+	ordr         	int NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.salex ( 
+	id      	int IDENTITY(1,1) NOT NULL,
+	fisc_yr 	numeric(4,0) NOT NULL,
+	exp_type	varchar(35) NOT NULL,
+	exp_cat 	varchar(35) NOT NULL,
+	emp_name	varchar(37) NOT NULL,
+	dir     	char(2) NOT NULL,
+	div     	char(4) NOT NULL,
+	tran_pgm	char(4) NOT NULL,
+	bep_pgm 	char(4) NOT NULL,
+	type    	varchar(6) NOT NULL,
+	exp_amt 	float NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.state ( 
+	st_id	char(2) NOT NULL,
+	code 	char(2) NOT NULL,
+	name 	varchar(20) NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.subm_stts ( 
+	subm_stts     	char(1) NOT NULL,
+	subm_stts_name	varchar(15) NOT NULL,
+	ordr          	int NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.subm_sub_stts ( 
+	subm_stts         	char(1) NOT NULL,
+	subm_sub_stts     	char(2) NOT NULL,
+	subm_sub_stts_name	varchar(15) NOT NULL,
+	ordr              	int NOT NULL 
+	)
+GO
+
+CREATE TABLE dbo.time ( 
+	id       	int IDENTITY(1,1) NOT NULL,
+	mnth     	numeric(2,0) NOT NULL,
+	cal_quar 	char(2) NOT NULL,
+	yr       	numeric(4,0) NOT NULL,
+	fisc_quar	char(2) NOT NULL,
+	fy       	numeric(4,0) NOT NULL 
+	)
+GO
+
+
+ALTER TABLE dbo.amd
+	ADD CONSTRAINT PK__amd__062E45DE
+	PRIMARY KEY (awd, prop, seq)
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT PK__awd__7ABC9332
+	PRIMARY KEY (awd_id)
+GO
+
+ALTER TABLE dbo.awd_abst
+	ADD CONSTRAINT PK__awd_abst__09FED6C2
+	PRIMARY KEY (awd_id)
+GO
+
+ALTER TABLE dbo.awd_istr
+	ADD CONSTRAINT PK__awd_istr__047B0796
+	PRIMARY KEY (awd_istr_id)
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT PK__awd_prop__0CDB436D
+	PRIMARY KEY (awd_id)
+GO
+
+ALTER TABLE dbo.cncp
+	ADD CONSTRAINT PK__cncp__1FEE17E1
+	PRIMARY KEY (id)
+GO
+
+ALTER TABLE dbo.cncp_tree
+	ADD CONSTRAINT PK__cncp_tree__1E05CF6F
+	PRIMARY KEY (id)
+GO
+
+ALTER TABLE dbo.comm_oblg
+	ADD CONSTRAINT PK__comm_oblg__22CA848C
+	PRIMARY KEY (id)
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT PK__comm_oblg_prop__28835DE2
+	PRIMARY KEY (id)
+GO
+
+ALTER TABLE dbo.ctry
+	ADD CONSTRAINT PK__ctry__6CA37E05
+	PRIMARY KEY (ctry_id)
+GO
+
+ALTER TABLE dbo.dir
+	ADD CONSTRAINT PK__dir__65025C3D
+	PRIMARY KEY (dir_id)
+GO
+
+ALTER TABLE dbo.div
+	ADD CONSTRAINT PK__div__66EAA4AF
+	PRIMARY KEY (div_id)
+GO
+
+ALTER TABLE dbo.div_pgm
+	ADD CONSTRAINT PK__div_pgm__22FF8EB6
+	PRIMARY KEY (div_pgm_id)
+GO
+
+ALTER TABLE dbo.dtproperties
+	ADD CONSTRAINT pk_dtproperties
+	PRIMARY KEY (id, property)
+GO
+
+ALTER TABLE dbo.dwell_rnge
+	ADD CONSTRAINT PK__dwell_rnge__725C575B
+	PRIMARY KEY (dwell_rnge_id)
+GO
+
+ALTER TABLE dbo.dwell_stage
+	ADD CONSTRAINT PK__dwell_stage__762CE83F
+	PRIMARY KEY (dwell_stage_id)
+GO
+
+ALTER TABLE dbo.fund
+	ADD CONSTRAINT PK__fund__39ADE9E4
+	PRIMARY KEY (id)
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT PK__fund_awd__3E729F01
+	PRIMARY KEY (id)
+GO
+
+ALTER TABLE dbo.fy
+	ADD CONSTRAINT PK__fy__631A13CB
+	PRIMARY KEY (fy)
+GO
+
+ALTER TABLE dbo.gend
+	ADD CONSTRAINT PK__gend__0A33E0EC
+	PRIMARY KEY (gend_id)
+GO
+
+ALTER TABLE dbo.inst
+	ADD CONSTRAINT PK__inst__1B5E6CEE
+	PRIMARY KEY (inst_id)
+GO
+
+ALTER TABLE dbo.inst_min
+	ADD CONSTRAINT PK__inst_min__12C926ED
+	PRIMARY KEY (inst_min_id)
+GO
+
+ALTER TABLE dbo.inst_type
+	ADD CONSTRAINT PK__inst_type__18820043
+	PRIMARY KEY (inst_type_id)
+GO
+
+ALTER TABLE dbo.inst_type_grp
+	ADD CONSTRAINT PK__inst_type_grp__15A59398
+	PRIMARY KEY (inst_type_grp_id)
+GO
+
+ALTER TABLE dbo.intl
+	ADD CONSTRAINT PK__intl__5926953D
+	PRIMARY KEY (intl_code)
+GO
+
+ALTER TABLE dbo.intl_impl
+	ADD CONSTRAINT PK__intl_impl__5B0EDDAF
+	PRIMARY KEY (prop_id)
+GO
+
+ALTER TABLE dbo.mnth
+	ADD CONSTRAINT PK__mnth__7EC22E40
+	PRIMARY KEY (id)
+GO
+
+ALTER TABLE dbo.natr_rqst
+	ADD CONSTRAINT PK__natr_rqst__07577441
+	PRIMARY KEY (natr_rqst_id)
+GO
+
+ALTER TABLE dbo.pgm
+	ADD CONSTRAINT PK__pgm__21174644
+	PRIMARY KEY (pgm_id)
+GO
+
+ALTER TABLE dbo.pi
+	ADD CONSTRAINT PK__pi__0E0471D0
+	PRIMARY KEY (pi_id)
+GO
+
+ALTER TABLE dbo.pr_cntl
+	ADD CONSTRAINT PK__pr_cntl__5DEB4A5A
+	PRIMARY KEY (rpt_num)
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT PK__prj_rpt__6680905B
+	PRIMARY KEY (rpt_num)
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT PK__prop__26D01F9A
+	PRIMARY KEY (prop_id)
+GO
+
+ALTER TABLE dbo.prop_rtng
+	ADD CONSTRAINT PK__prop_rtng__6E8BC677
+	PRIMARY KEY (prop_rtng_id)
+GO
+
+ALTER TABLE dbo.prop_stts
+	ADD CONSTRAINT PK__prop_stts__781530B1
+	PRIMARY KEY (prop_stts_id)
+GO
+
+ALTER TABLE dbo.prop_stts_grp
+	ADD CONSTRAINT PK__prop_stts_grp__69C7115A
+	PRIMARY KEY (prop_stts_grp_id)
+GO
+
+ALTER TABLE dbo.prop_type
+	ADD CONSTRAINT PK__prop_type__7AF19D5C
+	PRIMARY KEY (prop_type_id)
+GO
+
+ALTER TABLE dbo.rpt_stts
+	ADD CONSTRAINT PK__rpt_stts__649847E9
+	PRIMARY KEY (rpt_stts)
+GO
+
+ALTER TABLE dbo.state
+	ADD CONSTRAINT PK__state__10E0DE7B
+	PRIMARY KEY (st_id)
+GO
+
+ALTER TABLE dbo.subm_stts
+	ADD CONSTRAINT PK__subm_stts__5FD392CC
+	PRIMARY KEY (subm_stts)
+GO
+
+ALTER TABLE dbo.subm_sub_stts
+	ADD CONSTRAINT PK__subm_sub_stts__61BBDB3E
+	PRIMARY KEY (subm_sub_stts)
+GO
+
+ALTER TABLE dbo.time
+	ADD CONSTRAINT PK__time__00AA76B2
+	PRIMARY KEY (id)
+GO
+
+ALTER TABLE dbo.awd_istr
+	ADD CONSTRAINT UQ__awd_istr__056F2BCF
+	UNIQUE (code)
+GO
+
+ALTER TABLE dbo.dwell_rnge
+	ADD CONSTRAINT UQ__dwell_rnge__74449FCD
+	UNIQUE (code)
+GO
+
+ALTER TABLE dbo.dwell_rnge
+	ADD CONSTRAINT UQ__dwell_rnge__73507B94
+	UNIQUE (ordr)
+GO
+
+ALTER TABLE dbo.gend
+	ADD CONSTRAINT UQ__gend__0C1C295E
+	UNIQUE (code)
+GO
+
+ALTER TABLE dbo.gend
+	ADD CONSTRAINT UQ__gend__0B280525
+	UNIQUE (ordr)
+GO
+
+ALTER TABLE dbo.inst_min
+	ADD CONSTRAINT UQ__inst_min__13BD4B26
+	UNIQUE (ordr)
+GO
+
+ALTER TABLE dbo.inst_type_grp
+	ADD CONSTRAINT UQ__inst_type_grp__1699B7D1
+	UNIQUE (ordr)
+GO
+
+ALTER TABLE dbo.natr_rqst
+	ADD CONSTRAINT UQ__natr_rqst__084B987A
+	UNIQUE (code)
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT UQ__prop_hist__418415D6
+	UNIQUE (fy, prop_id)
+GO
+
+ALTER TABLE dbo.prop_rtng
+	ADD CONSTRAINT UQ__prop_rtng__70740EE9
+	UNIQUE (code)
+GO
+
+ALTER TABLE dbo.prop_rtng
+	ADD CONSTRAINT UQ__prop_rtng__6F7FEAB0
+	UNIQUE (ordr)
+GO
+
+ALTER TABLE dbo.prop_stts_grp
+	ADD CONSTRAINT UQ__prop_stts_grp__6ABB3593
+	UNIQUE (ordr)
+GO
+
+ALTER TABLE dbo.prop_stts_hist
+	ADD CONSTRAINT UQ__prop_stts_hist__3CBF60B9
+	UNIQUE (fy, prop)
+GO
+
+ALTER TABLE dbo.prop_type
+	ADD CONSTRAINT UQ__prop_type__7CD9E5CE
+	UNIQUE (code)
+GO
+
+ALTER TABLE dbo.prop_type
+	ADD CONSTRAINT UQ__prop_type__7BE5C195
+	UNIQUE (ordr)
+GO
+
+ALTER TABLE dbo.amd
+	ADD CONSTRAINT FK__amd__prop__08168E50
+	FOREIGN KEY(prop)
+	REFERENCES dbo.prop(prop_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.amd
+	ADD CONSTRAINT FK__amd__awd__07226A17
+	FOREIGN KEY(awd)
+	REFERENCES dbo.awd(awd_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__stts_time__7CA4DBA4
+	FOREIGN KEY(stts_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__prop__7F81484F
+	FOREIGN KEY(prop)
+	REFERENCES dbo.prop(prop_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__pi__00756C88
+	FOREIGN KEY(pi)
+	REFERENCES dbo.pi(pi_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__pgm__0445FD6C
+	FOREIGN KEY(pgm)
+	REFERENCES dbo.pgm(pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__mgr__025DB4FA
+	FOREIGN KEY(mgr)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__inst__016990C1
+	FOREIGN KEY(inst)
+	REFERENCES dbo.inst(inst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__fy__7BB0B76B
+	FOREIGN KEY(fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__exp_time__7E8D2416
+	FOREIGN KEY(exp_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__eff_time__7D98FFDD
+	FOREIGN KEY(eff_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd
+	ADD CONSTRAINT FK__awd__div__0351D933
+	FOREIGN KEY(div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__stts_t__0EC38BDF
+	FOREIGN KEY(stts_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__recv_t__1570896E
+	FOREIGN KEY(recv_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__prop_t__1664ADA7
+	FOREIGN KEY(prop_type)
+	REFERENCES dbo.prop_type(prop_type_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__prop_s__1A353E8B
+	FOREIGN KEY(prop_stts_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__prop_r__19411A52
+	FOREIGN KEY(prop_recv_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__prop_r__1758D1E0
+	FOREIGN KEY(prop_rtng)
+	REFERENCES dbo.prop_rtng(prop_rtng_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__prop_n__1C1D86FD
+	FOREIGN KEY(prop_natr_rqst)
+	REFERENCES dbo.natr_rqst(natr_rqst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__prop_d__184CF619
+	FOREIGN KEY(prop_dwell_rnge)
+	REFERENCES dbo.dwell_rnge(dwell_rnge_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__prop_a__1B2962C4
+	FOREIGN KEY(prop_awd_istr)
+	REFERENCES dbo.awd_istr(awd_istr_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__pi__10ABD451
+	FOREIGN KEY(pi)
+	REFERENCES dbo.pi(pi_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__pgm__147C6535
+	FOREIGN KEY(pgm)
+	REFERENCES dbo.pgm(pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__mgr__12941CC3
+	FOREIGN KEY(mgr)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__inst__119FF88A
+	FOREIGN KEY(inst)
+	REFERENCES dbo.inst(inst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__fy__0DCF67A6
+	FOREIGN KEY(fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__eff_ti__0FB7B018
+	FOREIGN KEY(eff_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.awd_prop
+	ADD CONSTRAINT FK__awd_prop__div__138840FC
+	FOREIGN KEY(div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.cncp
+	ADD CONSTRAINT FK__cncp__cncp_tree__20E23C1A
+	FOREIGN KEY(cncp_tree)
+	REFERENCES dbo.cncp_tree(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg
+	ADD CONSTRAINT FK__comm_oblg__prop__24B2CCFE
+	FOREIGN KEY(prop)
+	REFERENCES dbo.prop(prop_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg
+	ADD CONSTRAINT FK__comm_oblg__fy__23BEA8C5
+	FOREIGN KEY(fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg
+	ADD CONSTRAINT FK__comm_oblg__fdr_d__269B1570
+	FOREIGN KEY(fdr_div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg
+	ADD CONSTRAINT FK__comm_oblg__fdr__25A6F137
+	FOREIGN KEY(fdr)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg_pr__id__2977821B
+	FOREIGN KEY(id)
+	REFERENCES dbo.comm_oblg(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg_pr__fy__2A6BA654
+	FOREIGN KEY(fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg_p__fdr__2C53EEC6
+	FOREIGN KEY(fdr)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___37C5A172
+	FOREIGN KEY(prop_div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___36D17D39
+	FOREIGN KEY(prop_own)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___35DD5900
+	FOREIGN KEY(prop_inst)
+	REFERENCES dbo.inst(inst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___34E934C7
+	FOREIGN KEY(prop_pi)
+	REFERENCES dbo.pi(pi_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___33F5108E
+	FOREIGN KEY(prop_natr_rqst)
+	REFERENCES dbo.natr_rqst(natr_rqst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___3300EC55
+	FOREIGN KEY(prop_awd_istr)
+	REFERENCES dbo.awd_istr(awd_istr_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___320CC81C
+	FOREIGN KEY(prop_recv_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___3118A3E3
+	FOREIGN KEY(prop_stts_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___30247FAA
+	FOREIGN KEY(prop_dwell_rnge)
+	REFERENCES dbo.dwell_rnge(dwell_rnge_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___2F305B71
+	FOREIGN KEY(prop_rtng)
+	REFERENCES dbo.prop_rtng(prop_rtng_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__prop___2E3C3738
+	FOREIGN KEY(prop_type)
+	REFERENCES dbo.prop_type(prop_type_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg__fdr_d__2D4812FF
+	FOREIGN KEY(fdr_div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.comm_oblg_prop
+	ADD CONSTRAINT FK__comm_oblg___prop__2B5FCA8D
+	FOREIGN KEY(prop)
+	REFERENCES dbo.prop(prop_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.div
+	ADD CONSTRAINT FK__div__dir__67DEC8E8
+	FOREIGN KEY(dir)
+	REFERENCES dbo.dir(dir_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.div_pgm
+	ADD CONSTRAINT FK__div_pgm__pgm__24E7D728
+	FOREIGN KEY(pgm)
+	REFERENCES dbo.pgm(pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.div_pgm
+	ADD CONSTRAINT FK__div_pgm__div__23F3B2EF
+	FOREIGN KEY(div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund
+	ADD CONSTRAINT FK__fund__fy__3AA20E1D
+	FOREIGN KEY(fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund
+	ADD CONSTRAINT FK__fund__fdr__3C8A568F
+	FOREIGN KEY(fdr)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund
+	ADD CONSTRAINT FK__fund__awd__3B963256
+	FOREIGN KEY(awd)
+	REFERENCES dbo.awd(awd_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__id__3F66C33A
+	FOREIGN KEY(id)
+	REFERENCES dbo.fund(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__fy__405AE773
+	FOREIGN KEY(fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__fdr__414F0BAC
+	FOREIGN KEY(fdr)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__awd_st__4613C0C9
+	FOREIGN KEY(awd_stts_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__awd_pi__47FC093B
+	FOREIGN KEY(awd_pi)
+	REFERENCES dbo.pi(pi_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__awd_mg__442B7857
+	FOREIGN KEY(awd_mgr)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__awd_in__48F02D74
+	FOREIGN KEY(awd_inst)
+	REFERENCES dbo.inst(inst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__awd_fy__451F9C90
+	FOREIGN KEY(awd_fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__awd_ef__4707E502
+	FOREIGN KEY(awd_eff_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__awd_di__4337541E
+	FOREIGN KEY(awd_div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.fund_awd
+	ADD CONSTRAINT FK__fund_awd__awd__42432FE5
+	FOREIGN KEY(awd)
+	REFERENCES dbo.awd(awd_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.inst
+	ADD CONSTRAINT FK__inst__type__1F2EFDD2
+	FOREIGN KEY(type)
+	REFERENCES dbo.inst_type(inst_type_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.inst
+	ADD CONSTRAINT FK__inst__st__1D46B560
+	FOREIGN KEY(st)
+	REFERENCES dbo.state(st_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.inst
+	ADD CONSTRAINT FK__inst__min__1E3AD999
+	FOREIGN KEY(min)
+	REFERENCES dbo.inst_min(inst_min_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.inst
+	ADD CONSTRAINT FK__inst__ctry__1C529127
+	FOREIGN KEY(ctry)
+	REFERENCES dbo.ctry(ctry_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.inst_type
+	ADD CONSTRAINT FK__inst_type__grp__1976247C
+	FOREIGN KEY(grp)
+	REFERENCES dbo.inst_type_grp(inst_type_grp_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.intl_impl
+	ADD CONSTRAINT FK__intl_impl__prop___5C0301E8
+	FOREIGN KEY(prop_id)
+	REFERENCES dbo.prop(prop_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.pi
+	ADD CONSTRAINT FK__pi__gend__0EF89609
+	FOREIGN KEY(gend)
+	REFERENCES dbo.gend(gend_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT FK__prj_rpt__rpt_sub__695CFD06
+	FOREIGN KEY(rpt_subm_sub_stts)
+	REFERENCES dbo.subm_sub_stts(subm_sub_stts)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT FK__prj_rpt__rpt_sub__6868D8CD
+	FOREIGN KEY(rpt_subm_stts)
+	REFERENCES dbo.subm_stts(subm_stts)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT FK__prj_rpt__rpt_stt__6A51213F
+	FOREIGN KEY(rpt_stts)
+	REFERENCES dbo.rpt_stts(rpt_stts)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT FK__prj_rpt__rpt_num__6774B494
+	FOREIGN KEY(rpt_num)
+	REFERENCES dbo.pr_cntl(rpt_num)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT FK__prj_rpt__pgm_ele__6F15D65C
+	FOREIGN KEY(pgm_ele_code)
+	REFERENCES dbo.pgm(pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT FK__prj_rpt__mgr__6D2D8DEA
+	FOREIGN KEY(mgr)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT FK__prj_rpt__inst__6C3969B1
+	FOREIGN KEY(inst)
+	REFERENCES dbo.inst(inst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT FK__prj_rpt__div__6E21B223
+	FOREIGN KEY(div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prj_rpt
+	ADD CONSTRAINT FK__prj_rpt__awd_id__6B454578
+	FOREIGN KEY(awd_id)
+	REFERENCES dbo.awd(awd_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__type__2B94D4B7
+	FOREIGN KEY(type)
+	REFERENCES dbo.prop_type(prop_type_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__stts_time__2F65659B
+	FOREIGN KEY(stts_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__stts__2AA0B07E
+	FOREIGN KEY(stts)
+	REFERENCES dbo.prop_stts(prop_stts_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__rtng__27C443D3
+	FOREIGN KEY(rtng)
+	REFERENCES dbo.prop_rtng(prop_rtng_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__recv_time__2E714162
+	FOREIGN KEY(recv_time)
+	REFERENCES dbo.time(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__recv_fy__2D7D1D29
+	FOREIGN KEY(recv_fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__pi__314DAE0D
+	FOREIGN KEY(pi)
+	REFERENCES dbo.pi(pi_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__pgm__351E3EF1
+	FOREIGN KEY(pgm)
+	REFERENCES dbo.pgm(pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__own__3335F67F
+	FOREIGN KEY(own)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__natr_rqst__305989D4
+	FOREIGN KEY(natr_rqst)
+	REFERENCES dbo.natr_rqst(natr_rqst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__inst__3241D246
+	FOREIGN KEY(inst)
+	REFERENCES dbo.inst(inst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__fy__2C88F8F0
+	FOREIGN KEY(fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__dwell_stag__29AC8C45
+	FOREIGN KEY(dwell_stage)
+	REFERENCES dbo.dwell_stage(dwell_stage_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__dwell_rnge__28B8680C
+	FOREIGN KEY(dwell_rnge)
+	REFERENCES dbo.dwell_rnge(dwell_rnge_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop
+	ADD CONSTRAINT FK__prop__div__342A1AB8
+	FOREIGN KEY(div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__type__4925379E
+	FOREIGN KEY(type)
+	REFERENCES dbo.prop_type(prop_type_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__stts___436C5E48
+	FOREIGN KEY(stts_grp)
+	REFERENCES dbo.prop_stts_grp(prop_stts_grp_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__rtng__48311365
+	FOREIGN KEY(rtng)
+	REFERENCES dbo.prop_rtng(prop_rtng_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__pi__4554A6BA
+	FOREIGN KEY(pi)
+	REFERENCES dbo.pi(pi_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__pgm__4C01A449
+	FOREIGN KEY(pgm)
+	REFERENCES dbo.pgm(pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__own__4A195BD7
+	FOREIGN KEY(own)
+	REFERENCES dbo.div_pgm(div_pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__natr___473CEF2C
+	FOREIGN KEY(natr_rqst)
+	REFERENCES dbo.natr_rqst(natr_rqst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__inst__4648CAF3
+	FOREIGN KEY(inst)
+	REFERENCES dbo.inst(inst_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__fy__42783A0F
+	FOREIGN KEY(fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__dwell__44608281
+	FOREIGN KEY(dwell_rnge)
+	REFERENCES dbo.dwell_rnge(dwell_rnge_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_hist
+	ADD CONSTRAINT FK__prop_hist__div__4B0D8010
+	FOREIGN KEY(div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_stts
+	ADD CONSTRAINT FK__prop_stts__grp__790954EA
+	FOREIGN KEY(grp)
+	REFERENCES dbo.prop_stts_grp(prop_stts_grp_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_stts_hist
+	ADD CONSTRAINT FK__prop_stts_hi__fy__3F9BCD64
+	FOREIGN KEY(fy)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_stts_hist
+	ADD CONSTRAINT FK__prop_stts__stts___3EA7A92B
+	FOREIGN KEY(stts_grp)
+	REFERENCES dbo.prop_stts_grp(prop_stts_grp_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.prop_stts_hist
+	ADD CONSTRAINT FK__prop_stts___prop__3DB384F2
+	FOREIGN KEY(prop)
+	REFERENCES dbo.prop(prop_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.salex
+	ADD CONSTRAINT FK__salex__tran_pgm__72E66740
+	FOREIGN KEY(tran_pgm)
+	REFERENCES dbo.pgm(pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.salex
+	ADD CONSTRAINT FK__salex__fisc_yr__70FE1ECE
+	FOREIGN KEY(fisc_yr)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.salex
+	ADD CONSTRAINT FK__salex__div__71F24307
+	FOREIGN KEY(div)
+	REFERENCES dbo.div(div_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.salex
+	ADD CONSTRAINT FK__salex__bep_pgm__73DA8B79
+	FOREIGN KEY(bep_pgm)
+	REFERENCES dbo.pgm(pgm_id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.subm_sub_stts
+	ADD CONSTRAINT FK__subm_sub___subm___62AFFF77
+	FOREIGN KEY(subm_stts)
+	REFERENCES dbo.subm_stts(subm_stts)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.time
+	ADD CONSTRAINT FK__time__yr__0292BF24
+	FOREIGN KEY(yr)
+	REFERENCES dbo.fy(fy)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE dbo.time
+	ADD CONSTRAINT FK__time__mnth__019E9AEB
+	FOREIGN KEY(mnth)
+	REFERENCES dbo.mnth(id)
+	ON DELETE NO ACTION 
+	ON UPDATE NO ACTION 
+GO
+
