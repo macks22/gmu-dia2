@@ -1,21 +1,37 @@
+"""
+This script exists to request data from the NSF database managed by Purdue. The
+functionality contained herein is capable of getting NSF grant award history,
+including information about the investigators and POs for each award, as well as
+the organizations with which those individuals are affiliated with.
+
+"""
 import os
 import sys
-import json
+import time
+import logging
 import argparse
 import requests
+
+try:
+    # roughly 2x faster
+    import ujson as json
+except ImportError:
+    # builtin
+    import json
 
 
 URL = 'http://ci4ene01.ecn.purdue.edu/GMU_DIA2/DIA2/site/JSONRPC/query.php'
 
 
 class InvalidYearMonth(Exception):
+    """Raise if data is requested for a year/month no data exists for."""
     pass
 
 
 def json_rpc_request(json_content):
     """
-    Make the request to the NSF database through the PHP query
-    endpoint using the JSON contents passed as the POST body.
+    Make a POST request to the NSF database through the PHP query
+    endpoint using the JSON contents passed as the body.
 
     """
     headers = {
@@ -23,6 +39,7 @@ def json_rpc_request(json_content):
         'accept': 'application/json'
     }
     res = requests.post(URL, json_content, headers=headers)
+    logging.debug(res.content)
     return res.json()
 
 def _translate_month(month):
@@ -59,7 +76,7 @@ def _trigger_name_caching(pi_id, logical_op='and'):
     return json_rpc_request(json.dumps(req_body))
 
 
-def get_name(pi_id, logical_op='and'):
+def get_name_and_affiliation(pi_id, logical_op='and'):
     """
     Get the name of a PI by the disambiguated ID.
 
@@ -234,29 +251,56 @@ def request_data(year, month, dir_id='05', mode='current', logical_op='and'):
     return data
 
 
+def write_name_and_affiliation(pi_id):
+    """
+    Write the name and affiliation info for the given PI to a JSON file named
+    using this convention::
+
+        <pi_id>-name-affiliation.json'
+
+    @param str pi_id: The PI ID to get and write name and affiliation info for.
+    @raise TypeError: If the ID of the PI is not parseable as an int.
+
+    """
+    pi_id = str(int(pi_id))  # raise TypeError if bad ID & strip in the process
+    out_format = '{}-name-affiliation.json'
+
+    # TODO: STORE SOMEWHERE BETTER
+    json_dir = os.path.abspath('json')
+    path = os.path.join(json_dir, out_format.format(pi_id))
+    json_data = get_name_and_affiliation(pi_id)
+    with open(path, 'w') as f:
+        json.dump(json_data, f)
+
+
 def name(args):
     """Main CLI for 'name' subcommand."""
-    if args.outfile:
-        path = os.path.abspath(args.outfile)
-    else:
-        path = ''
 
     if args.id:
         try:
-            int(args.id)
+            write_name_and_affiliation(args.id)
         except ValueError:
             return 2
 
-        if not path:
-            path = os.path.abspath(args.id + '-name-affiliation.json')
-
-        json_data = get_name(args.id)
-        with open(path, 'w') as f:
-            json.dump(json_data, f)
-
         return 0
+
     elif args.file:
-        print get_names(args.file)
+        infile = os.path.abspath(args.file)
+        with open(infile, 'r') as f:
+            pi_ids = f.read().split()
+
+        num_processed = 0
+        for pi_id in pi_ids:
+            try:
+                write_name_and_affiliation(pi_id)
+                num_processed += 1
+                logging.info('Got name/affiliation info for {}.'.format(pi_id))
+                logging.info('{} Processed.'.format(num_processed))
+            except ValueError as err:
+                logging.error(str(err))
+                logging.error('Unable to parse PI ID: ' + pi_id)
+
+                #time.sleep(2)  # have to add to give Purdue code time to cache?
         return 0
     return 1
 
@@ -275,6 +319,10 @@ def setup_parser():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(
         help='valid subcommands')
+
+    parser.add_argument(
+        '-v', '--verbose', action='store_true',
+        help='change log level to debug')
 
     download_parser = subparsers.add_parser(
         'download', help='download award data for a year/month')
@@ -298,9 +346,6 @@ def setup_parser():
     name_parser.add_argument(
         '-f', '--file', action='store', default='',
         help='file of PI IDs, one per line, to get names for')
-    name_parser.add_argument(
-        '-o', '--outfile', action='store', default='',
-        help='file to write output to')
     name_parser.set_defaults(func=name)
 
     return parser
@@ -309,6 +354,19 @@ def setup_parser():
 def main():
     parser = setup_parser()
     args = parser.parse_args()
+
+    if args.verbose:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.ERROR
+
+    # set up logging to console
+    logging.basicConfig(
+        level=log_level,
+        format='[%(levelname)s\t%(asctime)s] %(message)s',
+        handlers=[logging.StreamHandler()]
+    )
+
     exit_code = args.func(args)
     if exit_code:
         parser.print_usage()
