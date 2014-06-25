@@ -70,8 +70,8 @@ def pi_award_graph(all_edge_attributes=True, **kwargs):
     g = igraph.Graph()
 
     # parse the list of JSON files from the data directory
-    award_directory = data.DataDirectory()
-    awards = award_directory.awards(**kwargs)
+    awards_directory = data.DataDirectory()
+    awards = awards_directory.awards(**kwargs)
 
     pis_seen_set = set()
     for award_data in awards:
@@ -157,8 +157,8 @@ def all_pi_ids_from_files():
 
     """
     pi_ids = set()
-    award_directory = data.DataDirectory()
-    for award in award_directory.awards():
+    awards_directory = data.DataDirectory()
+    for award in awards_directory.awards():
         for pi_id in award['PIcoPI']:
             pi_ids.add(str(pi_id))
 
@@ -212,12 +212,13 @@ def parse_funding_agents():
     ]
 
     # parse the list of JSON files from the data directory
-    award_directory = data.DataDirectory()
-    for award_data in award_directory.awards():
-        records_for_award = _parse_funding_agent(award_data)
+    awards_directory = data.DataDirectory()
+    for award in awards_directory.awards():
+        records_for_award = _parse_funding_agent(award)
         all_records += records_for_award
 
-    return pd.DataFrame(all_records, columns=columns)
+    df = pd.DataFrame(all_records, columns=columns)
+    return df.set_index('pi_id')
 
 
 def _parse_funding_agent(award_data):
@@ -258,14 +259,15 @@ def frame_pi_award_pairings():
 
     """
     records = []
-    award_directory = data.DataDirectory()
-    for award_data in award_directory.awards():
-        award_id = str(award_data['awardID'])
-        pi_list = [str(pi_id) for pi_id in award_data['PIcoPI']]
+    awards_directory = data.DataDirectory()
+    for award in awards_directory.awards():
+        award_id = str(award['awardID'])
+        pi_list = [str(pi_id) for pi_id in award['PIcoPI']]
         for pi_id in pi_list:
             records.append((pi_id, award_id))
 
-    return pd.DataFrame(records, columns=['pi_id', 'award_id'])
+    df = pd.DataFrame(records, columns=['pi_id', 'award_id'])
+    return df.set_index('pi_id')
 
 
 def frame_abstracts():
@@ -277,10 +279,10 @@ def frame_abstracts():
 
     """
     records = []
-    award_directory = data.DataDirectory()
-    for award_data in award_directory.awards():
-        award_id = str(award_data['awardID'])
-        abstract = award_data['abstract'].encode('utf-8')
+    awards_directory = data.DataDirectory()
+    for award in awards_directory.awards():
+        award_id = str(award['awardID'])
+        abstract = award['abstract'].encode('utf-8')
         records.append((award_id, abstract))
 
     df = pd.DataFrame(records, columns=['award_id', 'abstract'])
