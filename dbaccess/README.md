@@ -1,6 +1,6 @@
 ## Overview
 
-From what I can tell, the design decisions made when constructing the DIA2
+From what I can tell, the design decisions Purdue made when constructing the DIA2
 database schema either boil down to an unnecessary desire for strict
 normalization (3NF in the most recent version), lack of experience,
 over-engineering, or a combination of some of the above. In an attempt to learn
