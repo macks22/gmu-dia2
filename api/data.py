@@ -28,7 +28,6 @@ GRAPH_SAVE_DIR = os.path.join(DATA_DIR, 'pi-award-graphs')
 PICKLE_DIR = os.path.join(DATA_DIR, 'pickle')
 BOW_DIR = os.path.join(DATA_DIR, 'bow')
 WORDLE_DIR = os.path.join(DATA_DIR, 'wordle')
-JSON_FILES = {}
 
 
 class DataDirectory(object):
@@ -55,6 +54,20 @@ class DataDirectory(object):
                 else:
                     self.json_files[year][month] = path
 
+    def __getitem__(self, index):
+        try:
+            year, month = index
+            filepaths = (self.get_filepaths(year, month))
+        except TypeError:
+            year, month = index, None
+            filepaths = self.get_filepaths(year, month)
+
+        for path in filepaths:
+            logging.info("Parsing file {}".format(path))
+            json_data = self.load_json(path)
+            for doc_id in json_data:
+                yield json_data[doc_id]
+
     def available_years(self):
         """
         Get the list of all years there is data for.
@@ -65,7 +78,6 @@ class DataDirectory(object):
 
         """
         return self.json_files.keys()
-
 
     def available_months(self, year):
         """
@@ -105,10 +117,7 @@ class DataDirectory(object):
         """
         if year in self.json_files:
             if month is not None:
-                if month in self.json_files[year]:  # return single file
-                    return self.json_files[year][month]
-                else:
-                    return ''
+                return self.json_files[year].get(month, '') # single file
             else:  # return all file paths for given year
                 return self.json_files[year].values()
         else:  # no files available for given year
