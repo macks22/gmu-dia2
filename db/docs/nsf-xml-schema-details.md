@@ -179,6 +179,27 @@ approximate number of person-months or other activity called for in the grant wa
 performed. Payments are based on meeting specific requirements of the grant and
 accountability is based primarily on technical performance and results.
 
+### Grantee
+
+The organization or other entity that receives a grant and assumes legal and
+financial responsibility and accountability both for the awarded funds and for
+the performance of the grant-supported activity. NSF grants are normally made
+to organizations rather than to individual Principal Investigator/Project
+Director(s). Categories of eligible proposers may be found in
+[GPG Chapter I](http://www.nsf.gov/pubs/policydocs/pappguide/nsf08_1/gpg_1.jsp).
+
+### Principal Investigator/Project Director (PI/PD)
+
+The individual designated by the grantee, and approved by NSF, who will be
+responsible for the scientific or technical direction of the project. If
+more than one, the first one listed will have primary responsibility for
+the project and the submission of reports. All others listed are considered
+co-PI/PD, and share in the responsibility of the scientific or technical
+direction of the project. The term "Principal Investigator" generally is
+used in research projects, while the term "Project Director" generally is
+used in science and engineering education and other projects. For purposes
+of this Guide, PI/co-PI is interchangeable with PD/co-PD.
+
 ### Grants.gov
 
 A storefront web portal for use in electronic collection of data (forms and reports)
@@ -193,6 +214,14 @@ Co-Principal Investigator
 ### PI
 
 Principal Investigator
+
+### PD
+
+Program Director
+
+### Co-PD
+
+Co-Program Director
 
 ### PO
 
