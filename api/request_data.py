@@ -285,10 +285,19 @@ def name(args):
         return 0
 
     elif args.file:
+        # read requested pids from file
         infile = os.path.abspath(args.file)
         with open(infile, 'r') as f:
-            pi_ids = f.read().split()
+            pi_ids = set(f.read().split())
 
+        # get listing of those we already have
+        files = os.listdir('json')
+        pids_we_have = set([name.split('-')[0] for name in files])
+
+        # narrow down to those we don't have
+        pi_ids.difference_update(pids_we_have)
+
+        logging.info('Requesting data for {} PIs'.format(len(pi_ids)))
         num_processed = 0
         for pi_id in pi_ids:
             try:
@@ -300,7 +309,8 @@ def name(args):
                 logging.error(str(err))
                 logging.error('Unable to parse PI ID: ' + pi_id)
 
-                #time.sleep(2)  # have to add to give Purdue code time to cache?
+                if args.delay:
+                    time.sleep(args.delay)
         return 0
     return 1
 
@@ -346,6 +356,9 @@ def setup_parser():
     name_parser.add_argument(
         '-f', '--file', action='store', default='',
         help='file of PI IDs, one per line, to get names for')
+    name_parser.add_argument(
+        '-d', '--delay', action='store', default=0, type=float,
+        help='seconds to delay between requests for PIs.')
     name_parser.set_defaults(func=name)
 
     return parser
@@ -358,7 +371,7 @@ def main():
     if args.verbose:
         log_level = logging.DEBUG
     else:
-        log_level = logging.ERROR
+        log_level = logging.INFO
 
     # set up logging to console
     logging.basicConfig(
