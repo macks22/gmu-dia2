@@ -5,7 +5,7 @@ The raw award data is warehoused by the NSF and obtainable through the nsf.gov w
 can be used to download the data by year:
 
     http://www.nsf.gov/awardsearch/download?DownloadFileName=`2014`&All=true
-  
+
 Each file that is downloaded is a zipped XML file with a listing of all awards for that year.
 So for instance, a POST request to the above URI will return a zipped XML file that contains
 all the award data for the year 2014. The schema for the XML data can be seen
@@ -15,8 +15,9 @@ cleaned form which will be stored in a SQL database. The goal of this effort is 
 high quality representation of the data with minimal redundancy and maximum clarity, while
 ensuring the XML representation of the awards is interpreted correctly.
 
+## XML Schema Breakdown
 
-    Award (sequence): the top-level tag for each award; contains all information relevant to the award
+    Award (sequence): Top-level tag for each award; contains all info relevant to the award.
         AwardID (int): The unique ID of the award.
 
         AwardTitle (string): The title of the award.
@@ -29,25 +30,26 @@ ensuring the XML representation of the awards is interpreted correctly.
         MaxAmdLetterDate (dateTime): The last date the award was amended.
 
         AwardAmount (int): The amount of money awarded to date.
-        ARRAAmount (string): The amount of the award funded by the American Recovery and Reinvestment Act (ARRA).
+        ARRAAmount (string): Portion of AwardAmount funded by the American Recovery and Reinvestment Act (ARRA).
 
         AwardInstrument (sequence): Listing of classifications for this award.
-            Value (string): A particular classification (e.g. "Standard Grant").
+            Value (string): A particular classification (e.g. "Standard Grant",
+            "Cooperative Agreement", "Contract").
 
         Organization (sequence): The NSF organization(s) funding the grant.
-            Code (int): 
-            Directorate (sequence):
-                LongName (string):
-            Division (sequence):
-                LongName (string):
+            Code (int): Unique ID of the organization funding this award. DIRECTORE, DIVISON, or COMBO?
+            Directorate (sequence): Listing of directorates funding this award.
+                LongName (string): Name of directorate.
+            Division (sequence): Listing of divisions funding this award.
+                LongName (string): Name of division.
 
-        ProgramElement (sequence):
-            Code (int):
-            Text (string):
+        ProgramElement (sequence): Listing of programs funding this award.
+            Code (int): Unique ID of the program.
+            Text (string): Name of the program.
 
-        ProgramReference (sequence):
-            Code (int):
-            Text (string):
+        ProgramReference (sequence): Listing of programs related to the one funding this award.
+            Code (int): Unique ID of the program referenced.
+            Text (string): Name of the program referenced.
 
         ProgramOfficer (sequence): A listing of all Program Officers responsible for this award.
             SignBlockName (string): The name of the Program Officer.
@@ -59,7 +61,7 @@ ensuring the XML representation of the awards is interpreted correctly.
             StartDate (dateTime): The date the investigator started working on this award.
             EndDate (dateTime): The date the investigator stopped working on this award.
             RoleCode (int): The role of the investigator, identified by an integer code.
-                Either "Principal Investigator" or "Co-Principal Investigator.
+                Either "Principal Investigator" or "Co-Principal Investigator".
 
         Institution (sequence): The institution sponsoring this award (PO/Investigator affiliation).
             Name (string): Name of the institution.
@@ -71,6 +73,6 @@ ensuring the XML representation of the awards is interpreted correctly.
             ZipCode (int): Zip code of the institution's postal address.
             CountryName (string): Name of the country in which the institution is located.
 
-        FoaInformation (sequence):
-            Code (int):
-            Name (string):
+        FoaInformation (sequence): Funding Opportunity Anouncement (FOA) reference (to Grants.gov FOA listing).
+            Code (int): Unique ID of FOA.
+            Name (string): Name of FOA.
