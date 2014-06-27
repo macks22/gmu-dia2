@@ -7,7 +7,7 @@ is to scrape the references from the NSF award listings. The NSF offers
 a [search service at nsf.gov](http://www.nsf.gov/awardsearch/). This
 can also be accessed programatically with POST requests:
 
-  curl -d "AWD_ID=0963183&HistoricalAwards=false" http://www.nsf.gov/awardsearch/showAward
+    curl -d "AWD_ID=0963183&HistoricalAwards=false" http://www.nsf.gov/awardsearch/showAward
 
 The result of this POST request is an HTML page with a listing of information
 regarding the award. Most interesting for our purposes is a section at the
