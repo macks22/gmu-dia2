@@ -39,10 +39,10 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
         Recovery and Reinvestment Act (_ARRA_).
 
 10. **AwardInstrument** (_sequence_): Listing of classifications for this award.
-    1.  **Value_ (_string_): A particular classification** (e.g. "Standard Grant",
+    1.  **Value** (_string_): A particular classification (e.g. "Standard Grant",
         "Cooperative Agreement", "Contract").
 
-11. **Organization** (_sequence): The NSF organization(s_) funding the grant.
+11. **Organization** (_sequence_): The NSF organization(s) funding the grant.
     1.  **Code** (_int_): Unique ID of the organization funding this award.
             DIRECTORE, DIVISON, or COMBO?
     2.  **Directorate** (_sequence_): Listing of directorates funding this award.
@@ -54,7 +54,7 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
     1.  **Code** (_int_): Unique ID of the program.
     2.  **Text** (_string_): Name of the program.
 
-13. **ProgramReference** (_sequence_): Listing of programs related to the one funding this award.
+13. **ProgramReference** (_sequence_): Listing of programs related to those funding.
     1.  **Code** (_int_): Unique ID of the program referenced.
     2.  **Text** (_string_): Name of the program referenced.
 
@@ -80,6 +80,6 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
     7.  **ZipCode** (_int_): Zip code of the institution's postal address.
     8.  **CountryName** (_string_): Name of the country in which the institution is located.
 
-17. **FoaInformation** (_sequence): Funding Opportunity Anouncement (FOA) reference (to Grants.gov FOA listing_).
+17. **FoaInformation** (_sequence_): Funding Opportunity Anouncement (FOA) reference (to Grants.gov FOA listing).
     1.  **Code** (_int_): Unique ID of FOA.
     2.  **Name** (_string_): Name of FOA.
