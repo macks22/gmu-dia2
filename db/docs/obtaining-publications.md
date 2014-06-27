@@ -112,3 +112,18 @@ The first of these would be parsed into the following record:
 
 This record would then be matched up with each person, and if the person does
 not already exist in the db, he/she would be added, then matched as an author.
+
+### Notes on Extensibility
+
+One thing which is evident from the example above is the discrepancy between a "conference"
+publication and a "journal" publication. In order to produce maximum value from the data,
+it seems like it may be worthwhile to create another table called something like "Vehicle"
+or "PubType" or something like that. This table would include the name, abbrevation, and
+perhaps some metadata about the conference/journal, as well as a type indicating whether
+it is a conference or a journal (enum). Each entry would be given an integer ID and this
+could be referred to by a FK in the Publication table.
+
+This would not only be useful to more clearly distinguish between a conference publication
+and a journal publication, but also to create the opportunity to attach keywords such as
+prominent topics to the conference/journal. This might aid in community detection efforts.
+
