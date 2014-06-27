@@ -83,3 +83,117 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
 17. **FoaInformation** (_sequence_): Funding Opportunity Anouncement (FOA) reference (to Grants.gov FOA listing).
     1.  **Code** (_int_): Unique ID of FOA.
     2.  **Name** (_string_): Name of FOA.
+
+## Terminology
+
+Information obtained from:
+
+http://www.nsf.gov/pubs/policydocs/pappguide/nsf08_1/index.jsp#C
+
+http://www.grants.gov/web/grants/support/general-support/glossary.html
+
+### American Recovery and Reinvestment Act (ARRA) of 2009
+
+The economic stimulus package of $787 billion (Also known as the "Recovery Act",
+was signed into law by the President on February 17, 2009; it is the economic
+stimulus package of $787 billion. "Making supplemental appropriations for job
+preservation and creation, infrastructure investment, energy efficiency and
+science, assistance to the unemployed, and State and local fiscal stabilization,
+for the fiscal year ending September 30, 2009, and for other purposes".
+
+### Funding Opportunity Announcement
+
+A publicly available document by which a federal agency makes known its intentions
+to award discretionary grants or cooperative agreements, usually as a result of
+competition for funds. Funding opportunity announcements may be known as program
+announcements, notices of funding availability, solicitations, or other names
+depending on the agency and type of program. Funding opportunity announcements
+can be found at Grants.gov/FIND and on the Internet at the funding agency's or
+program's website.
+
+### Assistance Awards
+
+Awards that entail the transfer of money, property, services or other things of
+value from the Federal government to a recipient to accomplish a public purpose
+of support or stimulation. In the case of NSF, assistance awards involve the
+support or stimulation of scientific and engineering research, science and
+engineering education or other related activities. NSF is authorized to use
+grants or cooperative agreements for this purpose.
+
+#### Grant
+
+A type of assistance award and a legal instrument which permits an executive
+agency of the Federal government to transfer money, property, services or
+other things of value to a grantee when no substantial involvement is anticipated
+between the agency and the recipient during the performance of the contemplated
+activity. Grants are the primary mechanism of NSF support. NSF awards the following
+two types of grants.
+
+##### Standard Grant
+
+A type of grant in which NSF agrees to provide a specific level of support for a
+specified period of time with no statement of NSF intent to provide additional
+future support without submission of another proposal.
+
+##### Continuing Grant
+
+A type of grant in which NSF agrees to provide a specific level of support for
+an initial specified period of time, usually a year, with a statement of intent
+to provide additional support of the project for additional periods, provided
+funds are available and the results achieved warrant further support.
+
+#### Cooperative Agreement
+
+A type of assistance award which should be used when substantial agency involvement
+is anticipated during the project performance period. Substantial agency
+involvement may be necessary when an activity is technically and/or managerially
+complex and requires extensive or close coordination between NSF and the awardee.
+Examples of projects which might be suitable for cooperative agreements if there
+will be substantial agency involvement are: research centers, policy studies, large
+curriculum projects, multi-user facilities, projects which involve complex
+subcontracting, construction or operations of major in-house university facilities
+and major instrumentation development.
+
+#### Cost Reimbursement Award
+
+A type of grant under which NSF agrees to reimburse the grantee for work performed
+and/or costs incurred by the grantee up to the total amount specified in the grant.
+Such costs must be allowable in accordance with the applicable cost principles
+(e.g., OMB Circular A-21, Cost Principles for Educational Institutions or OMB
+Circular A-122, Cost Principles for Non-Profit Organizations). Accountability is
+based primarily on technical progress, financial accounting and fiscal reporting.
+Except under certain programs and under special circumstances, NSF grants and
+cooperative agreements are normally cost reimbursement type awards.
+
+#### Fixed Amount Award
+
+A type of grant used in certain programs and situations under which NSF agrees to
+provide a specific level of support without regard to actual costs incurred under
+the project. The award amount is negotiated using the applicable cost principles
+or other pricing information as a guide. This type of grant reduces some of the
+administrative burden and record-keeping requirements for both the grantee and NSF.
+Except under unusual circumstances, such as termination, there is no governmental
+review of the actual costs subsequently incurred by the grantee in performance of
+the project. There typically is a requirement for the grantee to certify that the
+approximate number of person-months or other activity called for in the grant was
+performed. Payments are based on meeting specific requirements of the grant and
+accountability is based primarily on technical performance and results.
+
+### Grants.gov
+
+A storefront web portal for use in electronic collection of data (forms and reports)
+for federal grant-making agencies through the Grants.gov site.
+
+## Acronyms
+
+### Co-PI
+
+Co-Principal Investigator
+
+### PI
+
+Principal Investigator
+
+### PO
+
+Program Officer
