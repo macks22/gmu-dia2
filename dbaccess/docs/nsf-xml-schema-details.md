@@ -17,14 +17,10 @@ ensuring the XML representation of the awards is interpreted correctly.
 
 ## XML Schema Breakdown
 
-Each year is downloaded as a zip file. Each zip file contains a bunch of XML files,
-each containing info for exactly one award. These files are named using the award ID:
-
-    <awardID>.xml
-
-Each XML file has a `rootTag>`, followed by an `<Award>` tag which contains the following
-elements:
-
+Each year is downloaded as a zip file and is named using the year: `<year>.zip`.
+Each zip file contains a bunch of XML files, each containing info for exactly one
+award. These files are named using the award ID: `<awardID>.xml`. Each XML file has
+a `rootTag>`, followed by an `<Award>` tag which contains the following elements:
 
 1.  AwardID (int): The unique ID of the award.
 
