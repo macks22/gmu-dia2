@@ -18,10 +18,13 @@ NSF_AWARDS_URL = 'http://www.nsf.gov/awardsearch/download'
 REQUIRED_PARAMS = ('DownloadFileName', 'All')
 
 
-def request_data(year, path='./'):
-    """Request data from NSF. Write to disk on response.
+def request_data(year, dirpath='./'):
+    """Request data from NSF. Write to disk on response. Note that
+    the response will come back as a zipped XML file with all award
+    data for the requested year.
 
     :param str year: The year to request data for.
+    :param str dirpath: The directory to write the zip file to.
     :raises :class:requests.exceptions.HTTPError: If an HTTP error
         occurs as a result of the request.
 
@@ -33,9 +36,9 @@ def request_data(year, path='./'):
     # will raise HTTP error if one occured
     r.raise_for_status()
 
-    # write results to zip file in current dir
+    # write results to zip file in designated directory
     fname = '{}.zip'.format(year)
-    outfile = os.path.join(os.path.abspath(path), fname)
+    outfile = os.path.join(os.path.abspath(dirpath), fname)
     with open(outfile, 'wb') as f:
         f.write(r.content)
         logging.info('data for {} written to {}'.format(year, outfile))
