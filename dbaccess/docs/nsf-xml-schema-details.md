@@ -39,7 +39,7 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
         Recovery and Reinvestment Act (ARRA).
 
 10. **AwardInstrument** (sequence): Listing of classifications for this award.
-    1.  **Value_ (string): A particular classification** (e.g. "Standard Grant",
+    1.  **Value** (string): A particular classification (e.g. "Standard Grant",
         "Cooperative Agreement", "Contract").
 
 11. **Organization** (sequence): The NSF organization(s) funding the grant.
@@ -64,7 +64,7 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
 15. **Investigator** (sequence): A listing of all investigators who have worked on or are working on this award.
     1.  **FirstName** (string): The first name of the investigator.
     2.  **LastName** (string): The last name of the investigator.
-    3.  **EmailAddress (string): The email address of the investigator** (optional).
+    3.  **EmailAddress** (string): The email address of the investigator (optional).
     4.  **StartDate** (dateTime): The date the investigator started working on this award.
     5.  **EndDate** (dateTime): The date the investigator stopped working on this award.
     6.  **RoleCode** (int): The role of the investigator, identified by an integer code.
