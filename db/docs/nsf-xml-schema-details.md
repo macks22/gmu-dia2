@@ -64,13 +64,13 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
 15. **Investigator** (_sequence_): A listing of all investigators who have worked on or are working on this award.
     1.  **FirstName** (_string_): The first name of the investigator.
     2.  **LastName** (_string_): The last name of the investigator.
-    3.  **EmailAddress (_string): The email address of the investigator** (optional_).
+    3.  **EmailAddress** (_string_): The email address of the investigator (optional).
     4.  **StartDate** (_dateTime_): The date the investigator started working on this award.
     5.  **EndDate** (_dateTime_): The date the investigator stopped working on this award.
     6.  **RoleCode** (_int_): The role of the investigator, identified by an integer code.
             Either "Principal Investigator" or "Co-Principal Investigator".
 
-16. **Institution** (_sequence): The institution sponsoring this award (PO/Investigator affiliation_).
+16. **Institution** (_sequence_): The institution sponsoring this award (PO/Investigator affiliation).
     1.  **Name** (_string_): Name of the institution.
     2.  **PhoneNumber** (_decimal_): Phone number of the institution.
     3.  **CityName** (_string_): Name of the city where the institution is located.
