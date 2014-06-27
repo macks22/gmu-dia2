@@ -92,9 +92,9 @@ REQUIRES FURTHER RESEARCH
 
 Information obtained from:
 
-http://www.nsf.gov/pubs/policydocs/pappguide/nsf08_1/index.jsp#C
+[NSF Proposal and Award Policies and Procedure Guide](http://www.nsf.gov/pubs/policydocs/pappguide/nsf08_1/index.jsp#C)
 
-http://www.grants.gov/web/grants/support/general-support/glossary.html
+[Grants.gov Glossary](http://www.grants.gov/web/grants/support/general-support/glossary.html)
 
 ### American Recovery and Reinvestment Act (ARRA) of 2009
 
