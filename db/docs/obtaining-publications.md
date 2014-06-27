@@ -21,7 +21,7 @@ bottom titled: "PUBLICATIONS PRODUCED AS A RESULT OF THIS RESEARCH". This sectio
 contains citations for papers that were published as a result of the research
 funded by this particular award. This list of citations is not present in the XML
 data for each award, so it will be necessary to scrape the HTML pages to obtain
-the citations, then parse them into the relevant fields:
+the citations, then parse them into their relevant fields.
 
 ### Data Storage
 
@@ -65,25 +65,34 @@ the citations, then parse them into the relevant fields:
 
 For example, the following publication listing is from the POST request above:
 
+---
+
+1. 
 Yuwen Sun, Lucas F Wanner, Mani B Srivastava.
 "Low-cost Estimation of Sub-system Power,"
 Proceedings of the Third International Green Computing Conference (IGCC'12), 2012.
 
+2. 
 Shafiee, A., Brandenberg, S.J., and Stewart, J.P..
 "Laboratory investigation of the cyclic and post-cyclic properties of Sherman Island peat,"
 GeoCongress, San Diego, 2012.
 
+3. 
 Reinert, T., Brandenberg, S.J., Stewart, J.P., and Lemke, J..
 "Remote monitoring of consolidation of peaty organic soil beneath a model levee,"
 GeoCongress, San Diego, 2012.
 
+4. 
 Zainul M Charbiwala, Paul D Martin, Mani B Srivastava.
 "CapMux: A Scalable Analog Front End for Low Power Compressed Sensing,"
 Proceedings of the Third International Green Computing Conference (IGCC'12), 2012.
 
+5. 
 Reinert, E.T., Brandenberg, S.J., Stewart, J.P., and Moss, R.E.S..
 "Dynamic field test of a model levee founded on peaty organic soil using an eccentric mass shaker,"
 15th World Conference on Earthquake Engineering, Lisbon, Portugul, 2012.
+
+---
     
 The first of these would be parsed into the following record:
 
