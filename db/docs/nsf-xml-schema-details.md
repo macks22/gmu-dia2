@@ -84,6 +84,10 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
     1.  **Code** (_int_): Unique ID of FOA.
     2.  **Name** (_string_): Name of FOA.
 
+## NSF Organization Hierarchy
+
+REQUIRES FURTHER RESEARCH
+
 ## Terminology
 
 Information obtained from:
