@@ -80,7 +80,7 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
     7.  **ZipCode** (_int_): Zip code of the institution's postal address.
     8.  **CountryName** (_string_): Name of the country in which the institution is located.
 
-17. **FoaInformation** (_sequence_): Funding Opportunity Anouncement (FOA) reference (to Grants.gov FOA listing).
+17. **FoaInformation** (_sequence_): Funding Opportunity Anouncement (FOA) reference (to Grants.gov/nsf.gov FOA listing).
     1.  **Code** (_int_): Unique ID of FOA.
     2.  **Name** (_string_): Name of FOA.
 
