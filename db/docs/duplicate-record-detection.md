@@ -2,7 +2,8 @@
 
 Duplicate record detection, or record linkage, is the problem of detecting records in one or
 more databases that refer to the same real-world entity. Duplicate records are often a result of
-inconsistencies in the cataloging of data, particularly string data.
+inconsistencies in the cataloging of data, particularly string data. This is also referred to as
+disambiguation elsewhere in the DB documentation.
 
 ## Applicability
 
