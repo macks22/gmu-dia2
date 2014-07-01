@@ -1,9 +1,9 @@
 ## Idea
 
-Duplicate record detection, or record linkage, is the problem of detecting records in one or
+_Duplicate record detection_, or _record linkage_, is the problem of detecting records in one or
 more databases that refer to the same real-world entity. Duplicate records are often a result of
 inconsistencies in the cataloging of data, particularly string data. This is also referred to as
-disambiguation elsewhere in the DB documentation.
+_disambiguation_ elsewhere in the DB documentation.
 
 ## Applicability
 
@@ -75,7 +75,13 @@ purposes.
 
 Below, the approach for each particular entity is laid out in more detail.
 
-### Directorate and Division
+### Directorate
+
+If two records share a division, then they must be the same directorate, since
+NSF divisions are not shared across directorates. If this is not the case,
+perform string matching on the LongName tag text.
+
+### Division
 
 Perform string matching on LongName tag text.
 
@@ -90,6 +96,9 @@ conclude the two records are duplicates and merge them.
 
 Perform string matching on the SignBlockName tag text. We also might consider
 increasing the confidence score if the two records share a program in common.
+Record linkage might also occur after the SignBlockName has been parsed into
+first name and last name components. In this case, use an aggregate string
+matching score to determine if the two records are duplicates.
 
 ### Institution
 
