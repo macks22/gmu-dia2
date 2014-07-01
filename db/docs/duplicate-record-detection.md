@@ -61,6 +61,25 @@ They are categorized as either:
 3.  Oxford Name Compression Algorithm (ONCA)
 4.  Metaphone and Double Metaphone
 
+
+### Comparison of String Matching Methods
+
+"Yancey shows that the Jaro-Winkler metric works well for name matching tasks for data
+coming from the US census. A notable comparison effort is the work of Bilenko et al.,
+who compare the effectiveness of character-based and token-based similarity metrics.
+They show that the Monge-Elkan metric has the highest average performance across data
+sets and across character-based distance metrics. They also show that the SoftTF.IDF
+metric works better than any other metric. However, Bilenko et al. emphasize that no
+single metric is suitable for all data sets. Even metrics that demonstrate robust and
+high performance for some data sets can perform poorly on others."
+
+1.  Monge-Elkan (atomic strings)
+2.  SoftTF.IDF
+3.  [Jaro-Winkler](http://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance)
+
+Also see [this mailing list discussion](
+https://mail.python.org/pipermail/python-list/2005-May/333531.html).
+
 ## Approach
 
 Since all of the entities we need to perform duplicate record detection on are
