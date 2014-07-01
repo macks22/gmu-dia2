@@ -70,8 +70,9 @@ is SoftTF.IDF](https://www.cs.cmu.edu/~pradeepr/papers/ijcai03.pdf). There is an
 implementation of this algorithm and just about every other string matching
 algorithm you might ever want in the [SecondString Java library](
 http://secondstring.sourceforge.net/javadoc/com/wcohen/secondstring/SoftTFIDF.html).
-Using this library along with JDBC for DB access should be sufficient for our
-purposes.
+Using this library along with [JDBC for DB access](
+http://docs.oracle.com/javase/tutorial/jdbc/basics/processingsqlstatements.html)
+should be sufficient for our purposes.
 
 Below, the approach for each particular entity is laid out in more detail.
 
