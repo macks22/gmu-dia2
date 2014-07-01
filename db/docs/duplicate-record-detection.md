@@ -74,12 +74,26 @@ purposes.
 
 Below, the approach for each particular entity is laid out in more detail.
 
-### Directorate
+### Directorate and Division
 
-### Division
+Perform string matching on LongName tag text.
 
 ### Investigator
 
+First check for an identical email; if found, score as a perfect match. Otherwise,
+perform string matching separately on the FirstName and LastName and aggregate the
+scores together (a simple sum may suffice). If the score meets some threshold,
+conclude the two records are duplicates and merge them.
+
 ### Program Officer
 
+Perform string matching on the SignBlockName tag text.
+
 ### Institution
+
+Consider two institutions the same if:
+
+1.  they have the same phone number
+2.  same name and zip code
+3.  names match with high confidence and same zip code
+4.  aggregate address matching produces high confidence
