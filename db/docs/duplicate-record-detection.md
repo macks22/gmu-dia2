@@ -87,7 +87,8 @@ conclude the two records are duplicates and merge them.
 
 ### Program Officer
 
-Perform string matching on the SignBlockName tag text.
+Perform string matching on the SignBlockName tag text. We also might consider
+increasing the confidence score if the two records share a program in common.
 
 ### Institution
 
