@@ -43,8 +43,8 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
         "Cooperative Agreement", "Contract").
 
 11. **Organization** (_sequence_): The NSF organization(s) funding the grant.
-    1.  **Code** (_int_): Unique ID of the organization funding this award.
-            DIRECTORE, DIVISON, or COMBO?
+    1.  **Code** (_int_): No one seems to know what this actually represents.
+            Perhaps it can be a challenge for some daring historian/researcher to discover.
     2.  **Directorate** (_sequence_): Listing of directorates funding this award.
         1.  **LongName** (_string_): Name of directorate.
     3.  **Division** (_sequence_): Listing of divisions funding this award.
@@ -54,7 +54,7 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
     1.  **Code** (_int_): Unique ID of the program.
     2.  **Text** (_string_): Name of the program.
 
-13. **ProgramReference** (_sequence_): Listing of programs related to those funding.
+13. **ProgramReference** (_sequence_): Listing of programs intellectually related to the subject matter of this award.
     1.  **Code** (_int_): Unique ID of the program referenced.
     2.  **Text** (_string_): Name of the program referenced.
 
