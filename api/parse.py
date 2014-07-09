@@ -16,6 +16,11 @@ import string
 import logging
 import itertools
 
+try:
+    import ujson as json
+except ImportError:
+    import json
+
 import nltk
 import igraph
 import pandas as pd
@@ -287,3 +292,59 @@ def frame_abstracts():
 
     df = pd.DataFrame(records, columns=['award_id', 'abstract'])
     return df.set_index('award_id')
+
+
+def affiliation_frames(json_dir):
+    """
+    Parse the PI affiliation information into two data frames:
+        1. institutions (inst_id, org_name, street, city, state, zip, nation)
+        2. affiliations (pi_id, inst_id)
+
+    :param str json_dir: Directory containing the json files to be parsed.
+
+    Both frames are output to csv files in the current directory.
+
+    """
+    pairs = set()
+    institutions = set()
+
+    json_files = [os.path.join(json_dir, f) for f in os.listdir(json_dir)]
+    for file in json_files:
+        pi_id = str(os.path.basename(file).split('-')[0])
+        with open(file, 'r') as f:
+            stuff = json.load(f)
+
+        data = stuff['result']['data'][-1]
+        affils = data['affiliation']
+
+        for affil in affils:
+            if affil['id'] == -1:  # Garbage Org for POs (always 'NSF')
+                break
+
+            inst_id = str(affil['id'])
+            org_name = affil['organization'][0]['name'].strip()
+            address = affil['address']
+            street = address['street'].strip()
+            city = address['city'].strip()
+            state = address['state']['abbr'].strip()
+            zip = address['zipCode'].strip()
+            nation = address['nation'].strip()
+
+            institutions.add((inst_id, org_name, street, city, state, zip, nation))
+            pairs.add((pi_id, inst_id))
+
+    inst_cols = ['id', 'org', 'street', 'city', 'state', 'zip', 'nation']
+    inst_frame = pd.DataFrame(list(institutions), columns=inst_cols)
+    inst_frame.set_index('id', inplace=True)
+
+    pair_cols = ['pi_id', 'inst_id']
+    pair_frame = pd.DataFrame(list(pairs), columns=pair_cols)
+    pair_frame.set_index('pi_id', inplace=True)
+
+    pairs_file = os.path.abspath('./pi-affiliations.csv')
+    with open(pairs_file, 'w') as f:
+        pair_frame.to_csv(f)
+
+    inst_file = os.path.abspath('./institutions.csv')
+    with open(inst_file, 'w') as f:
+        inst_frame.to_csv(f)
