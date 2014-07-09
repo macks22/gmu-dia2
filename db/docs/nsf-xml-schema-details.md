@@ -236,22 +236,12 @@ for federal grant-making agencies through the Grants.gov site.
 
 ## Acronyms
 
-### Co-PI
+**Co-PI**: Co-Principal Investigator
 
-Co-Principal Investigator
+**PI**: Principal Investigator
 
-### PI
+**PD**: Program Director
 
-Principal Investigator
+**Co-PD**: Co-Program Director
 
-### PD
-
-Program Director
-
-### Co-PD
-
-Co-Program Director
-
-### PO
-
-Program Officer
+**PO**: Program Officer
