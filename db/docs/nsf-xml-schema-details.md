@@ -115,10 +115,8 @@ Unique identifiers:
 
 ## Terminology
 
-Information obtained from:
-
-[NSF Proposal and Award Policies and Procedure Guide](http://www.nsf.gov/pubs/policydocs/pappguide/nsf08_1/index.jsp#C)
-
+Sources: [NSF Proposal and Award Policies and Procedure Guide]
+(http://www.nsf.gov/pubs/policydocs/pappguide/nsf08_1/index.jsp#C) | 
 [Grants.gov Glossary](http://www.grants.gov/web/grants/support/general-support/glossary.html)
 
 ### American Recovery and Reinvestment Act (ARRA) of 2009
