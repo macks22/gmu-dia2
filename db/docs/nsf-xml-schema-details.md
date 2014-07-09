@@ -1,4 +1,21 @@
-## Overview
+
+## Table of Contents<a name="table-of-contents"></a>
+
+1.  [Overview](#overview)
+2.  [XML Schema Breakdown](#xml-schema-breakdown)
+3.  [NSF Organization Hierarchy](#nsf-organization-hierarchy)
+4.  [Terminology](#terminology)
+    1.  [American Recovery and Reinvestment Act (ARRA) of 2009](#american-recovery-and-reinvestment-act-(arra)-of-2009)
+    2.  [Funding Opportunity Announcement](#funding-opportunity-announcement)
+    3.  [Assistance Awards](#assistance-awards)
+        1.  [Grant](#grant)
+            1.  [Standard Grant](#standard-grant)
+            2.  [Continuing Grant](#continuing-grant)
+        2.  [Cooperative Agreement](#cooperative-agreement)
+        3.  [Cost Reimbursement Award](#cost-reimbursement-award)
+        4.  [Fixed Amount Award](#fixed-amount-award)
+
+## Overview<a name="overview"></a>
 
 The raw award data is warehoused by the NSF and obtainable through the nsf.gov website,
 [here](_http://www.nsf.gov/awardsearch/download.jsp_). There is also a RESTful endpoint which
@@ -15,7 +32,7 @@ cleaned form which will be stored in a SQL database. The goal of this effort is 
 high quality representation of the data with minimal redundancy and maximum clarity, while
 ensuring the XML representation of the awards is interpreted correctly.
 
-## XML Schema Breakdown
+## XML Schema Breakdown<a name="xml-schema-breakdown"></a>
 
 Each year is downloaded as a zip file and is named using the year: `<year>.zip`.
 Each zip file contains a bunch of XML files, each containing info for exactly one
@@ -84,7 +101,7 @@ a `rootTag>`, followed by an `<Award>` tag which contains the following elements
     1.  **Code** (_int_): Unique ID of FOA.
     2.  **Name** (_string_): Name of FOA.
 
-## NSF Organization Hierarchy
+## NSF Organization Hierarchy<a name="nsf-organization-hierarchy"></a>
 
 The NSF is organized into a hierarchy of sub-organizations. There are two top-level types of sub-organizations.
 
@@ -113,13 +130,13 @@ Unique identifiers:
             3.  other miscellaneous reasons motivated by accounting needs cause it to
 4.  Institution: no fundamentally unique identifier; the address/name combo is probably the least ambiguous.
 
-## Terminology
+## Terminology<a name="terminology"></a>
 
 Sources: [NSF Proposal and Award Policies and Procedure Guide]
 (http://www.nsf.gov/pubs/policydocs/pappguide/nsf08_1/index.jsp#C) | 
 [Grants.gov Glossary](http://www.grants.gov/web/grants/support/general-support/glossary.html)
 
-### American Recovery and Reinvestment Act (ARRA) of 2009
+### American Recovery and Reinvestment Act (ARRA) of 2009<a name="american-recovery-and-reinvestment-act-(arra)-of-2009"></a>
 
 The economic stimulus package of $787 billion (Also known as the "Recovery Act",
 was signed into law by the President on February 17, 2009; it is the economic
@@ -128,7 +145,7 @@ preservation and creation, infrastructure investment, energy efficiency and
 science, assistance to the unemployed, and State and local fiscal stabilization,
 for the fiscal year ending September 30, 2009, and for other purposes".
 
-### Funding Opportunity Announcement
+### Funding Opportunity Announcement<a name="funding-opportunity-announcement"></a>
 
 A publicly available document by which a federal agency makes known its intentions
 to award discretionary grants or cooperative agreements, usually as a result of
@@ -138,7 +155,7 @@ depending on the agency and type of program. Funding opportunity announcements
 can be found at Grants.gov/FIND and on the Internet at the funding agency's or
 program's website.
 
-### Assistance Awards
+### Assistance Awards<a name="assistance-awards"></a>
 
 Awards that entail the transfer of money, property, services or other things of
 value from the Federal government to a recipient to accomplish a public purpose
@@ -147,7 +164,7 @@ support or stimulation of scientific and engineering research, science and
 engineering education or other related activities. NSF is authorized to use
 grants or cooperative agreements for this purpose.
 
-#### Grant
+#### Grant<a name="grant"></a>
 
 A type of assistance award and a legal instrument which permits an executive
 agency of the Federal government to transfer money, property, services or
@@ -156,20 +173,20 @@ between the agency and the recipient during the performance of the contemplated
 activity. Grants are the primary mechanism of NSF support. NSF awards the following
 two types of grants.
 
-##### Standard Grant
+##### Standard Grant<a name="standard-grant"></a>
 
 A type of grant in which NSF agrees to provide a specific level of support for a
 specified period of time with no statement of NSF intent to provide additional
 future support without submission of another proposal.
 
-##### Continuing Grant
+##### Continuing Grant<a name="continuing-grant"></a>
 
 A type of grant in which NSF agrees to provide a specific level of support for
 an initial specified period of time, usually a year, with a statement of intent
 to provide additional support of the project for additional periods, provided
 funds are available and the results achieved warrant further support.
 
-#### Cooperative Agreement
+#### Cooperative Agreement<a name="cooperative-agreement"></a>
 
 A type of assistance award which should be used when substantial agency involvement
 is anticipated during the project performance period. Substantial agency
@@ -181,7 +198,7 @@ curriculum projects, multi-user facilities, projects which involve complex
 subcontracting, construction or operations of major in-house university facilities
 and major instrumentation development.
 
-#### Cost Reimbursement Award
+#### Cost Reimbursement Award<a name="cost-reimbursement-award"></a>
 
 A type of grant under which NSF agrees to reimburse the grantee for work performed
 and/or costs incurred by the grantee up to the total amount specified in the grant.
@@ -192,7 +209,7 @@ based primarily on technical progress, financial accounting and fiscal reporting
 Except under certain programs and under special circumstances, NSF grants and
 cooperative agreements are normally cost reimbursement type awards.
 
-#### Fixed Amount Award
+#### Fixed Amount Award<a name="fixed-amount-award"></a>
 
 A type of grant used in certain programs and situations under which NSF agrees to
 provide a specific level of support without regard to actual costs incurred under
@@ -206,7 +223,7 @@ approximate number of person-months or other activity called for in the grant wa
 performed. Payments are based on meeting specific requirements of the grant and
 accountability is based primarily on technical performance and results.
 
-### Grantee
+### Grantee<a name="grantee"></a>
 
 The organization or other entity that receives a grant and assumes legal and
 financial responsibility and accountability both for the awarded funds and for
@@ -215,7 +232,7 @@ to organizations rather than to individual Principal Investigator/Project
 Director(s). Categories of eligible proposers may be found in
 [GPG Chapter I](http://www.nsf.gov/pubs/policydocs/pappguide/nsf08_1/gpg_1.jsp).
 
-### Principal Investigator/Project Director (PI/PD)
+### Principal Investigator/Project Director (PI/PD)<a name="principal-investigator/project-director-(pi/pd)"></a>
 
 The individual designated by the grantee, and approved by NSF, who will be
 responsible for the scientific or technical direction of the project. If
@@ -227,12 +244,12 @@ used in research projects, while the term "Project Director" generally is
 used in science and engineering education and other projects. For purposes
 of this Guide, PI/co-PI is interchangeable with PD/co-PD.
 
-### Grants.gov
+### Grants.gov<a name="grants.gov"></a>
 
 A storefront web portal for use in electronic collection of data (forms and reports)
 for federal grant-making agencies through the Grants.gov site.
 
-## Acronyms
+## Acronyms<a name="acronyms"></a>
 
 **Co-PI**: Co-Principal Investigator
 
