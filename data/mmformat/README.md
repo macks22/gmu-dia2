@@ -122,8 +122,8 @@ frequencies. Note that indexing starts at 1 (Fortran style), so the 4th line
 shown above represents "row 1, column 46" rather than "row 2, column 47". The
 relationships between this file and the others are as follows.
 
-*   The `pi-name-index.csv' file is in the same order as the rows in the matrix,
+*   The `pi-name-index.csv` file is in the same order as the rows in the matrix,
     so row 1 in this file represents the first PI in the name index file.
-*   The `feature-name-index.csv' file has a closer relationship because the term
+*   The `feature-name-index.csv` file has a closer relationship because the term
     IDs are contiguous. Each column number can be used to get the term ID by
     subtracting 1 (a 0-indexing language was used to assign IDs).
