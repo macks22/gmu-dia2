@@ -49,8 +49,8 @@ lengthy. More specifically, here are statistics on the lengths:
 Given this information, a _representative document_ (repdoc) was parsed for each
 PI in the dataset, in the following manner:
 
-1.  For all awards the PI has worked on, concatenate with spaces between to get
-    a single string of words.
+1.  For all awards the PI has worked on, concatenate the abstracts (with spaces between)
+    to get a single string of words.
 2.  The following cleaning operations are performed:
     1. punctuation removed
     2. all characters lowercased
@@ -70,7 +70,7 @@ treated as a corpus of abstracts and the following steps are performed:
     *   each word is now represented as (id, frequency), with an associated
         lookup table of (id, term)
 2.  Filter out tokens that appear in
-    1.  less than 5 documents (absolute number) or
+    1.  less than 5 documents, or
     2.  more than half of all documents
     3.  after (1) and (2), keep only the first 100,000 most frequent terms
 3.  After the pruning, shrink resulting gaps in word ids so they are contiguous
@@ -80,7 +80,7 @@ the stemming produced some strings that would have been removed by the earlier
 filtering. For instance, the character 'i' shows up again after stemming, but it
 only occurs in 5 places throughout the entire corpus.
 
-The total number of words after this process is 12,171.
+**The total number of words (stems) after this process is 12,171.**
 
 ## Section 3: Data Format
 
