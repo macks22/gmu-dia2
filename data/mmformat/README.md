@@ -14,7 +14,7 @@ the relationships between the files.
 
 ## Section 1: Background
 
-The dataset was originally downloaded from the
+The dataset was originally downloaded from 
 [nsf.gov](http://www.nsf.gov/awardsearch/download.jsp) and pre-processed by
 Purdue University. The pre-processing steps of relevance to this subset of that
 data are as follows:
