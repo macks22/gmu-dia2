@@ -30,7 +30,8 @@ programs are all referred to as "entities"):
 3.  two entities the same were not matched and are represented separately
 
 There is no way, given the pre-processed dataset to determine to what extent the
-disambiguation procedure produced outcome #1 vs. outcome #2 & #3.
+disambiguation procedure produced outcome #1 vs. outcome #2 & #3. In other
+words, the accuracy of the disambiguation procedure is unknown.
 
 ## Section 2: Methodology
 
@@ -39,7 +40,7 @@ transformation of the dataset was to produce a representation suitable for
 topic modelling. Each of the PIs in the dataset has a set of one or more awards
 he/she has worked on. **In total, there are 14,979 PIs and 22,263 awards.** Each
 of these awards has a single abstract, which may be empty, quite short, or very
-lengthy. More specifically, here are statistics on the lengths:
+lengthy. More specifically, here are statistics on the lengths (# characters):
 
 *   min = 0
 *   max = 5000
@@ -49,17 +50,17 @@ lengthy. More specifically, here are statistics on the lengths:
 Given this information, a _representative document_ (repdoc) was parsed for each
 PI in the dataset, in the following manner:
 
-1.  For all awards the PI has worked on, concatenate with spaces between to get
-    a single string of words.
+1.  For all awards the PI has worked on, concatenate abstracts with spaces
+    between to get a single string of words.
 2.  The following cleaning operations are performed:
-    1. punctuation removed
-    2. all characters lowercased
-    3. whitespace stripped
+    1.  punctuation removed
+    2.  all characters lowercased
+    3.  whitespace stripped
 3.  Words meeting these filtering criteria are removed:
-    1. empty or only 1 character
-    2. stopword
-    3. all digits
-    4. starts with digit
+    1.  empty or only 1 character
+    2.  stopword
+    3.  all digits
+    4.  starts with digit
 4.  Finally, all words are stemmed using a Porter stemmer.
 
 At this point, each repdoc is represented as a list of words. In order to
@@ -70,17 +71,17 @@ treated as a corpus of abstracts and the following steps are performed:
     *   each word is now represented as (id, frequency), with an associated
         lookup table of (id, term)
 2.  Filter out tokens that appear in
-    1.  less than 5 documents (absolute number) or
+    1.  less than 5 documents or
     2.  more than half of all documents
     3.  after (1) and (2), keep only the first 100,000 most frequent terms
-3.  After the pruning, shrink resulting gaps in word ids so they are contiguous
+3.  After filtering, shrink resulting gaps in word ids so they are contiguous
 
 For the abstracts corpus, step 2.3 does not discard any words. Also note that
 the stemming produced some strings that would have been removed by the earlier
 filtering. For instance, the character 'i' shows up again after stemming, but it
 only occurs in 5 places throughout the entire corpus.
 
-The total number of words after this process is 12,171.
+The **total number of words** after this process is **12,171**.
 
 ## Section 3: Data Format
 
@@ -116,8 +117,8 @@ the first cell of the matrix:
 
 Notice that each cell is an integer, and the format is "coordinate", which means
 this is a sparse representation of the matrix. The second line is a comment, and
-the third is a listing of unique values for each column. The first column
-represents the PIs, the second is the term IDs, and the third is the term
+the third is a listing of the number of unique values for each column. The first
+column represents the PIs, the second is the term IDs, and the third is the term
 frequencies. Note that indexing starts at 1 (Fortran style), so the 4th line
 shown above represents "row 1, column 46" rather than "row 2, column 47". The
 relationships between this file and the others are as follows.
@@ -126,4 +127,5 @@ relationships between this file and the others are as follows.
     so row 1 in this file represents the first PI in the name index file.
 *   The `feature-name-index.csv' file has a closer relationship because the term
     IDs are contiguous. Each column number can be used to get the term ID by
-    subtracting 1 (a 0-indexing language was used to assign IDs).
+    subtracting 1 (a 0-indexing language was used to assign IDs). So in the
+    example above, "46" represents the term with ID 45.

@@ -6,7 +6,7 @@ Input Data Files
 pi-graph-edges.txt
 ------------------
 
-(node_id, node_id), where each node_id is the ID of the PI the node represents.
+(node_id1, node_id2), where each node_id is the ID of the PI the node represents.
 Corresponds to 1912.edges in CESNA sample data.
 
 abstracts-features.txt
@@ -51,4 +51,3 @@ weights.txt
 "Logistic weight. k-th number for i-th row shows the logistic weight factor
 between community i and attribute k. If the names of attributes are given, the
 names are written in the first row."
-
