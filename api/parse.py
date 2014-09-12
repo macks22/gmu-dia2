@@ -1,11 +1,10 @@
 """
-This module contains functions for parsing data from the raw JSON
-files and loading parsed data from saved pickle files. It is meant
-to act as the main parsing interface on top of the raw data.
-Eventually, the vision is to have each "Data object" be retreivable
-via two possible methods: parse & load. The parsing functionality
-will be present in this module, while the loading functionality
-will exist in the L{data} module.
+This module contains functions for parsing data from the raw JSON files and
+loading parsed data from saved pickle files. It is meant to act as the main
+parsing interface on top of the raw data.  Eventually, the vision is to have
+each "Data object" be retreivable via two possible methods: parse & load. The
+parsing functionality will be present in this module, while the loading
+functionality will exist in the L{data} module.
 
 Currently, things are a bit more messy than that, and there is
 some of both parsing and loading functionality in this module.
@@ -29,8 +28,7 @@ import data
 
 
 def pi_award_graph(all_edge_attributes=True, **kwargs):
-    """
-    Parse the json files for the given years/months into an igraph
+    """Parse the json files for the given years/months into an igraph
     Graph object. The graph is constructed by creating a vertex for
     every PIcoPI ID and an edge for every collaborative effort
     between PIs. In particular, for each awardID, if there is more
@@ -47,29 +45,17 @@ def pi_award_graph(all_edge_attributes=True, **kwargs):
     This function does not allow you to pick different months for
     each year in the range.
 
-    @type  year_start: int
-    @param year_start: First year in range to parse.
-
-    @type  year_end: int
-    @param year_end: Last year in range to parse.
-
-    @type  month_start: int
-    @param month_start: First month in range to parse.
-
-    @type  month_end: int
-    @param month_end: Last month in range to parse.
-
-    @type  file_limit: int
-    @param file_limit: Limits the number of files parsed; note
+    :param int year_start: First year in range to parse.
+    :param int year_end: Last year in range to parse.
+    :param int month_start: First month in range to parse.
+    :param int month_end: Last month in range to parse.
+    :param int file_limit: Limits the number of files parsed; note
         this option overrides the year/month params
+    :param bool all_edge_attributes: If False, only the awardID is added as an
+        attribute for each, otherwise everything is; default is True.
 
-    @type  all_edge_attributes: bool
-    @param all_edge_attributes: If False, only the awardID is added
-        as an attribute for each, otherwise
-        everything is; default is True.
-
-    @rtype:   L{igraph.Graph}
-    @returns: Graph constructed from JSON data files parsed.
+    :rtype:   L{igraph.Graph}
+    :returns: Graph constructed from JSON data files parsed.
 
     """
     g = igraph.Graph()
@@ -139,11 +125,10 @@ def pi_award_graph(all_edge_attributes=True, **kwargs):
 
 
 def parse_full_graph():
-    """
-    Parse through all data and save it to a pickle file.
+    """Parse through all data and save it to a pickle file.
 
-    @rtype:  L{igraph.Graph}
-    @return: The graph which was parsed from the full dataset.
+    :rtype:  L{igraph.Graph}
+    :return: The graph which was parsed from the full dataset.
 
     """
     g = pi_award_graph()
@@ -152,13 +137,11 @@ def parse_full_graph():
 
 
 def all_pi_ids_from_files():
-    """
-    This parses all files for IDs of all PIs and coPIs. Both are
-    treated the same since we have no way to distinguish between the
-    two.
+    """This parses all files for IDs of all PIs and coPIs. Both are treated the
+    same since we have no way to distinguish between the two.
 
-    @rtype:   set of str
-    @return:  Set of all PI IDs found.
+    :rtype:   set of str
+    :return:  Set of all PI IDs found.
 
     """
     pi_ids = set()
@@ -171,22 +154,19 @@ def all_pi_ids_from_files():
 
 
 def all_pi_ids_from_graph(g):
-    """
-    Parse the graph to get the set of all PI IDs.
+    """Parse the graph to get the set of all PI IDs.
 
-    @type  g: L{igraph.Graph}
-    @param g: Graph to parse for PI IDs.
-
-    @rtype:   set
-    @returns: Set of all PI IDs in the graph (for all vertices).
+    :type  g: L{igraph.Graph}
+    :param g: Graph to parse for PI IDs.
+    :rtype:   set
+    :returns: Set of all PI IDs in the graph (for all vertices).
 
     """
     return set([v['name'] for v in g.vs])
 
 
 def parse_funding_agents():
-    """
-    Parse all funding agents from the JSON files. We can't use
+    """Parse all funding agents from the JSON files. We can't use
     the graph for this, because awards with only one PI do not
     have edges in the pi_award_graph.
 
@@ -204,8 +184,8 @@ def parse_funding_agents():
         10. pgm_name : program name
 
 
-    @rtype:   L{pandas.DataFrame}
-    @return:  A data frame with the 10 fields listed above.
+    :rtype:   L{pandas.DataFrame}
+    :return:  A data frame with the 10 fields listed above.
 
     """
     all_records = []
@@ -255,12 +235,11 @@ def _parse_funding_agent(award_data):
 
 
 def frame_pi_award_pairings():
-    """
-    Return a data frame with records for each PI for each award they
+    """Return a data frame with records for each PI for each award they
     worked on.
 
-    @rtype:   L{pandas.DataFrame}
-    @return:  DataFrame with pi_id and award_id columns.
+    :rtype:   L{pandas.DataFrame}
+    :return:  DataFrame with pi_id and award_id columns.
 
     """
     records = []
@@ -276,11 +255,10 @@ def frame_pi_award_pairings():
 
 
 def frame_abstracts():
-    """
-    Parse all abstracts into a DataFrame, indexed by award ids.
+    """Parse all abstracts into a DataFrame, indexed by award ids.
 
-    @rtype:   L{pandas.DataFrame}
-    @return:  DataFrame of abstracts, indexed by award ids.
+    :rtype:   L{pandas.DataFrame}
+    :return:  DataFrame of abstracts, indexed by award ids.
 
     """
     records = []
@@ -295,14 +273,14 @@ def frame_abstracts():
 
 
 def affiliation_frames(json_dir):
-    """
-    Parse the PI affiliation information into two data frames:
+    """Parse the PI affiliation information into two data frames::
+
         1. institutions (inst_id, org_name, street, city, state, zip, nation)
         2. affiliations (pi_id, inst_id)
 
-    :param str json_dir: Directory containing the json files to be parsed.
-
     Both frames are output to csv files in the current directory.
+
+    :param str json_dir: Directory containing the json files to be parsed.
 
     """
     pairs = set()
