@@ -10,27 +10,30 @@ Functions for word cleaning and stemming are also included.
 
 """
 import string
-import nltk
+from itertools import ifilter, ifilterfalse, imap
+import nltk.corpus
+from nltk.tokenize import word_tokenize
+from porterstemmer import Stemmer
+import numpy
 
 
 PUNCT = set(string.punctuation)
+EXCLUDE = PUNCT.update([' ', '\t', '\n'])
+TRANSLATION_TABLE = {ord(c): None for c in PUNCT}
 STOPWORDS = set(nltk.corpus.stopwords.words('english'))
 STOPWORDS.add('br')  # get rid of </br> html tags (hackish)
 STOPWORDS.add('')  # makes the pipeline squeaky clean (ass-covering)
-STEMMER = nltk.PorterStemmer()
+stem_word = Stemmer()
 
-
-def tokenize(doc):
-    return nltk.tokenize.word_tokenize(doc)
 
 def remove_punctuation(word):
-    return ''.join([char for char in word if char not in PUNCT])
+    return word.translate(TRANSLATION_TABLE)
 
 def is_stopword(word):
     return word in STOPWORDS
 
 def starts_with_digits(word):
-    return word[0].isdigit() or word.isdigit()
+    return word[0].isdigit()
 
 def clean_word(word):
     """Remove punctuation, lowercase, and strip whitespace from the word.
@@ -38,7 +41,7 @@ def clean_word(word):
     :param str word: The word to clean.
     :return: The cleaned word.
     """
-    return remove_punctuation(word).lower().strip()
+    return remove_punctuation(word).lower()
 
 def word_is_not_junk(word):
     """Applies a set of conditions to filter out junk words.
@@ -48,7 +51,7 @@ def word_is_not_junk(word):
     :return: False if the word is junk, else True.
 
     """
-    too_short = lambda word: len(word) < 1
+    too_short = lambda word: len(word) < 2
     if (not word or
         is_stopword(word) or
         starts_with_digits(word) or
@@ -58,18 +61,23 @@ def word_is_not_junk(word):
         return True
 
 def preprocess(wordlist, stopwords=True, digits=True, stem=True):
-    """Perform preprocessing on the list of words. Always removes punctuation,
+    """Perform preprocessing on a list of words. Always removes punctuation,
     lowercases the word, and strips whitespace before other preprocessing.
 
     :param bool stopwords: If True, remove stopwords.
     :param bool digits: If True, remove words that start with digits.
     :param bool stem: If True, stem words using a Porter stemmer.
     """
-    cleaned = [w for w in map(clean_word, wordlist) if w]
-    if stopwords: cleaned = [w for w in cleaned if not is_stopword(w)]
-    if digits: cleaned = [w for w in cleaned if not starts_with_digits(w)]
-    if stem: cleaned = map(STEMMER.stem_word, cleaned)
-    return cleaned
+    if stopwords: wordlist = ifilterfalse(is_stopword, wordlist)
+    if digits: wordlist = ifilterfalse(starts_with_digits, wordlist)
+    if stem: wordlist = imap(stem_word, wordlist)
+    return wordlist
+
+def doctovec(doc, *args):
+    """See `preprocess` for keyword args."""
+    doc = remove_punctuation(doc)
+    doc = numpy.unicode_.lower(doc)
+    return preprocess(word_tokenize(doc), *args)
 
 def clean_word_list(word_list):
     """The following cleaning operations are performed:
@@ -92,20 +100,19 @@ def clean_word_list(word_list):
     :return: The cleaned, stemmed, filtered, list of words.
     """
     cleaned_words = [clean_word(w) for w in word_list]
-    filtered_words = filter(word_is_not_junk, cleaned_words)
-    stemmed_words = [STEMMER.stem_word(word) for word in filtered_words]
+    filtered_words = ifilter(word_is_not_junk, cleaned_words)
+    stemmed_words = [stem_word(word) for word in filtered_words]
     return stemmed_words
 
 def vectorize(doc):
     """Convert a document (string/unicode) into a filtered, cleaned,
-    stemmed, list of words.
+    stemmed, list of words. See `doctovec` for a function with more options.
 
     :param str doc: The document to vectorize.
     :rtype:  list of str
     :return: The filtered, cleaned, stemmed, list of words.
     """
-    word_list = nltk.tokenize.word_tokenize(doc)
-    return clean_word_list(word_list)
+    return clean_word_list(word_tokenize(doc))
 
 def write_vec(vec, filepath):
     """ Write a list of words to a txt file, seperated by newlines.

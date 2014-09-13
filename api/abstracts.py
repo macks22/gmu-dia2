@@ -186,6 +186,11 @@ class AbstractVectors(object):
         self.pis = self._abstracts.pis
         self.parse = parse
 
+        # set defaults for document vectorization preprocessing steps
+        self.remove_stopwords = True
+        self.remove_digits = True
+        self.stem_words = True
+
     def __iter__(self):
         """Yield each abstract in turn, either by parsing the abstract
         strings from the underlying L{Abstracts} instance, or by
@@ -195,7 +200,8 @@ class AbstractVectors(object):
         """
         if self.parse:
             for abstract in self._abstracts:
-                yield doctovec.vectorize(abstract)
+                yield doctovec.preprocess(abstract, self.remove_stopwords,
+                    self.remove_digits, self.stem_words)
         else:
             for award_id in self.award_ids:
                 yield data.load_abstract_vec(award_id)
@@ -287,7 +293,8 @@ class AbstractVectors(object):
 class AbstractBoWs(object):
     """Manage award abstracts as BoWs."""
 
-    def __init__(self, abstracts=None, abstract_vectors=None, parse=False):
+    def __init__(self, abstracts=None, abstract_vectors=None, parse=False,
+                 filter_extremes=False):
         """Load BoW dictionaries for all PIs and combine them to form a BoW for
         the complete dataset (all abstracts). An instance of this class can be
         instantiated with no parameters, in which case it will parse through the
@@ -321,7 +328,8 @@ class AbstractBoWs(object):
 
         self.dictionary = gensim.corpora.dictionary.Dictionary(
             self._abstract_vectors)
-        self.dictionary.filter_extremes()
+        if filter_extremes:
+            self.dictionary.filter_extremes()
 
         self.award_ids = self._abstract_vectors.award_ids
         self.pis = self._abstract_vectors.pis

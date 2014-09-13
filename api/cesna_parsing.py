@@ -12,14 +12,11 @@ class EdgesFile(object):
         return self.g[idx]['label']
 
     def get_edge_pis(edge):
-        igraph_ids = edge.tuple
-        pi_id1 = self.get_pi_id(igraph_ids[0])
-        pi_id2 = self.get_pi_id(igraph_ids[1])
-        return (pi_id1, pi_id2)
+        id1, id2 = edge.tuple
+        return (self.get_pi_id(id1), self.get_pi_id(id2))
 
     def parse():
-        for edge in self.g.es:
-            yield get_edge_pis(edge)
+        return (get_edge_pis(edge) for edge in self.g.es)
 
     def write():
         pi_pairings = self.parse()
@@ -31,13 +28,12 @@ class EdgesFile(object):
 class FeaturesFiles(object):
     """Write the features file for all PI representative documents."""
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.g = data.load_full_graph()
-        self.bowas = abstracts.AbstractBoWs()
+        self.bowas = abstracts.AbstractBoWs(**kwargs)
 
     def all_pis(self):
-        for v in self.g.vs:
-            yield v['label']
+        return (v['label'] for v in self.g.vs)
 
     def all_term_freqs_for_pi(self, pi_id):
         all_freqs = []
