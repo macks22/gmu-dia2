@@ -11,9 +11,9 @@ class TestCleanWord(unittest.TestCase):
     """Test word cleaning and filtering."""
 
     def test_whitespace_stripping(self):
-        leading = '  test'
-        trailing = 'test  '
-        expected = 'test'
+        leading = u'  test'
+        trailing = u'test  '
+        expected = u'test'
         stripped_leading = doctovec.clean_word(leading)
         stripped_trailing = doctovec.clean_word(trailing)
 
@@ -23,11 +23,11 @@ class TestCleanWord(unittest.TestCase):
     def test_removes_punctuation(self):
         punctuation = doctovec.PUNCT
         for char in punctuation:
-            self.assertEqual(doctovec.clean_word(char), '')
+            self.assertEqual(doctovec.clean_word(unicode(char)), u'')
 
     def test_lowercases_words(self):
-        uppercase = 'TEST'
-        expected = 'test'
+        uppercase = u'TEST'
+        expected = u'test'
         self.assertEqual(doctovec.clean_word(uppercase), expected)
 
 
