@@ -14,7 +14,7 @@ the relationships between the files.
 
 ## Section 1: Background
 
-The dataset was originally downloaded from the
+The dataset was originally downloaded from 
 [nsf.gov](http://www.nsf.gov/awardsearch/download.jsp) and pre-processed by
 Purdue University. The pre-processing steps of relevance to this subset of that
 data are as follows:
@@ -71,7 +71,7 @@ treated as a corpus of abstracts and the following steps are performed:
     *   each word is now represented as (id, frequency), with an associated
         lookup table of (id, term)
 2.  Filter out tokens that appear in
-    1.  less than 5 documents or
+    1.  less than 5 documents, or
     2.  more than half of all documents
     3.  after (1) and (2), keep only the first 100,000 most frequent terms
 3.  After filtering, shrink resulting gaps in word ids so they are contiguous
@@ -81,7 +81,7 @@ the stemming produced some strings that would have been removed by the earlier
 filtering. For instance, the character 'i' shows up again after stemming, but it
 only occurs in 5 places throughout the entire corpus.
 
-The **total number of words** after this process is **12,171**.
+**The total number of words (stems) after this process is 12,171.**
 
 ## Section 3: Data Format
 
@@ -123,9 +123,9 @@ frequencies. Note that indexing starts at 1 (Fortran style), so the 4th line
 shown above represents "row 1, column 46" rather than "row 2, column 47". The
 relationships between this file and the others are as follows.
 
-*   The `pi-name-index.csv' file is in the same order as the rows in the matrix,
+*   The `pi-name-index.csv` file is in the same order as the rows in the matrix,
     so row 1 in this file represents the first PI in the name index file.
-*   The `feature-name-index.csv' file has a closer relationship because the term
+*   The `feature-name-index.csv` file has a closer relationship because the term
     IDs are contiguous. Each column number can be used to get the term ID by
     subtracting 1 (a 0-indexing language was used to assign IDs). So in the
     example above, "46" represents the term with ID 45.
