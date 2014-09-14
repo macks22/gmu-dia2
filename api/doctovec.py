@@ -11,6 +11,7 @@ Functions for word cleaning and stemming are also included.
 """
 import string
 from itertools import ifilter, ifilterfalse, imap
+import operator as op
 import nltk.corpus
 from nltk.tokenize import word_tokenize
 from porterstemmer import Stemmer
@@ -18,12 +19,12 @@ import numpy
 
 
 PUNCT = set(string.punctuation)
-EXCLUDE = PUNCT.update([' ', '\t', '\n'])
 TRANSLATION_TABLE = {ord(c): None for c in PUNCT}
 STOPWORDS = set(nltk.corpus.stopwords.words('english'))
 STOPWORDS.add('br')  # get rid of </br> html tags (hackish)
 STOPWORDS.add('')  # makes the pipeline squeaky clean (ass-covering)
 stem_word = Stemmer()
+strip = op.methodcaller('strip')
 
 
 def remove_punctuation(word):
@@ -68,10 +69,11 @@ def preprocess(wordlist, stopwords=True, digits=True, stem=True):
     :param bool digits: If True, remove words that start with digits.
     :param bool stem: If True, stem words using a Porter stemmer.
     """
+    wordlist = imap(strip, wordlist)
     if stopwords: wordlist = ifilterfalse(is_stopword, wordlist)
     if digits: wordlist = ifilterfalse(starts_with_digits, wordlist)
     if stem: wordlist = imap(stem_word, wordlist)
-    return wordlist
+    return list(wordlist)
 
 def doctovec(doc, *args):
     """See `preprocess` for keyword args."""
