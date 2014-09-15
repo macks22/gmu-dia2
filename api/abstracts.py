@@ -350,8 +350,8 @@ class AbstractBoWs(object):
         :return: An iterator which yields BoW abstracts.
 
         """
-        for abstract in self._abstract_vectors:
-            yield self.dictionary.doc2bow(abstract)
+        for pi in self.pis:
+            yield self.pi_document(pi)
 
     def __getitem__(self, award_id):
         """Get the BoW representation of the abstract associated with the given
