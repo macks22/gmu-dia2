@@ -24,14 +24,18 @@ except ImportError:
     from nltk import PorterStemmer
     stem_word = PorterStemmer().stem_word
 
-
+from data import STOPWORDS_FILE
 
 # table to delete all punctuation characters using `translate`
 PUNCT = set(string.punctuation)
 TRANSLATION_TABLE = {ord(c): None for c in PUNCT}
 
 # nltk has a list of 123 english stopwords
-STOPWORDS = set(nltk.corpus.stopwords.words('english'))
+# STOPWORDS = set(nltk.corpus.stopwords.words('english'))
+# but I had to expand on it to include contractions
+# this list includes all nltk stopwords plus contractions plus a few extras
+with open(STOPWORDS_FILE, 'r') as f:
+    STOPWORDS = set(f.read().split())
 STOPWORDS.add('br')  # get rid of </br> html tags (hackish)
 STOPWORDS.add('')  # makes the pipeline squeaky clean (ass-covering)
 
@@ -41,16 +45,18 @@ these should be filtered out afterwards so cases where hyphens are left
 out are marked the same, such as:
     multi-processor and multiprocessor
     on-line and online
+and so contractions can be handled appropriately.
 """
-TOKENIZER = RegexpTokenizer("\w+[-']?\w*")
+TOKENIZER = RegexpTokenizer("\w+[-']?\w*(-?\w*)*")
 _word_tokenize = TOKENIZER.tokenize
 
 strip = op.methodcaller('strip')
+remove_hyphens = lambda word: word.replace('-', '')
 simple_punct_remove = lambda word: word.replace('-', '').replace("'", '')
 
 
 def word_tokenize(doc):
-    return [simple_punct_remove(word) for word in _word_tokenize(doc)]
+    return [remove_hyphens(word) for word in _word_tokenize(doc)]
 
 def remove_punctuation(word):
     return word.translate(TRANSLATION_TABLE)

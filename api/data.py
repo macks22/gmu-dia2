@@ -22,12 +22,14 @@ import igraph
 # -----------------------------------------------------------------------------
 # MODULE SETUP
 # -----------------------------------------------------------------------------
-DATA_DIR = os.path.join(os.path.abspath(os.path.pardir), 'data')
+PROJECT_DIR = os.path.abspath(os.path.pardir)
+DATA_DIR = os.path.join(PROJECT_DIR, 'data')
 JSON_DIR = os.path.join(DATA_DIR, 'json')
 GRAPH_SAVE_DIR = os.path.join(DATA_DIR, 'pi-award-graphs')
 PICKLE_DIR = os.path.join(DATA_DIR, 'pickle')
 BOW_DIR = os.path.join(DATA_DIR, 'bow')
 WORDLE_DIR = os.path.join(DATA_DIR, 'wordle')
+STOPWORDS_FILE = os.path.join(PROJECT_DIR, 'api/stopwords.txt')
 
 
 class DataDirectory(object):
