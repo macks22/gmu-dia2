@@ -1,5 +1,8 @@
+import gensim
+
 import data
 import abstracts
+
 
 
 class EdgesFile(object):
@@ -64,3 +67,27 @@ class FeaturesFiles(object):
             with open('cesna-features-file-descriptors.txt', 'w') as f:
                 for item in self.bowas.dictionary.iteritems():
                     f.write('{} {}\n'.format(item[0], item[1]))
+
+
+class TfidfTermDocMatrix(object):
+    """Write a term-document matrix in pseudo-mmformat: tfidf for counts."""
+
+    def __init__(self, **kwargs):
+        self.g = data.load_full_graph()
+        self.corpus = abstracts.AbstractBoWs(**kwargs)
+        self.tfidf = gensim.models.TfidfModel(self.corpus)
+
+    def all_pis(self):
+        return (v['label'] for v in self.g.vs)
+
+    def iterdocs(self):
+        for pi in self.all_pis():
+            doc = self.corpus.pi_document(pi)
+            tfidf_doc = self.tfidf[doc]
+            yield (pi, tfidf_doc)
+
+    def write(self, fpath):
+        with open(fpath, 'wb') as f:
+            for pi, doc in self.iterdocs():
+                for termid, tfidf in doc:
+                    f.write('{} {} {}\n'.format(pi, termid, tfidf))
