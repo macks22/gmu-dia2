@@ -10,22 +10,47 @@ Functions for word cleaning and stemming are also included.
 
 """
 import string
-from itertools import ifilter, ifilterfalse, imap
+import itertools as it
 import operator as op
+
 import nltk.corpus
-from nltk.tokenize import word_tokenize
-from porterstemmer import Stemmer
+from nltk.tokenize import RegexpTokenizer
 import numpy
 
+try:
+    from porterstemmer import Stemmer
+    stem_word = Stemmer()
+except ImportError:
+    from nltk import PorterStemmer
+    stem_word = PorterStemmer().stem_word
 
+
+
+# table to delete all punctuation characters using `translate`
 PUNCT = set(string.punctuation)
 TRANSLATION_TABLE = {ord(c): None for c in PUNCT}
+
+# nltk has a list of 123 english stopwords
 STOPWORDS = set(nltk.corpus.stopwords.words('english'))
 STOPWORDS.add('br')  # get rid of </br> html tags (hackish)
 STOPWORDS.add('')  # makes the pipeline squeaky clean (ass-covering)
-stem_word = Stemmer()
-strip = op.methodcaller('strip')
 
+"""
+this tokenizer also removes all punctuation except apostrophes and hyphens
+these should be filtered out afterwards so cases where hyphens are left
+out are marked the same, such as:
+    multi-processor and multiprocessor
+    on-line and online
+"""
+TOKENIZER = RegexpTokenizer("\w+[-']?\w*")
+_word_tokenize = TOKENIZER.tokenize
+
+strip = op.methodcaller('strip')
+simple_punct_remove = lambda word: word.replace('-', '').replace("'", '')
+
+
+def word_tokenize(doc):
+    return [simple_punct_remove(word) for word in _word_tokenize(doc)]
 
 def remove_punctuation(word):
     return word.translate(TRANSLATION_TABLE)
@@ -42,7 +67,7 @@ def clean_word(word):
     :param str word: The word to clean.
     :return: The cleaned word.
     """
-    return remove_punctuation(word).lower()
+    return remove_punctuation(word).lower().strip()
 
 def word_is_not_junk(word):
     """Applies a set of conditions to filter out junk words.
@@ -52,14 +77,9 @@ def word_is_not_junk(word):
     :return: False if the word is junk, else True.
 
     """
-    too_short = lambda word: len(word) < 2
-    if (not word or
-        is_stopword(word) or
-        starts_with_digits(word) or
-        too_short(word)):
-        return False
-    else:
-        return True
+    return not (is_stopword(word) or
+                starts_with_digits(word) or
+                (len(word) < 2))
 
 def preprocess(wordlist, stopwords=True, digits=True, stem=True):
     """Perform preprocessing on a list of words. Always removes punctuation,
@@ -69,17 +89,14 @@ def preprocess(wordlist, stopwords=True, digits=True, stem=True):
     :param bool digits: If True, remove words that start with digits.
     :param bool stem: If True, stem words using a Porter stemmer.
     """
-    wordlist = imap(strip, wordlist)
-    if stopwords: wordlist = ifilterfalse(is_stopword, wordlist)
-    if digits: wordlist = ifilterfalse(starts_with_digits, wordlist)
-    if stem: wordlist = imap(stem_word, wordlist)
+    if stopwords: wordlist = it.ifilterfalse(is_stopword, wordlist)
+    if digits: wordlist = it.ifilterfalse(starts_with_digits, wordlist)
+    if stem: wordlist = it.imap(stem_word, wordlist)
     return list(wordlist)
 
 def doctovec(doc, *args):
     """See `preprocess` for keyword args."""
-    doc = remove_punctuation(doc)
-    doc = numpy.unicode_.lower(doc)
-    return preprocess(word_tokenize(doc), *args)
+    return preprocess(word_tokenize(doc.lower()), *args)
 
 def clean_word_list(word_list):
     """The following cleaning operations are performed:
@@ -102,7 +119,7 @@ def clean_word_list(word_list):
     :return: The cleaned, stemmed, filtered, list of words.
     """
     cleaned_words = [clean_word(w) for w in word_list]
-    filtered_words = ifilter(word_is_not_junk, cleaned_words)
+    filtered_words = it.ifilter(word_is_not_junk, cleaned_words)
     stemmed_words = [stem_word(word) for word in filtered_words]
     return stemmed_words
 

@@ -191,6 +191,10 @@ class AbstractVectors(object):
         self.remove_digits = True
         self.stem_words = True
 
+    def vectorize(self, doc):
+        return doctovec.doctovec(doc, self.remove_stopwords,
+                self.remove_digits, self.stem_words)
+
     def __iter__(self):
         """Yield each abstract in turn, either by parsing the abstract
         strings from the underlying L{Abstracts} instance, or by
@@ -200,8 +204,7 @@ class AbstractVectors(object):
         """
         if self.parse:
             for abstract in self._abstracts:
-                yield doctovec.preprocess(abstract, self.remove_stopwords,
-                    self.remove_digits, self.stem_words)
+                yield self.vectorize(abstract)
         else:
             for award_id in self.award_ids:
                 yield data.load_abstract_vec(award_id)
@@ -216,7 +219,7 @@ class AbstractVectors(object):
         """
         abstract = self._abstracts[award_id]  # safeguard
         if self.parse:
-            return doctovec.vectorize(abstract)
+            return self.vectorize(abstract)
         else:
             return data.load_abstract_vec(award_id)
 
@@ -275,7 +278,7 @@ class AbstractVectors(object):
 
         """
         abstracts = self._abstracts.for_pi(pi_id)
-        return [doctovec.vectorize(abstract) for abstract in abstracts]
+        return [self.vectorize(abstract) for abstract in abstracts]
 
     def pi_document(self, pi_id):
         """Return the representative document for the given PI as a word vector.
@@ -286,15 +289,14 @@ class AbstractVectors(object):
         :return: The representative document for the given PI id.
 
         """
-        document_string = self._abstracts.pi_document(pi_id)
-        return doctovec.vectorize(document_string)
+        pi_doc = self._abstracts.pi_document(pi_id)
+        return self.vectorize(pi_doc)
 
 
 class AbstractBoWs(object):
     """Manage award abstracts as BoWs."""
 
-    def __init__(self, abstracts=None, abstract_vectors=None, parse=False,
-                 filter_extremes=False):
+    def __init__(self, **kwargs):
         """Load BoW dictionaries for all PIs and combine them to form a BoW for
         the complete dataset (all abstracts). An instance of this class can be
         instantiated with no parameters, in which case it will parse through the
@@ -305,22 +307,27 @@ class AbstractBoWs(object):
         can be passed as a parameter to avoid parsing through the JSON files.
 
         :type  abstracts: L{Abstracts}
-        :param abstracts: Abstracts instance to use as the underlying
+        :keyword abstracts: Abstracts instance to use as the underlying
             corpus; if none is passed and no I{abstract_vectors}
             instance is passed, instantiate a new instance,
             which parses the raw JSON files to build the abstracts
             corpus.
 
         :type  abstract_vectors: L{AbstractVectors}
-        :param abstract_vectors: AbstractVectors instance to use as
+        :keyword abstract_vectors: AbstractVectors instance to use as
             the underlying corpus; if none is passed, a new instance
             will be instantiated, passing the I{abstracts} param to
             it directly. Otherwise the I{abstracts} param will be
             ignored.
 
-        :param bool parse: see L{AbstractVectors.__init__}
+        :keyword bool parse: see L{AbstractVectors.__init__}
+        :keyword bool filter_extremes: see L{gensim.corpora.dictionary}
 
         """
+        abstract_vectors = kwargs.get('abstract_vectors', None)
+        abstracts = kwargs.get('abstracts', None)
+        parse = kwargs.get('parse', False)
+
         if abstract_vectors is None:
             self._abstract_vectors = AbstractVectors(abstracts, parse)
         else:
@@ -328,7 +335,7 @@ class AbstractBoWs(object):
 
         self.dictionary = gensim.corpora.dictionary.Dictionary(
             self._abstract_vectors)
-        if filter_extremes:
+        if kwargs.get('filter_extremes', False):
             self.dictionary.filter_extremes()
 
         self.award_ids = self._abstract_vectors.award_ids
@@ -364,6 +371,11 @@ class AbstractBoWs(object):
     def __str__(self):
         msg = 'BoW Abstracts corpus with {} abstracts.'
         return msg.format(self.__len__())
+
+    def save_mmformat(self, fpath):
+        """Save in matrix market format to given file path."""
+        gensim.corpora.MmCorpus.serialize(fpath, self,
+            id2token=self.dictionary.id2token)
 
     def awards_for_pi(self, pi_id):
         """Retrieve the list of all awards for the PI.
@@ -580,3 +592,8 @@ def write_wordle_files(lda_model, num_topics=10, topn=40):
             topic.append((pair[1], int(float(pair[0]) * 1000)))
 
         data.write_wordle_file(topic_num, topic)
+
+
+if __name__ == "__main__":
+    corpus = AbstractBoWs()
+    tfidf = gensim.models.TfidfModel(corpus)
