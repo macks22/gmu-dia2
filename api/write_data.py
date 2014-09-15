@@ -76,7 +76,8 @@ class TfidfTermDocMatrix(object):
 
     def __init__(self, **kwargs):
         self.g = data.load_full_graph()
-        self.pis = set([v['label'] for v in self.g.vs])
+        self.pis = set([(v.index, v['label']) for v in self.g.vs])
+        self.pis = sorted(list(self.pis), key=lambda tuple: tuple[0])
 
         corpus = kwargs.get('corpus', None)
         self.corpus = corpus if corpus else abstracts.AbstractBoWs(**kwargs)
@@ -93,6 +94,10 @@ class TfidfTermDocMatrix(object):
         return ' '.join(map(str,
                 (self.num_docs, self.num_terms, self.num_nnz)))
 
+    @property
+    def mmheader(self):
+        return ''.join([self.header,'\n',self.stats,'\n'])
+
     @classmethod
     def load(cls, corpusfile, tfidf_file):
         with open(corpusfile) as f:
@@ -101,18 +106,17 @@ class TfidfTermDocMatrix(object):
             tfidf = pickle.load(f)
         return TfidfTermDocMatrix(corpus=corpus, tfidf=tfidf)
 
-    def itertfidfdocs(self):
-        for pi in self.pis:
-            doc = self.corpus.pi_document(pi)
-            tfidf_doc = self.tfidf[doc]
-            yield (pi, tfidf_doc)
-
     def iterdocs(self):
-        for pi in self.pis:
-            tf_doc = self.corpus.pi_document(pi)
-            yield (pi, tf_doc)
+        for pi_label, pi_id in self.pis:
+            tf_doc = self.corpus.pi_document(pi_id)
+            yield (pi_label, tf_doc)
 
-    def write(self, fpath=None):
+    def itertfidfdocs(self):
+        for pi_label, doc in self.iterdocs():
+            tfidf_doc = self.tfidf[doc]
+            yield (pi_label, tfidf_doc)
+
+    def write(self, fpath='abstracts-matrix'):
         """Writes four different files for the tfidf version of the abstracts
         corpus::
 
@@ -124,38 +128,75 @@ class TfidfTermDocMatrix(object):
         ...where `doc` is the ID of the PI.
 
         """
-        if fpath is not None:
-            tf_file = fpath + '-tf.mm'
-            tfidf_file = fpath + '-tfidf.mm'
-            self.write_tf_matrix(tf_file)
-            self.write_tfidf_matrix(tfidf_file)
-        else:
-            self.write_tf_matrix()
-            self.write_tfidf_matrix()
+        tf_file = fpath + '-tf.mm'
+        tfidf_file = fpath + '-tfidf.mm'
 
-        self.write_term_mappings()
-        self.write_dfs()
+        self.write_tf_matrix_fast(tf_file)
+        self.write_tfidf_matrix_fast(tfidf_file)
+        self.write_tmap_and_dfs()
+
+    # IN BOTH MM WRITING METHODS: YOU NEED TO ENSURE FORTRAN START-FROM-1
+    # INDEXING IS USED AND PI INDICES SHOULD BE MAPPED TO CONTIGUOUS RANGE FROM
+    # 1-#PIS IN ORDER TO ENSURE ROW INDICES DO NOT EXCEED MATRIX DIMENSIONS
+
+    def write_tf_matrix_fast(self, fpath='abstracts-matrix-tf.mm'):
+        gensim.corpora.MmCorpus.serialize(
+            fpath, (doc for pi, doc in self.iterdocs()),
+            self.corpus.dictionary.id2token)
 
     def write_tf_matrix(self, fpath='abstracts-matrix-tf.mm'):
         with open(fpath, 'wb') as f:
-            f.write(self.header + '\n' + self.stats + '\n')
+            f.write(self.mmheader)
             for pi, doc in self.iterdocs():
                 f.write('\n'.join(
-                    [' '.join(map(str, (pi, termid, tf)))
+                    [' '.join((str(pi+1), str(termid+1), str(tf)))
                     for termid, tf in doc]))
+
+    def write_tfidf_matrix_fast(self, fpath='abstracts-matrix-tfidf.mm'):
+        gensim.corpora.MmCorpus.serialize(
+            fpath, (doc for pi, doc in self.itertfidfdocs()),
+            self.corpus.dictionary.id2token)
 
     def write_tfidf_matrix(self, fpath='abstracts-matrix-tfidf.mm'):
         with open(fpath, 'wb') as f:
-            f.write(self.header + '\n' + self.stats + '\n')
+            f.write(self.mmheader)
             for pi, doc in self.itertfidfdocs():
                 f.write('\n'.join(
-                    [' '.join(map(str, (pi, termid, tfidf)))
+                    [' '.join((str(pi+1), str(termid+1), str(tfidf)))
                     for termid, tfidf in doc]))
+
+    def write_pimap_and_names(self, fpath='pimap-and-names.csv'):
+        with open('name-index.pickle') as f:
+            index = pickle.load(f)
+        tuples = ((str(pi_label), pi_id, unicode(name_index[pi_id]))
+                  for pi_label, pi_id in self.pis)
+        strings = (u','.join(tup) for tup in tuples)
+        with open(fpath, 'wb') as f:
+            f.write('docid,pi-id,pi-name\n')
+            f.write(u'\n'.join(pair for pair in strings).encode('utf-8'))
+
+    def write_pimap(self, fpath='pi-id-mappings.csv'):
+        tuples = ((str(pi_label), pi_id) for pi_label, pi_id in self.pis)
+        strings = (','.join(tup) for tup in tuples)
+        with open(fpath, 'wb') as f:
+            f.write('pilabel,piid\n')
+            f.write('\n'.join(pair for pair in strings))
+
+    def write_tmap_and_dfs(self, fpath='term-map-and-freqs.csv'):
+        get_dfs = lambda termid: self.corpus.dictionary.dfs[termid]
+        tok2id = sorted(self.corpus.dictionary.items())
+        tuples = ((unicode(tid), term, unicode(get_dfs(tid)))
+                  for tid, term in tok2id)
+
+        with open(fpath, 'wb') as f:
+            f.write('termid,term,docreq\n')
+            f.write(u'\n'.join(
+                [u','.join(tup) for tup in tuples]).encode('utf-8'))
 
     def write_term_mappings(self, fpath='termid-mappings.csv'):
         with open(fpath, 'wb') as f:
             f.write('termid,term\n')
-            term_pairs = [u','.join(map(unicode, (termid, term)))
+            term_pairs = [u','.join((unicode(termid), unicode(term)))
                           for term, termid
                           in self.corpus.dictionary.token2id.iteritems()]
             content = u'\n'.join(term_pairs)
@@ -164,6 +205,6 @@ class TfidfTermDocMatrix(object):
     def write_dfs(self, fpath='term-document-frequencies.csv'):
         with open(fpath, 'wb') as f:
             f.write('termid,docfreq\n')
-            f.write('\n'.join([','.join(map(unicode, (termid, df)))
+            f.write('\n'.join([','.join((str(termid), str(df)))
                               for termid, df
                               in self.tfidf.dfs.iteritems()]))
