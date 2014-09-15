@@ -202,14 +202,19 @@ class AbstractVectors(object):
         on the value of L{AbstractVectors.parse}.
 
         """
-        if self.parse:
-            for abstract in self._abstracts:
-                yield self.vectorize(abstract)
-        else:
-            for award_id in self.award_ids:
-                yield data.load_abstract_vec(award_id)
+        for pi in self.pis:
+            yield self.pi_document(pi)
+        #if self.parse:
+        #    for abstract in self._abstracts:
+        #        yield self.vectorize(abstract)
+        # else:
+        #     for award_id in self.award_ids:
+        #         yield data.load_abstract_vec(award_id)
 
-    def __getitem__(self, award_id):
+    def __getitem__(self, pi_id):
+        return self.pi_document(pi_id)
+
+    def get_award_abstract(self, award_id):
         """Look up an abstract by the id of the award it was written for.
 
         :type  award_id: str or int
@@ -341,6 +346,18 @@ class AbstractBoWs(object):
         self.award_ids = self._abstract_vectors.award_ids
         self.pis = self._abstract_vectors.pis
 
+    @property
+    def num_docs(self):
+        return self.dictionary.num_docs
+
+    @property
+    def num_terms(self):
+        return len(self.dictionary)
+
+    @property
+    def num_nnz(self):
+        return self.dictionary.num_nnz
+
     def __iter__(self):
         """Yield each abstract in turn by iterating through the underlying
         L{AbstractVectors} instance and converting each abstract vector into its
@@ -353,7 +370,10 @@ class AbstractBoWs(object):
         for pi in self.pis:
             yield self.pi_document(pi)
 
-    def __getitem__(self, award_id):
+    def __getitem__(self, pi_id):
+        return self.pi_document(pi_id)
+
+    def get_award_abstract(self, award_id):
         """Get the BoW representation of the abstract associated with the given
         award id.
 
