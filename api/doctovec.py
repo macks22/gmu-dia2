@@ -88,8 +88,7 @@ def word_is_not_junk(word):
                 (len(word) < 2))
 
 def preprocess(wordlist, stopwords=True, digits=True, stem=True):
-    """Perform preprocessing on a list of words. Always removes punctuation,
-    lowercases the word, and strips whitespace before other preprocessing.
+    """Perform preprocessing on a list of words.
 
     :param bool stopwords: If True, remove stopwords.
     :param bool digits: If True, remove words that start with digits.
