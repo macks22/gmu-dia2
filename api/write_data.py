@@ -134,6 +134,7 @@ class TfidfTermDocMatrix(object):
         self.write_tf_matrix_fast(tf_file)
         self.write_tfidf_matrix_fast(tfidf_file)
         self.write_tmap_and_dfs()
+        self.write_pimap_and_names()
 
     # IN BOTH MM WRITING METHODS: YOU NEED TO ENSURE FORTRAN START-FROM-1
     # INDEXING IS USED AND PI INDICES SHOULD BE MAPPED TO CONTIGUOUS RANGE FROM
@@ -168,7 +169,7 @@ class TfidfTermDocMatrix(object):
     def write_pimap_and_names(self, fpath='pimap-and-names.csv'):
         with open('name-index.pickle') as f:
             index = pickle.load(f)
-        tuples = ((str(pi_label), pi_id, unicode(name_index[pi_id]))
+        tuples = ((str(pi_label), pi_id, unicode(index[pi_id]))
                   for pi_label, pi_id in self.pis)
         strings = (u','.join(tup) for tup in tuples)
         with open(fpath, 'wb') as f:
