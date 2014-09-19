@@ -38,6 +38,7 @@ import cPickle as pickle
 
 import gensim
 import pandas as pd
+import numpy as np
 
 import data
 import doctovec
@@ -84,6 +85,7 @@ class Abstracts(object):
             awd_abstract_pairings,
             columns=abstract_frame_columns)
 
+        self.select_columns = ['abstract', 'title']
         self.abstracts = self._abstract_frame['abstract'].values
         self.award_ids = self._abstract_frame['award_id'].values
 
@@ -99,9 +101,10 @@ class Abstracts(object):
 
         """
         selector = self._abstract_frame['award_id'] == str(award_id)
-        result = self._abstract_frame[selector]['abstract'].values
+        result = self._abstract_frame[selector]
         if len(result) == 1:
-            return unicode(result[0])
+            arr = result[self.select_columns].values
+            return u' '.join(arr[0])
         else:
             raise KeyError('unknown award id')
 
@@ -118,15 +121,16 @@ class Abstracts(object):
         selector = self._pi_frame['pi_id'] == str(pi_id)
         selected = self._pi_frame[selector]
         joined = selected.merge(self._abstract_frame, on='award_id')
-        return joined['abstract'].values
+        awd_arr = joined[self.select_columns].values
+        return np.array([np.unicode_.join(u' ', parts) for parts in awd_arr])
 
     def __iter__(self):
         """Yield each abstract string in turn by iterating through the
         underlying L{pandas.DataFrame}.
 
         """
-        for abstract in self._abstract_frame['abstract'].values:
-            yield abstract
+        for docparts in self._abstract_frame[self.select_columns].values:
+            yield np.unicode_.join(u' ', docparts)
 
     def __len__(self):
         """Return the number of abstracts in the corpus."""
@@ -162,12 +166,15 @@ class Abstracts(object):
         # get awards for this PI
         selector = self._pi_frame['pi_id'] == str(pi_id)
         awards = self._pi_frame[selector]['award_id'].values
+        if len(awards) != 1:
+            raise KeyError('unknown pi_id')
 
         # get abstracts from award ids
         selector = self._abstract_frame['award_id'].isin(awards)
-        abstracts = self._abstract_frame[selector]['abstract'].values
-
-        return u' '.join(abstracts)
+        doc_frame = self._abstract_frame[selector]
+        doc_arr = doc_frame[self.select_columns].values
+        flattened = np.concatenate(doc_arr)
+        return np.unicode_.join(u' ', flattened)
 
 
 class AbstractVectors(object):
@@ -233,8 +240,8 @@ class AbstractVectors(object):
         return len(self._abstracts)
 
     def __str__(self):
-        msg = "Corpus of {} abstracts from NSF grant awards."
-        return msg.format(self.__len__())
+        return "Corpus of {} abstracts from NSF grant awards.".format(
+            self.__len__())
 
     def save_vector(self, award_id):
         """Save the vector for the abstract associated with the given
@@ -278,8 +285,8 @@ class AbstractVectors(object):
 
         :type  pi_id: str or int
         :param pi_id: ID of the PI to get abstracts for.
-        :rtype:   list of (list of str)
-        :returns: List of abstract word vectors.
+        :rtype:  list of (list of str)
+        :return: List of abstract word vectors.
 
         """
         abstracts = self._abstracts.for_pi(pi_id)
