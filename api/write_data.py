@@ -21,7 +21,7 @@ class EdgesFile(object):
         return (self.get_pi_id(id1), self.get_pi_id(id2))
 
     def parse():
-        return (get_edge_pis(edge) for edge in self.g.es)
+        return (self.get_edge_pis(edge) for edge in self.g.es)
 
     def write():
         pi_pairings = self.parse()
@@ -57,18 +57,20 @@ class FeaturesFiles(object):
             yield unicode(pi_id) + ' '.join(map(unicode, all_term_freqs))
 
     def write(self, features=True, descriptors=True):
+        self.write_features()
+        self.write_descriptors()
+
+    def write_features(self):
         pi_features = self.parse()
+        with open('cesna-features-file.txt', 'w') as f:
+            for pi_feature_string in pi_features:
+                to_write = pi_feature_string + '\n'
+                f.write(to_write.encode('utf-8'))
 
-        if features:
-            with open('cesna-features-file.txt', 'w') as f:
-                for pi_feature_string in pi_features:
-                    to_write = pi_feature_string + '\n'
-                    f.write(to_write.encode('utf-8'))
-
-        if descriptors:
-            with open('cesna-features-file-descriptors.txt', 'w') as f:
-                for item in self.bowas.dictionary.iteritems():
-                    f.write('{} {}\n'.format(item[0], item[1]))
+    def write_descriptors(self):
+        with open('cesna-features-file-descriptors.txt', 'w') as f:
+            for item in self.bowas.dictionary.iteritems():
+                f.write('{} {}\n'.format(item[0], item[1]).encode('utf-8'))
 
 
 class TfidfTermDocMatrix(object):
