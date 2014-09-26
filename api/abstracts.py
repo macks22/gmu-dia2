@@ -166,7 +166,7 @@ class Abstracts(object):
         # get awards for this PI
         selector = self._pi_frame['pi_id'] == str(pi_id)
         awards = self._pi_frame[selector]['award_id'].values
-        if len(awards) != 1:
+        if len(awards) < 1:
             raise KeyError('unknown pi_id')
 
         # get abstracts from award ids
