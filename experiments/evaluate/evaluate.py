@@ -391,9 +391,9 @@ def write_barplot(fname, df, labels, sortby='f1', title=''):
     frame.plot(kind='bar', color=palette[:len(labels)], width=0.85,
                title=title, figsize=(24,16), ax=ax)
 
-    legend_depth = len(labels)/2
-    #legend_depth = 4 if legend_depth < 4 else legend_depth
-    ax.legend(loc='upper center', ncol=len(labels)/2,
+    ncols = len(labels)/2
+    ncols = 4 if ncols < 4 else ncols
+    ax.legend(loc='upper center', ncol=ncols,
               fancybox=True, shadow=True)
     ax.xaxis.grid(False)
 
@@ -408,6 +408,8 @@ def write_precision_recall(fname, df):
 
     ax.scatter(df['p'], df['r'], color=palette[0])
     ax.set_title('Recall vs. Precision')
+    ax.set_xlim(1.0)
+    ax.set_ylim(1.0)
     ax.set_xlabel('Precision')
     ax.set_ylabel('Recall')
 
@@ -420,8 +422,10 @@ def write_roc_curve(fname, df):
     plt.cla()
     fig, ax = plt.subplots()
 
-    ax.plot(df['fpr'], df['r'], color=palette[0])
+    frame = df[['fpr','r']].sort('fpr')
+    ax.plot(frame['fpr'], frame['r'], color=palette[0])
     ax.set_title('ROC Curve')
+    ax.set_ylim(1.0)
     ax.set_ylabel('TPR')
     ax.set_xlabel('FPR')
 
@@ -458,6 +462,51 @@ def write_histogram(fname, data, title=''):
 
     fname = check_extension(fname)
     fig.savefig(fname, bbox_inches='tight', dpi=300)
+    fig.clear()
+
+
+def plot_roc_curve(csvfile):
+    """`csvfile` should be the csvfile of the evaluation statistics from the
+    SENC parameter sweep.
+    """
+    df = DataFrame.from_csv(csvfile)
+    fig, ax = plt.subplots()
+    frame = df[['fpr', 'r']].sort('fpr')
+    ax.plot(frame['fpr'], frame['r'], color='black', alpha=0.85,
+            linewidth=3)
+    ax.set_title('ROC Curve')
+    ax.set_ylabel('TPR')
+    ax.set_xlabel('FPR')
+    ax.set_ylim(0,1)
+
+    # x values are FPR and y values are RECALL
+    # metrics obtained from comparison on connected components ground truth
+    cesna_x = 0.0040484809285604717
+    cesna_y = 0.49224591663028472
+    coda_x = 0.0032235301223333371
+    coda_y = 0.41731067592697141
+    edcar_x = 0.0013878215161439689
+    edcar_y = 0.20758049657661148
+
+    #ax.plot(cesna_x, cesna_y, color='r', alpha=0.8, marker='o', ms=10)
+    ax.plot(cesna_x, cesna_y, color='black', marker='o', ms=10)
+    plt.annotate('CESNA', xy=(cesna_x, cesna_y),
+            ha='center', va='bottom', textcoords='offset points',
+            xytext=(0, 3.5))
+
+    #ax.plot(coda_x, coda_y, color='g', alpha=0.8, marker='o', ms=10)
+    ax.plot(coda_x, coda_y, color='black', marker='o', ms=10)
+    plt.annotate('CODA', xy=(coda_x, coda_y),
+            ha='center', va='bottom', textcoords='offset points',
+            xytext=(0, 3))
+
+    #ax.plot(edcar_x, edcar_y, color=palette[0], alpha=0.8, marker='o', ms=10)
+    ax.plot(edcar_x, edcar_y, color='black', marker='o', ms=10)
+    plt.annotate('EDCAR', xy=(edcar_x, edcar_y),
+            ha='center', va='bottom', textcoords='offset points',
+            xytext=(0, 3.5))
+
+    fig.savefig('roc-curve-with-competitor-points', bbox_inches='tight', dpi=300)
     fig.clear()
 
 
@@ -501,12 +550,19 @@ def make_parser():
     parser.add_argument(
         '-a', '--all', action='store_true',
         help='output all files/graphs (eclipses other args)')
+    parser.add_argument(
+        '--plot-roc-from-csv', action='store', default='',
+        help='give a CSV file with FPR/RECALL values to plot in ROC space')
     return parser
 
 
 if __name__ == "__main__":
     parser = make_parser()
     args = parser.parse_args()
+
+    if args.plot_roc_from_csv:
+        plot_roc_curve(args.plot_roc_from_csv)
+        sys.exit(0)
 
     if args.verbose:
         logging.basicConfig(
@@ -534,6 +590,7 @@ if __name__ == "__main__":
         logging.info('found community evaluation stats will be calculated')
         stats = {}
         ground_name, ground = read_ground(args.ground_file)
+        logging.info('using ground-truths from: %s' % ground_name)
 
     if get_lengths:
         logging.info('community length stats will be calculated')
